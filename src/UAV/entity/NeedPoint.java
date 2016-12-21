@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 /**
  * NeedPoint entity. @author MyEclipse Persistence Tools
+ * 需求点
  */
 
 public class NeedPoint extends Point implements java.io.Serializable {
@@ -12,10 +13,10 @@ public class NeedPoint extends Point implements java.io.Serializable {
 	// Fields
 
 	
-	private Integer group;
+	private Integer group;//没用了
 
-	private Integer amount;
-	private Timestamp deadline;
+	private Integer amount;//需求点需要送快递的数量
+	private Timestamp deadline;//需求点的deadline，不考虑了，没时间就不做了
 	
 	
 	

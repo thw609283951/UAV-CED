@@ -2,8 +2,8 @@ package UAV.entity;
 
 public abstract class Point {
 	private Integer id;
-	private Double longitude;
-	private Double latitude;
+	private Double longitude;//经度
+	private Double latitude;//纬度
 	
 	public Integer getId() {
 		return id;

@@ -3,6 +3,7 @@ package UAV.entity;
 
 /**
  * DockPoint entity. @author MyEclipse Persistence Tools
+ * 停靠点
  */
 
 public class DockPoint extends Point implements java.io.Serializable {
@@ -10,10 +11,10 @@ public class DockPoint extends Point implements java.io.Serializable {
 	// Fields
 
 	//private Integer id;
-	private Integer group;
+	private Integer group;//没用了。。。。
 	//private Double longitude;
 	//private Double latitude;
-	private Boolean selected;
+	private Boolean selected;//是否是被选择了的停靠点
 	public DockPoint() {
 		super();
 		// TODO Auto-generated constructor stub

@@ -3,18 +3,25 @@ package UAV.entity;
 
 /**
  * UavVersionInfo entity. @author MyEclipse Persistence Tools
+ * 同型号无人机的信息
  */
 
 public class UavVersionInfo implements java.io.Serializable {
 
 	// Fields
 
-	private String version;
-	private Double sumpower;
-	private Integer maxexpramount;
-	private Double velocity;
-	private Double powerconsumption;
-	private Integer powerfulltime;
+	private String version;//型号
+	private Double sumpower;//总电量
+	private Integer maxexpramount;//该型号无人机最大的载货件数
+	private Double velocity;//速度
+	private Double powerconsumption;//消耗电量的速度
+	private Integer powerfulltime;//充电充满的时间
+	/*	下面是学长给出的数据库字段的设计
+	sumpower	Double[(6,2)]	Not null	总电量，单位是kj
+	velocity	Double[(6,2)]	Not null	无人机的速度，单位为km/h
+	powerconsumption	Double[(6,2)]	Not null	无人机的功率，即耗电量，单位为kj/km。小数点后保留两位小数。
+	remainingpower	Int	Not null	无人机电量剩余，单位为%.
+*/
 
 	// Constructors
 
