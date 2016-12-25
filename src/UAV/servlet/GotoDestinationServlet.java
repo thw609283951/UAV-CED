@@ -51,6 +51,7 @@ public class GotoDestinationServlet extends HttpServlet {
 		
 		String ip=request.getParameter("ipaddress");
 		String po=request.getParameter("port");
+		System.out.println("aaaaaaaaaaaaaa" + po);
 		String lo=request.getParameter("newlongitude");
 		String la=request.getParameter("newlatitude");
 				

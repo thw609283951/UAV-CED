@@ -3,13 +3,15 @@ package UAV.entity;
 
 /**
  * DockPoint entity. @author MyEclipse Persistence Tools
+ * 停靠点
  */
 
 public class DockPoint extends Point implements java.io.Serializable {
 
 	// Fields
-	private static Integer group;//代表停靠点的子区域编号
-	private Boolean selected;//判断停靠点是否需要停靠
+
+	private Integer group;//没用了。。。。
+	private Boolean selected;//是否是被选择了的停靠点
 	private boolean isKey;//判断是否是核心点
 	private boolean isClassed;//判断是否已经分类
 	private String name;//显示点的名称
@@ -32,6 +34,7 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public DockPoint() {
 		super();
 		// TODO Auto-generated constructor stub
