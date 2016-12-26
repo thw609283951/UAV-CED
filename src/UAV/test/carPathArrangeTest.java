@@ -20,7 +20,7 @@ public class carPathArrangeTest {
 		for (Point point : testPs) {
 			System.out.println(point.getId());
 		}
-		double dis[][] = ExpressPathArrangeService.getPointDis(testPs);
+		double dis[][] = ExpressPathArrangeService.getPointDisByRoad(testPs);
 		//System.out.println(dis);
 		for (int i = 0; i < dis.length; i++) {
 			for (int j = 0; j < dis[i].length; j++) {
