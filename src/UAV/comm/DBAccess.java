@@ -7,7 +7,7 @@ public class DBAccess {
 
 	private static String password="123456789";
 	private static String username="root";
-	private static String url="jdbc:mysql://localhost:3306/uavweb";
+	private static String url="jdbc:mysql://123.206.46.253:3306/uavweb";
 	
 	public static Connection getInstance(){
 		
