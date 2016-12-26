@@ -3,6 +3,7 @@ package UAV.entity;
 
 /**
  * WarePoint entity. @author MyEclipse Persistence Tools
+ * 仓库点
  */
 
 public class WarePoint extends Point implements java.io.Serializable {

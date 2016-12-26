@@ -5,10 +5,7 @@ package UAV.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.mail.Part;
-
-import UAV.entity.Car;
-import UAV.entity.CarPath;
+import UAV.comm.MapDistance;
 import UAV.entity.ChildZone;
 import UAV.entity.DockPoint;
 import UAV.entity.NeedPoint;
@@ -16,6 +13,28 @@ import UAV.entity.Point;
 import UAV.entity.WarePoint;
 import UAV.entity.UAVInBase;
 
+/*
+ * entity中咱们能用到的类（也即是数据库中咱们能用到的表）:
+ * ChildZone, DockPoint, NeedPoint, Point(无数据表对应), UavForExpress, UavVersionInfo, WarePoint
+ * (如新增可添加在此~)
+ *
+ * 由于学长们没设置外键，设计的时候我也没设计（现在倒是觉得设计了好了。。其实还是因为不涉及逆向过来方便。。偷懒了）。。说明一下数据表之间的关系
+ * NeedPoint:
+ * 		其中有个dockid的字段，表示负责这个NeedPoint的DockPoint是哪个，dockDis表示到这个DockPoint的距离
+ * DockPoint:
+ * 		其中selected表示其是否被选择，group无视之，czid是对应于ChildZone中的id的,表示这个DockPoint属于这个ChildZone
+ * ChildZone:
+ * 		其中有一个wrid,是对应于WarePoint中的id的，表示这个子区域包含哪个仓库点，因为仓库点对子区域是1toN的关系，所以这么做
+ *
+ * 所以，子区域的数据结构表示为：
+ * 		通过ChildZone的id在DockPoint中找是这个czid的就能找到这个子区域的所有DockPoint,然后并上ChildZone中的wrid对应的仓库点即是子区域包含的所有点
+ * 		当然，可以在内存中用个Set或者List存一下，更快更方便，然而依照我能水则水的设计思想（。。。）先从数据库来吧，之后再改感觉也不难
+ *
+ * 还有一个要注意的关系是我们用到的无人机如果要得到速度，最大载货量等参数，需要用Version字段访问UavVersionInfo,这个是出于实际情况考虑的。
+ *
+ *
+ *
+ */
 public class ExpressPathArrangeService {
 
 	
@@ -159,10 +178,10 @@ public class ExpressPathArrangeService {
 		else{
 			return k_means(S,n);
 		}
-		
+
 		return div;
 	}
-	
+
 	/*
 	 * 旅行商问题求解从dock点出发遍历part中点，并返回dock的最短路径的路径序列
 	 */
@@ -170,23 +189,37 @@ public class ExpressPathArrangeService {
 		NeedPoint l[];
 		return l;
 	}
-	
+
 	/*
 	 * 根据无人机执行情况推算所需的最大充电时间，以得到car在停靠点dock的最大等待时间
 	 */
 	private get_max_wait_time(){
-		
+
 	}
 	/**
 	 * 马
-	 * 计算points数组中各个点之间的距离。以二维数组形式返回
+	 * 计算points数组中各个点之间的距离,此距离为路上距离，而不是直线距离。以二维数组形式返回
 	 * @param points
 	 * @return
 	 */
 	private double[][] getPointDis(List<Point> points) {
-		
-		double[][] a = null;
-		return a;
+		double[][] dis = new double[points.size()][points.size()];
+		for (int i = 0; i < points.size(); i++) {
+			for (int j = 0; j < points.size(); j++) {
+				if (j == i) {
+					dis[i][j] = 0;
+				} else if (j > i){
+					dis[i][j] = dis[j][i] = MapDistance.GetDistance(
+							points.get(i).getLongitude(),
+							points.get(i).getLatitude(),
+							points.get(j).getLongitude(),
+							points.get(j).getLatitude());
+				}
+			}
+		}
+
+
+		return dis;
 	}
 	
 	
