@@ -1,10 +1,20 @@
 package UAV.entity;
 
-public abstract class Point {
+public class Point {
 	private Integer id;
 	private Double longitude;//经度
 	private Double latitude;//纬度
 	
+	public Point() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Point(Integer id, Double longitude, Double latitude) {
+		super();
+		this.id = id;
+		this.longitude = longitude;
+		this.latitude = latitude;
+	}
 	public Integer getId() {
 		return id;
 	}
