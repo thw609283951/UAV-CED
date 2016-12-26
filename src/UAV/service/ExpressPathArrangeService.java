@@ -4,14 +4,14 @@ package UAV.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import UAV.entity.Car;
 import UAV.comm.MapDistance;
 import UAV.entity.ChildZone;
 import UAV.entity.DockPoint;
 import UAV.entity.NeedPoint;
 import UAV.entity.Point;
 import UAV.entity.WarePoint;
-import UAV.entity.UAVInBase;
+import UAV.entity.UavForExpress;
 
 /*
  * entity中咱们能用到的类（也即是数据库中咱们能用到的表）:
@@ -149,20 +149,19 @@ public class ExpressPathArrangeService {
 		Car car = childZone.getCar();//获取子区域负责车辆
 		for(DockPoint dock : childZone.getDockPoint_arr()){ //遍历停靠点
 			S=dock.getNeedPoint_arr();//所有需求点
-			DockPoint next_dock;
+			DockPoint next_dock = childZone.get_next_dock(dock);//获取下一个停靠点;
 			div = Divid_need(S, dock, car.getUavCount());//划分所有需求点，分派给无人机
 			NeedPoint l[];//保存每个划分的无人机路径序列，不含路径头和尾，因为这两个点都应该是停靠点dock，数据类型不同保存不方便
-			UAVInBase uav;
+			UavForExpress uav;
 			for(NeedPoint[] part : div){ //遍历所有需求划分区域
 				l = TPS(part, dock); //该区域的路线
 				uav = car.sendUav();//从car中派出一辆无人机
 				uav.add_P(l,time);//通过路径，向uav中添加时序路径序列
 			max_wait_time = get_max_wait_time(l_all,uav.getVelocity(),car.getV(),dock,childZone);//获取car在dock的最大等待时间
-			tmp_time = get_dist(dock, childZone)/car.getV();//到下一个停靠点的时间
+			tmp_time = get_dist(dock, next_dock)/car.getV();//到下一个停靠点的时间
 			tmp_time += max_wait_time;
 			time += tmp_time;//过了tmp_time时间，车行驶到下一个停靠点
-			next_dock = childZone.get_next_dock();//获取下一个停靠点
-			car.add_P(time,dock,childZone);//为车添加时序路径
+			car.add_P(time,dock,next_dock);//为车添加时序路径
 			}
 		}
 	}
@@ -172,6 +171,7 @@ public class ExpressPathArrangeService {
 	private NeedPoint[][] Divid_need(NeedPoint[] S,DockPoint dock, int var_uav){
 		int m = S.length;//需求点个数
 		NeedPoint div[][];
+		
 		if(var_uav>=m){
 			return S;
 		}
@@ -193,8 +193,8 @@ public class ExpressPathArrangeService {
 	/*
 	 * 根据无人机执行情况推算所需的最大充电时间，以得到car在停靠点dock的最大等待时间
 	 */
-	private get_max_wait_time(){
-
+	private double get_max_wait_time(NeedPoint[][] l_all,double uav_v,double car_v,DockPoint dock, ChildZone childZone){
+		return 0;
 	}
 	/**
 	 * 马
