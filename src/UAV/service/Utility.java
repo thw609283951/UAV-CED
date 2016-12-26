@@ -17,14 +17,16 @@ public final class Utility {
 		double dx=p.getLongitude()-q.getLongitude();
 		double dy=p.getLatitude()-q.getLatitude();
 		double distance=Math.sqrt(dx*dx+dy*dy);
+		//double distance = 
 		return distance;
 	}
-		//检测p点是不是核心点，tmpLst存储核心点的直达点
+	//检测p点是不是核心点，tmpLst存储核心点的直达点
 	public static List<DockPoint> isKeyPoint(List<DockPoint> lst,DockPoint p,double e,int minp){
 		int count=0;
 		List<DockPoint> tmpLst=new ArrayList<DockPoint>();
-		for(Iterator<DockPoint> it=lst.iterator();it.hasNext();){
+		for(Iterator<DockPoint> it=lst.iterator();it.hasNext();){//遍历lst中的点
 			DockPoint q=it.next();
+			//
 			if(getDistance(p,q)<=e){
 				++count;
 				if(!tmpLst.contains(q)){
@@ -37,6 +39,21 @@ public final class Utility {
 			return tmpLst;
 		}
 		return null;
+	}
+	public static List<DockPoint> notkeyPoint(List<DockPoint> lst,DockPoint p,double e,int minp){
+		int count=0;
+		List<DockPoint> tmpLst=new ArrayList<DockPoint>();
+		for(Iterator<DockPoint> it=lst.iterator();it.hasNext();){//遍历lst中的点
+			DockPoint q=it.next();
+			//
+			if(getDistance(p,q)<=e){
+				++count;
+				if(!tmpLst.contains(q)){
+					tmpLst.add(q);
+				}
+			}
+		}
+		return tmpLst;
 	}
 	//合并两个链表，前提是b中的核心点包含在a中
 	public static boolean mergeList(List<DockPoint> a,List<DockPoint> b){
@@ -60,14 +77,42 @@ public final class Utility {
 		}
 		return merge;
 	}
+	public static void input_not_classed_point(List<List<DockPoint>> resultList,DockPoint notclassed){
+		int index=0;
+		double mindistance=-1;
+		double distance=0;
+		List<DockPoint> tmp = null;
+		for(Iterator<List<DockPoint>> it=resultList.iterator();it.hasNext();){
+			List<DockPoint> lst=it.next();
+			if(lst.isEmpty()){
+				continue;
+			}
+			int number=1;
+			for(Iterator<DockPoint> it1=lst.iterator();it1.hasNext();){
+				DockPoint p=it1.next();
+				distance=getDistance(notclassed,p);
+				if (mindistance==-1 || mindistance>distance){
+					mindistance=distance;
+					tmp=lst;
+				}
+				number++;
+			}
+			index++;
+	    }
+		tmp.add(notclassed);
+	}
 	//获取文本中的样本点集合
 	public static List<DockPoint> getPointsList() throws IOException{
+		//链接数据库，将所有的DockPoint中select=true的点添加到lst中
+		//现在是模拟，真实操作的时候需要修改代码
 		List<DockPoint> lst=new ArrayList<DockPoint>();
 		String txtPath="src\\UAV\\service\\points.txt";
 		BufferedReader br=new BufferedReader(new FileReader(txtPath));
 		String str="";
+		int id=0;
 		while((str=br.readLine())!=null && str!=""){
-			lst.add(new DockPoint(str));
+			lst.add(new DockPoint(str,id));
+			id++;
 		}
 		br.close();
 		return lst;
@@ -91,5 +136,11 @@ public final class Utility {
 			}
 			index++;
 	    }
+	}
+	public static void display_notclassed(List<DockPoint> notclassed) {
+		System.out.println("这里是未分配的点");
+		for(DockPoint i:notclassed){
+			System.out.println(i.print());
+		}
 	}
 }

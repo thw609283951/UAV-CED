@@ -10,6 +10,8 @@ import UAV.entity.DockPoint;
 import UAV.entity.NeedPoint;
 import UAV.entity.Point;
 import UAV.entity.WarePoint;
+import UAV.service.Utility;
+import UAV.service.DBscan;
 /*
  * entity中咱们能用到的类（也即是数据库中咱们能用到的表）:
  * ChildZone, DockPoint, NeedPoint, Point(无数据表对应), UavForExpress, UavVersionInfo, WarePoint 
@@ -114,8 +116,8 @@ public class ExpressPathArrangeService {
 	 * 生成ChildZone序列，并填写其中的wrid
 	 */
 	private List<ChildZone> childZonePatition() {
-		
-		
+		String[] args = null;
+		DBscan.main(args);
 		return new ArrayList<ChildZone>();
 	}
 	

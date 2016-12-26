@@ -15,7 +15,15 @@ public class DockPoint extends Point implements java.io.Serializable {
 	private boolean isKey;//判断是否是核心点
 	private boolean isClassed;//判断是否已经分类
 	private String name;//显示点的名称
+	private Integer id;//点的ID
+	private int idnumber=0;
 	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public boolean isKey() {
 		return isKey;
 	}
@@ -56,14 +64,15 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setSelected(Boolean selected) {
 		this.selected = selected;
 	}
-	public DockPoint(String str){//打印分类结果
+	public DockPoint(String str,int id){//打印分类结果
 		String[] p=str.split(",");
 		this.setLongitude(Double.parseDouble(p[0]));
 		this.setLatitude(Double.parseDouble(p[1]));
 		this.name=p[2];
+		this.id=id;
 	}
 	public String print(){
-		return "<"+this.getLongitude()+","+this.getLatitude()+"> 地点:"+this.name;
+		return "<"+this.getLongitude()+","+this.getLatitude()+"> 地点:"+this.getName()+" id:"+this.getId();
 	}
 
 }
