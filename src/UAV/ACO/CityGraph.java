@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package UAV.ACO;
 
 import java.util.Random;
@@ -10,7 +5,6 @@ import java.util.Random;
 /**
  * distance[][]一旦确定不再改变，迭代过程中更新pheromone[][]
  *
- * @author weangdan
  */
 public class CityGraph {
 
