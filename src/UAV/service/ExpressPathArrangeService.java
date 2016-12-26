@@ -5,6 +5,7 @@ package UAV.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import UAV.comm.MapDistance;
 import UAV.entity.ChildZone;
 import UAV.entity.DockPoint;
 import UAV.entity.NeedPoint;
@@ -143,14 +144,28 @@ public class ExpressPathArrangeService {
 	
 	/**
 	 * 马
-	 * 计算points数组中各个点之间的距离。以二维数组形式返回
+	 * 计算points数组中各个点之间的距离,此距离为路上距离，而不是直线距离。以二维数组形式返回
 	 * @param points
 	 * @return
 	 */
 	private double[][] getPointDis(List<Point> points) {
+		double[][] dis = new double[points.size()][points.size()];
+		for (int i = 0; i < points.size(); i++) {
+			for (int j = 0; j < points.size(); j++) {
+				if (j == i) {
+					dis[i][j] = 0;
+				} else if (j > i){
+					dis[i][j] = dis[j][i] = MapDistance.GetDistance(
+							points.get(i).getLongitude(),
+							points.get(i).getLatitude(), 
+							points.get(j).getLongitude(),
+							points.get(j).getLatitude());
+				}
+			}
+		}
 		
-		double[][] a = null;
-		return a;
+		
+		return dis;
 	}
 	
 	
