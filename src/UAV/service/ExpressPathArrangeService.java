@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import UAV.comm.MapDistance;
+import UAV.dao.ExpressPathArrangeDAO;
 import UAV.entity.ChildZone;
 import UAV.entity.DockPoint;
 import UAV.entity.NeedPoint;
 import UAV.entity.Point;
 import UAV.entity.WarePoint;
+import UAV.factory.ExpressPathArrangeDAOFactory;
 /*
  * entity中咱们能用到的类（也即是数据库中咱们能用到的表）:
  * ChildZone, DockPoint, NeedPoint, Point(无数据表对应), UavForExpress, UavVersionInfo, WarePoint 
@@ -68,7 +70,8 @@ public class ExpressPathArrangeService {
 	public void pathArrange() {
 		
 		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
-		
+		ExpressPathArrangeDAO EPADAO = ExpressPathArrangeDAOFactory.getInstance();
+		allDockPoints = EPADAO.getAllDockPoints();
 		pointPreProcess();
 		List<ChildZone> childZones = childZonePatition();
 		for (ChildZone childZone : childZones) {

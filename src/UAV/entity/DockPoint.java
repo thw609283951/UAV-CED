@@ -9,7 +9,7 @@ package UAV.entity;
 public class DockPoint extends Point implements java.io.Serializable {
 
 	// Fields
-
+	private Integer czid;
 	//private Integer id;
 	private Integer group;//没用了。。。。
 	//private Double longitude;
@@ -19,10 +19,20 @@ public class DockPoint extends Point implements java.io.Serializable {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public DockPoint(Integer group, Boolean selected) {
-		super();
+	
+	public DockPoint(Integer id, Integer czid, Integer group, Double longitude, Double latitude, Boolean selected) {
+		super(id, longitude, latitude);
+		this.czid = czid;
 		this.group = group;
 		this.selected = selected;
+	}
+	
+	
+	public Integer getCzid() {
+		return czid;
+	}
+	public void setCzid(Integer czid) {
+		this.czid = czid;
 	}
 	public Integer getGroup() {
 		return group;
