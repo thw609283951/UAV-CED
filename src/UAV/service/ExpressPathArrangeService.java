@@ -77,7 +77,7 @@ public class ExpressPathArrangeService {
 			//TODO:czPs是子区域的所有停靠点和对应的仓库点，需要使用childZone从数据库获得
 			List<Point> czPs = new ArrayList<Point>();
 			
-			double[][] pDis = getPointDis(czPs);
+			double[][] pDis = getPointDisByRoad(czPs);
 			List<Point> carPath = carPathArrange(czPs, pDis);
 			UAVArrange(carPath);
 		}
@@ -202,7 +202,7 @@ public class ExpressPathArrangeService {
 	 * @param points
 	 * @return
 	 */
-	private double[][] getPointDis(List<Point> points) {
+	public static double[][] getPointDisByRoad(List<Point> points) {
 		double[][] dis = new double[points.size()][points.size()];
 		for (int i = 0; i < points.size(); i++) {
 			for (int j = 0; j < points.size(); j++) {
@@ -221,6 +221,34 @@ public class ExpressPathArrangeService {
 
 		return dis;
 	}
+	
+	
+	/**
+	 * 马
+	 * 计算points数组中各个点之间的距离,此距离为空中距离，即是直线距离。以二维数组形式返回
+	 * @param points
+	 * @return
+	 */
+	public static double[][] getPointDisByAir(List<Point> points) {
+		double[][] dis = new double[points.size()][points.size()];
+		for (int i = 0; i < points.size(); i++) {
+			for (int j = 0; j < points.size(); j++) {
+				if (j == i) {
+					dis[i][j] = 0;
+				} else if (j > i){
+					dis[i][j] = dis[j][i] = MapDistance.GetDistance(
+							points.get(i).getLongitude(),
+							points.get(i).getLatitude(), 
+							points.get(j).getLongitude(),
+							points.get(j).getLatitude());
+				}
+			}
+		}
+		
+		
+		return dis;
+	}
+	
 	
 	
 }
