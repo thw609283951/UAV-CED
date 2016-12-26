@@ -146,7 +146,7 @@ public class ExpressPathArrangeService {
 	 * @param points
 	 * @return
 	 */
-	private double[][] getPointDis(List<Point> points) {
+	public static double[][] getPointDis(List<Point> points) {
 		double[][] dis = new double[points.size()][points.size()];
 		for (int i = 0; i < points.size(); i++) {
 			for (int j = 0; j < points.size(); j++) {
