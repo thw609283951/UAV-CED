@@ -1,6 +1,7 @@
 package UAV.entity;
 // default package
 
+import UAV.entity.NeedPoint;
 /**
  * DockPoint entity. @author MyEclipse Persistence Tools
  */
@@ -14,6 +15,8 @@ public class DockPoint extends Point implements java.io.Serializable {
 	//private Double longitude;
 	//private Double latitude;
 	private Boolean selected;
+	private NeedPoint NeedPoint_arr[];
+	
 	public DockPoint() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -34,6 +37,12 @@ public class DockPoint extends Point implements java.io.Serializable {
 	}
 	public void setSelected(Boolean selected) {
 		this.selected = selected;
+	}
+	public NeedPoint[] getNeedPoint_arr() {
+		return NeedPoint_arr;
+	}
+	public void setNeedPoint_arr(NeedPoint needPoint_arr[]) {
+		NeedPoint_arr = needPoint_arr;
 	}
 
 	

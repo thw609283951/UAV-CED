@@ -13,7 +13,6 @@ public class NeedPoint extends Point implements java.io.Serializable {
 
 	
 	private Integer group;
-
 	private Integer amount;
 	private Timestamp deadline;
 	
