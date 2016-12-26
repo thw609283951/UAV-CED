@@ -76,8 +76,8 @@ public class ACO {
                 bestAnt = i;
             }
         }
-        System.out.println("当前最优解是：" + bestTour);
-        System.out.println("该路径下的最低消耗：" + bestLength);
+//        System.out.println("当前最优解是：" + bestTour);
+//        System.out.println("该路径下的最低消耗：" + bestLength);
     }
     //按更新方程修改轨迹长度
 
@@ -96,7 +96,7 @@ public class ACO {
         Init_paras();
         startTime = System.currentTimeMillis();
         for (int i = 0; i < p; i++) {//一次迭代即更新了一次解空间
-            System.out.println("第" + i + "次迭代：");
+          //  System.out.println("第" + i + "次迭代：");
             Init_Ants();
             MovetoNextCity();
             findBestRoad();
@@ -104,6 +104,15 @@ public class ACO {
             updatePheromone();
         }
     }
+    public String getBestTour() {
+		return bestTour;
+	}
+
+	public void setBestTour(String bestTour) {
+		this.bestTour = bestTour;
+	}
+
+	
 
     public static void main(String[] args) {
         ACO aco = new ACO();
