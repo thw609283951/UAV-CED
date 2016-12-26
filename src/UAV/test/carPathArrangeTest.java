@@ -2,6 +2,7 @@ package UAV.test;
 
 import java.util.List;
 
+import UAV.ACO.ACO;
 import UAV.dao.ExpressPathArrangeDAO;
 import UAV.entity.Point;
 import UAV.factory.ExpressPathArrangeDAOFactory;
@@ -27,7 +28,13 @@ public class carPathArrangeTest {
 				System.out.print(dis[i][j] + "\t");
 			}
 			System.out.println("");
-		}
+		} 	
+		
+		 ACO aco = new ACO();
+		 aco.Init_Distance(testPs.size(), dis);
+	     aco.iterator();
+	     
+
 	}
 
 }

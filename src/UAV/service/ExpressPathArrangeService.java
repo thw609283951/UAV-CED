@@ -166,6 +166,7 @@ public class ExpressPathArrangeService {
 		return dis;
 	}
 	public List<Point> getTestCzPoints() {
+		return null;
 		
 	}
 	
