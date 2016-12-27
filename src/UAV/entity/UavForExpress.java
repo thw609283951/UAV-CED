@@ -1,6 +1,6 @@
 package UAV.entity;
 // default package
-
+import UAV.entity.NeedPoint;
 /**
  * UavForExpress entity. @author MyEclipse Persistence Tools
  * 无人机信息
@@ -22,7 +22,7 @@ public class UavForExpress implements java.io.Serializable {
 	remainingpower	Int	Not null	无人机电量剩余，单位为%.
 */
 	
-	
+	private double velocity;//无人机速度
 	private Integer expressamount;//无人机当前载有货物的数量（不是最大能载货数量哦）
 
 	// Constructors
@@ -42,7 +42,9 @@ public class UavForExpress implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	public void add_P(NeedPoint[] l,double time){
+		return null;
+	}
 	public Integer getId() {
 		return this.id;
 	}
@@ -89,6 +91,14 @@ public class UavForExpress implements java.io.Serializable {
 
 	public void setExpressamount(Integer expressamount) {
 		this.expressamount = expressamount;
+	}
+
+	public double getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(double velocity) {
+		this.velocity = velocity;
 	}
 
 }
