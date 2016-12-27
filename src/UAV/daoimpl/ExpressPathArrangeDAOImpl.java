@@ -41,7 +41,7 @@ public class ExpressPathArrangeDAOImpl implements ExpressPathArrangeDAO {
 		return null;
 	}
 	
-	public List<Point> getAllDockPoints() {
+	public List<DockPoint> getAllDockPoints() {
 		try {
 			Connection conn=DBAccess.getInstance();
 			StringBuffer sql=new StringBuffer("select * from dock_point;");			
@@ -49,7 +49,7 @@ public class ExpressPathArrangeDAOImpl implements ExpressPathArrangeDAO {
 			System.out.println(sql.toString());
 			ResultSet rs=stmt.executeQuery(sql.toString());
 			//List<Record> list=new ArrayList<Record>();
-			List<Point> ps = new ArrayList<Point>();
+			List<DockPoint> ps = new ArrayList<DockPoint>();
 			while(rs.next())
 			{
 				//Record(rs.getString("ipaddress"), rs.getInt("port"),rs.getDate("indate"),rs.getTime("intime"),rs.getDate("outdate"),rs.getTime("outtime"))
@@ -66,7 +66,7 @@ public class ExpressPathArrangeDAOImpl implements ExpressPathArrangeDAO {
 		return null;
 	}
 	
-	public List<Point> getAllWarePoints() {
+	public List<WarePoint> getAllWarePoints() {
 		try {
 			Connection conn=DBAccess.getInstance();
 			StringBuffer sql=new StringBuffer("select * from ware_point;");			
@@ -74,7 +74,7 @@ public class ExpressPathArrangeDAOImpl implements ExpressPathArrangeDAO {
 			System.out.println(sql.toString());
 			ResultSet rs=stmt.executeQuery(sql.toString());
 			//List<Record> list=new ArrayList<Record>();
-			List<Point> ps = new ArrayList<Point>();
+			List<WarePoint> ps = new ArrayList<WarePoint>();
 			while(rs.next())
 			{
 				//Record(rs.getString("ipaddress"), rs.getInt("port"),rs.getDate("indate"),rs.getTime("intime"),rs.getDate("outdate"),rs.getTime("outtime"))
@@ -91,7 +91,7 @@ public class ExpressPathArrangeDAOImpl implements ExpressPathArrangeDAO {
 		return null;
 	}
 	
-	public List<Point> getAllNeedPoints() {
+	public List<NeedPoint> getAllNeedPoints() {
 		try {
 			Connection conn=DBAccess.getInstance();
 			StringBuffer sql=new StringBuffer("select * from need_point;");			
@@ -99,7 +99,7 @@ public class ExpressPathArrangeDAOImpl implements ExpressPathArrangeDAO {
 			System.out.println(sql.toString());
 			ResultSet rs=stmt.executeQuery(sql.toString());
 			//List<Record> list=new ArrayList<Record>();
-			List<Point> ps = new ArrayList<Point>();
+			List<NeedPoint> ps = new ArrayList<NeedPoint>();
 			while(rs.next())
 			{
 				//Record(rs.getString("ipaddress"), rs.getInt("port"),rs.getDate("indate"),rs.getTime("intime"),rs.getDate("outdate"),rs.getTime("outtime"))
