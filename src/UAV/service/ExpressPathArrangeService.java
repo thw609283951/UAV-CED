@@ -7,12 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+
 import UAV.entity.Car;
+
+import UAV.ACO.ACO;
+
 import UAV.comm.MapDistance;
 import UAV.comm.kdtree.KDTree;
 import UAV.comm.kdtree.KeyDuplicateException;
 import UAV.comm.kdtree.KeySizeException;
 import UAV.dao.ExpressPathArrangeDAO;
+import UAV.comm.TSPUtils;
 import UAV.entity.ChildZone;
 import UAV.entity.DockPoint;
 import UAV.entity.NeedPoint;
@@ -197,13 +202,17 @@ public class ExpressPathArrangeService {
 	
 	/**
 	 * 冯
-	 * 
+	 * 返回0;6;11;13;2;10;1;5;4;14;3;12;9;8;7，其中0代表仓库点
 	 * 解决旅行商问题的模块,返回形式为最优解的行走序列，第一个点为仓库点，之后顺序的为停靠点
-	 * @param childZone
+	 * @param 
 	 */
-	private List<Point> carPathArrange(List<Point> czPs, double[][] pDis) {
-		
-		return new ArrayList<Point>();
+	public List<Point> carPathArrange(List<Point> czPs, double[][] pDis) {
+		 ACO aco = new ACO();
+		 aco.Init_Distance(czPs.size(), pDis);
+	     aco.iterator();
+	     List<Point> poList = new ArrayList<Point>();
+	     poList = TSPUtils.getPointSequence(czPs, aco.getBestTour());
+		 return poList;
 	}
 	
 	/**
@@ -294,6 +303,7 @@ public class ExpressPathArrangeService {
 
 		return dis;
 	}
+
 	
 	
 	/**
@@ -317,9 +327,12 @@ public class ExpressPathArrangeService {
 				}
 			}
 		}
-		
-		
 		return dis;
+	}
+		
+
+	public List<Point> getTestCzPoints() {
+		
 	}
 	
 	
