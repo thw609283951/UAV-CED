@@ -10,7 +10,7 @@ import UAV.entity.Car;
 public class ChildZone implements java.io.Serializable {
 
 	// Fields
-
+	private Integer id;//子区域的id，逻辑主键
     private Integer wrid;//子区域所包含的仓库点的id，因为仓库点对子区域是一对多的关系，所以在ChildZone中添加此字段
 	private DockPoint DockPoint_arr[];//保存所有的停靠点
 	private Car car;//保存负责车辆

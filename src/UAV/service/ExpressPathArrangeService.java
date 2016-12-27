@@ -4,8 +4,14 @@ package UAV.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import UAV.entity.Car;
 import UAV.comm.MapDistance;
+import UAV.comm.kdtree.KDTree;
+import UAV.comm.kdtree.KeyDuplicateException;
+import UAV.comm.kdtree.KeySizeException;
 import UAV.dao.ExpressPathArrangeDAO;
 import UAV.entity.ChildZone;
 import UAV.entity.DockPoint;
@@ -74,8 +80,9 @@ public class ExpressPathArrangeService {
 	public void pathArrange() {
 		
 		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
-		ExpressPathArrangeDAO EPADAO = ExpressPathArrangeDAOFactory.getInstance();
-		allDockPoints = EPADAO.getAllDockPoints();
+//		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
+//		allDockPoints = epaDao.getAllDockPoints();
+//		allNeedPoints = epaDao.getAllNeedPoints();
 		pointPreProcess();
 		List<ChildZone> childZones = childZonePatition();
 		for (ChildZone childZone : childZones) {
@@ -107,8 +114,69 @@ public class ExpressPathArrangeService {
 	 * 并将allDockPoints中选出selectedDockPoints
 	 * 并释放allDockPoints
 	 */
-	private void pointPreProcess() {
+	public void pointPreProcess() {
+		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
+		allDockPoints = epaDao.getAllDockPoints();
+		allNeedPoints = epaDao.getAllNeedPoints();
+		KDTree<Integer> kdTree = new KDTree<Integer>(2);
+		Map<Integer, ArrayList<NeedPoint>> needPointMap = new TreeMap<Integer, ArrayList<NeedPoint>>();
+		for (DockPoint dockPoint : allDockPoints) {
+			needPointMap.put(dockPoint.getId(), new ArrayList<NeedPoint>());
+			double[] coord = {dockPoint.getLongitude().doubleValue(),
+					dockPoint.getLatitude().doubleValue()};
+			try {
+				//System.out.println("kkkkk"+dockPoint.getId());
+				kdTree.insert(coord, dockPoint.getId());
+			} catch (KeySizeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (KeyDuplicateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		for (NeedPoint needPoint : allNeedPoints) {
+			double[] coord = {needPoint.getLongitude().doubleValue(),
+					needPoint.getLatitude().doubleValue()};
+			Integer id = null;
+			try {
+				id = kdTree.nearest(coord);
+				//System.out.println(id + "\t\t" + needPoint.getId());
+				for (DockPoint d : allDockPoints) {
+					if (d.getId().equals(id)) {
+						needPointMap.get(d.getId()).add(needPoint);
+						needPoint.setDockid(d.getId());
+						needPoint.setDockdis(MapDistance.GetDistance(
+								needPoint.getLongitude(), 
+								needPoint.getLatitude(),
+								d.getLongitude(),
+								d.getLatitude()));
+						break;
+					}
+				}
+				
+			} catch (KeySizeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 		
+		for (DockPoint dockPoint : allDockPoints) {
+			dockPoint.setSelected(true);
+			dockPoint.setCzid(-1);
+			needPointMap.get(dockPoint.getId()).toArray();
+			dockPoint.setNeedPoint_arr((NeedPoint[]) needPointMap.get(dockPoint.getId()).toArray(new NeedPoint[0]));
+		}
+		
+		selectedDockPoints = allDockPoints;
+		
+		for (NeedPoint needPoint : allNeedPoints) {
+			System.out.println(needPoint);
+		}
+		for (DockPoint dockPoint : allDockPoints) {
+			System.out.println(dockPoint);
+		}
 	}
 	
 	

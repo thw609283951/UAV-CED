@@ -92,6 +92,16 @@ public class NeedPoint extends Point implements java.io.Serializable {
 		this.dockdis = dockdis;
 	}
 
+
+
+
+
+	@Override
+	public String toString() {
+		return super.toString() + "NeedPoint [amount=" + amount + ", dockid=" + dockid
+				+ ", dockdis=" + dockdis + "]";
+	}
+
 	
 
 }

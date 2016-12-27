@@ -9,6 +9,7 @@ import UAV.dao.ExpressPathArrangeDAO;
 import UAV.entity.DockPoint;
 import UAV.entity.NeedPoint;
 import UAV.factory.ExpressPathArrangeDAOFactory;
+import UAV.service.ExpressPathArrangeService;
 
 public class preProcessTest {
 
@@ -16,7 +17,7 @@ public class preProcessTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-//		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
 //		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
 //		List<DockPoint> allDockPoints = epaDao.getAllDockPoints();
 //		List<NeedPoint> allNeedPoints = epaDao.getAllNeedPoints();
@@ -59,7 +60,8 @@ public class preProcessTest {
 //			
 //		}
 		
-		
+		ExpressPathArrangeService arrangeService = new ExpressPathArrangeService();
+		arrangeService.pointPreProcess();
 		
 		
 		
