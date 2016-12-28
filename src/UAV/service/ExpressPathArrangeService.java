@@ -303,7 +303,13 @@ public class ExpressPathArrangeService {
 
 		return dis;
 	}
-
+	
+	public double getDistanceByAir(Point a, Point b) {
+		return MapDistance.GetDistance(a.getLongitude(), 
+										a.getLatitude(),
+										b.getLongitude(),
+										b.getLatitude());
+	}
 	
 	
 	/**
