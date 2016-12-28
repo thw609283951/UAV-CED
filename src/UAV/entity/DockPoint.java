@@ -17,6 +17,7 @@ public class DockPoint extends Point implements java.io.Serializable {
 	private String name;//显示点的名称
 	private Integer id;//点的ID
 	private int idnumber=0;
+	private List<List>Car;
 	
 	public Integer getId() {
 		return id;

@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.mysql.jdbc.Connection;
+
+import UAV.comm.MapDistance;
 import UAV.entity.DockPoint;
 
 //测试用
@@ -23,11 +26,13 @@ public final class Utility {
 	//检测p点是不是核心点，tmpLst存储核心点的直达点
 	public static List<DockPoint> isKeyPoint(List<DockPoint> lst,DockPoint p,double e,int minp){
 		int count=0;
+		double distance=0;
 		List<DockPoint> tmpLst=new ArrayList<DockPoint>();
-		for(Iterator<DockPoint> it=lst.iterator();it.hasNext();){//遍历lst中的点
+		for(Iterator<DockPoint> it=lst.iterator();it.hasNext();){	//遍历lst中的点
 			DockPoint q=it.next();
-			//
-			if(getDistance(p,q)<=e){
+			distance=MapDistance.GetDistance(p.getLatitude(), p.getLongitude(), q.getLatitude(), q.getLongitude());
+//			System.out.println("<"+p.getName()+","+q.getName()+">"+distance);
+			if(distance<=e){
 				++count;
 				if(!tmpLst.contains(q)){
 					tmpLst.add(q);
@@ -99,7 +104,10 @@ public final class Utility {
 			}
 			index++;
 	    }
-		tmp.add(notclassed);
+		if(!tmp.contains(notclassed)){
+			tmp.add(notclassed);
+		}
+		
 	}
 	//获取文本中的样本点集合
 	public static List<DockPoint> getPointsList() throws IOException{

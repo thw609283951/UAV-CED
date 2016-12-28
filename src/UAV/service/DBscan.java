@@ -8,7 +8,7 @@ import UAV.entity.DockPoint;
 import UAV.service.Utility;
 
 public class DBscan {
-	private final static double e=0.005;//ε半径
+	private final static double e=500;//ε半径
 	private final static int minp=3;//密度阈值
 	private static List<DockPoint> pointsList=new ArrayList<DockPoint>();//存储原始样本点
  	private static List<List<DockPoint>> resultList=new ArrayList<List<DockPoint>>();//存储最后的聚类结果
@@ -53,15 +53,14 @@ public class DBscan {
  		try {
  			//调用DBSCAN的实现算法
  			applyDbscan();
- 			Utility.display(resultList);
- 			Utility.display_notclassed(notclassed);
- 			int number=0;
+// 			Utility.display(resultList);+
+// 			Utility.display_notclassed(notclassed);
  			for (DockPoint i:notclassed){
  				Utility.input_not_classed_point(resultList,i);
  			}
  			notclassed.clear();
  			Utility.display(resultList);
- 			Utility.display_notclassed(notclassed);
+// 			Utility.display_notclassed(notclassed);
  		} catch (IOException e) {
  			// TODO Auto-generated catch block
  			e.printStackTrace();
