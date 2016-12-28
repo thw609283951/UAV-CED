@@ -12,7 +12,10 @@ public class WarePoint extends Point implements java.io.Serializable {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
+	public WarePoint(Integer id, Double longitude, Double latitude){
+		super(id, longitude, latitude);
+	}
+	
 	
 
 }
