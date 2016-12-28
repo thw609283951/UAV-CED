@@ -1,4 +1,7 @@
 package UAV.entity;
+
+import java.util.ArrayList;
+import java.util.List;
 // default package
 
 /**
@@ -14,7 +17,8 @@ public class DockPoint extends Point implements java.io.Serializable {
 	//private Double longitude;
 	//private Double latitude;
 	private Boolean selected;//是否是被选择了的停靠点
-    private NeedPoint NeedPoint_arr[];//保存这个停靠点所有的需求点
+    private ArrayList<NeedPoint> NeedPoint_arr;//保存这个停靠点所有的需求点
+    
 	public DockPoint() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -36,12 +40,13 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setSelected(Boolean selected) {
 		this.selected = selected;
 	}
-    public NeedPoint[] getNeedPoint_arr() {
-        return NeedPoint_arr;
-    }
-    public void setNeedPoint_arr(NeedPoint needPoint_arr[]) {
-        NeedPoint_arr = needPoint_arr;
-    }
+	public ArrayList<NeedPoint> getNeedPoint_arr() {
+		return NeedPoint_arr;
+	}
+	public void setNeedPoint_arr(ArrayList<NeedPoint> needPoint_arr) {
+		NeedPoint_arr = needPoint_arr;
+	}
+    
 	
 
 }

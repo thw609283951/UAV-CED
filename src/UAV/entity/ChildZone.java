@@ -1,6 +1,9 @@
 package UAV.entity;
 // default package
 
+import java.util.ArrayList;
+import java.util.List;
+
 import UAV.entity.DockPoint;
 import UAV.entity.Car;
 /**
@@ -12,8 +15,9 @@ public class ChildZone implements java.io.Serializable {
 	// Fields
 
     private Integer wrid;//子区域所包含的仓库点的id，因为仓库点对子区域是一对多的关系，所以在ChildZone中添加此字段
-	private DockPoint DockPoint_arr[];//保存所有的停靠点
+	private ArrayList<DockPoint> DockPoint_arr;//保存所有的停靠点
 	private Car car;//保存负责车辆
+	private Integer id;
 
 	// Constructors
 
@@ -66,14 +70,16 @@ public class ChildZone implements java.io.Serializable {
 	}
 
 
-	public DockPoint[] getDockPoint_arr() {
+	public ArrayList<DockPoint> getDockPoint_arr() {
 		return DockPoint_arr;
 	}
 
 
-	public void setDockPoint_arr(DockPoint dockPoint_arr[]) {
+	public void setDockPoint_arr(ArrayList<DockPoint> dockPoint_arr) {
 		DockPoint_arr = dockPoint_arr;
 	}
+
+
 
 
 

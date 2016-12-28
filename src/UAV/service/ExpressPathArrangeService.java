@@ -1,8 +1,7 @@
 package UAV.service;
 
-
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import UAV.entity.Car;
 import UAV.comm.MapDistance;
@@ -140,43 +139,64 @@ public class ExpressPathArrangeService {
 	 */
 	private void UAVArrange(ChildZone childZone) {
 		//TODO:会需要从停靠点得到停靠点所负责的所有需求点的集合
-		NeedPoint S[];//保存child_zone的所有需求点
-		NeedPoint div[][];//指定停靠点所属需求点的划分
-		NeedPoint l_all[][];//指定停靠点的无人机路径序列
+		ArrayList<NeedPoint> S = new ArrayList<NeedPoint>();//保存child_zone的所有需求点
+		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();//指定停靠点所属需求点的划分
+//		ArrayList<Double> l_all = new ArrayList<Double>();//指定停靠点的无人机路径序列
+		double max_l = 0;//保存最长的区域路径长度
+		double l_length = 0;//l长度
 		double max_wait_time;//指定停靠点的最大等待时间，等待是为了充电
 		double time = 0;//相对时间，从0起
+		double[][] dist;//保存距离计算结果输出
+		ArrayList<Point> point_list = new ArrayList<Point>();//记录点集合，计算距离使用
 		double tmp_time;
 		Car car = childZone.getCar();//获取子区域负责车辆
 		for(DockPoint dock : childZone.getDockPoint_arr()){ //遍历停靠点
-			S=dock.getNeedPoint_arr();//所有需求点
+			S = dock.getNeedPoint_arr();//所有需求点
 			DockPoint next_dock = childZone.get_next_dock(dock);//获取下一个停靠点;
 			div = Divid_need(S, dock, car.getUavCount());//划分所有需求点，分派给无人机
-			NeedPoint l[];//保存每个划分的无人机路径序列，不含路径头和尾，因为这两个点都应该是停靠点dock，数据类型不同保存不方便
-			UavForExpress uav;
-			for(NeedPoint[] part : div){ //遍历所有需求划分区域
-				l = TPS(part, dock); //该区域的路线
-				uav = car.sendUav();//从car中派出一辆无人机
-				uav.add_P(l,time);//通过路径，向uav中添加时序路径序列
-			max_wait_time = get_max_wait_time(l_all,uav.getVelocity(),car.getV(),dock,childZone);//获取car在dock的最大等待时间
-			tmp_time = get_dist(dock, next_dock)/car.getV();//到下一个停靠点的时间
+			ArrayList<NeedPoint> l;//保存每个划分的无人机路径序列，不含路径头和尾，因为这两个点都应该是停靠点dock，数据类型不同保存不方便
+			UavForExpress uav = null;
+			for(List<NeedPoint> part : div){ //遍历所有需求划分区域
+				l = TPS(part, dock);         //该区域的路线
+				uav = car.sendUav();         //从car中派出一辆无人机
+				uav.add_P(dock,l,time);     //通过路径，向uav中添加时序路径序列
+				l_length = get_l_length(l); //得到l长度
+				if (max_l < l_length){
+					max_l = l_length;
+				}
+			}
+			max_wait_time = get_max_wait_time(max_l,uav.getVelocity(),car.getV(),dock,childZone);//获取car在dock的最大等待时间
+			point_list.add(dock);
+			point_list.add(next_dock);
+			dist = getPointDisByRoad(point_list);
+			tmp_time = dist[0][1]/car.getV();//到下一个停靠点的时间
 			tmp_time += max_wait_time;
 			time += tmp_time;//过了tmp_time时间，车行驶到下一个停靠点
 			car.add_P(time,dock,next_dock);//为车添加时序路径
 			}
 		}
-	}
-	/*
-	 * 划分需求点并指派给无人机
-	 */
-	private NeedPoint[][] Divid_need(NeedPoint[] S,DockPoint dock, int var_uav){
-		int m = S.length;//需求点个数
-		NeedPoint div[][];
+	private double get_l_length(ArrayList<NeedPoint> l) {
+		// TODO Auto-generated method stub
 		
+		return 0;
+	}
+
+
+	/*
+	 * 划分需求点并指派给无人机,S为需求点集合，var_uav为无人机数量，也就是需要划分成的块数
+	 */
+	private ArrayList<ArrayList<NeedPoint>> Divid_need(List<NeedPoint> S,DockPoint dock, int var_uav){
+		int m = S.size();//需求点个数
+		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();
 		if(var_uav>=m){
-			return S;
+			for(NeedPoint p : S){
+				ArrayList<NeedPoint> tmp = new ArrayList<NeedPoint>();
+				tmp.add(p);
+				div.add(tmp);
+			}
 		}
 		else{
-			return k_means(S,n);
+			return k_means_with_Point(S,var_uav);
 		}
 
 		return div;
@@ -185,7 +205,7 @@ public class ExpressPathArrangeService {
 	/*
 	 * 旅行商问题求解从dock点出发遍历part中点，并返回dock的最短路径的路径序列
 	 */
-	private NeedPoint[] TPS(NeedPoint[] part, DockPoint dock){
+	private ArrayList<NeedPoint> TPS(List<NeedPoint> part, DockPoint dock){
 		NeedPoint l[];
 		return l;
 	}
@@ -193,7 +213,8 @@ public class ExpressPathArrangeService {
 	/*
 	 * 根据无人机执行情况推算所需的最大充电时间，以得到car在停靠点dock的最大等待时间
 	 */
-	private double get_max_wait_time(NeedPoint[][] l_all,double uav_v,double car_v,DockPoint dock, ChildZone childZone){
+	private double get_max_wait_time(double max_l,double uav_v,double car_v,DockPoint dock, ChildZone childZone){
+		
 		return 0;
 	}
 	/**
