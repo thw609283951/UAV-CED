@@ -11,13 +11,13 @@ public class DBscan {
 	private final static double e=500;//ε半径
 	private final static int minp=3;//密度阈值
 	private static List<DockPoint> pointsList=new ArrayList<DockPoint>();//存储原始样本点
- 	private static List<List<DockPoint>> resultList=new ArrayList<List<DockPoint>>();//存储最后的聚类结果
+ 	private static List<ArrayList<DockPoint>> resultList=new ArrayList<ArrayList<DockPoint>>();//存储最后的聚类结果
  	private static List<DockPoint> notclassed=new ArrayList<DockPoint>();//存放没有被分类的点
 
  	private static void applyDbscan() throws IOException{
  		pointsList=Utility.getPointsList();
  		for(int index=0;index<pointsList.size();++index){
- 			List<DockPoint> tmpLst=new ArrayList<DockPoint>();
+ 			ArrayList<DockPoint> tmpLst=new ArrayList<DockPoint>();
  			DockPoint p=pointsList.get(index);
  			if(p.isClassed()){
  				continue; 
@@ -65,5 +65,23 @@ public class DBscan {
  			// TODO Auto-generated catch block
  			e.printStackTrace();
  		}     
+ 	}
+ 	public static List<ArrayList<DockPoint>> resultList(){
+ 		try {
+ 			//调用DBSCAN的实现算法
+ 			applyDbscan();
+// 			Utility.display(resultList);+
+// 			Utility.display_notclassed(notclassed);
+ 			for (DockPoint i:notclassed){
+ 				Utility.input_not_classed_point(resultList,i);
+ 			}
+ 			notclassed.clear();
+// 			Utility.display(resultList);
+// 			Utility.display_notclassed(notclassed);
+ 		} catch (IOException e) {
+ 			// TODO Auto-generated catch block
+ 			e.printStackTrace();
+ 		}     
+ 		return resultList;
  	}
 }

@@ -24,10 +24,10 @@ public final class Utility {
 		return distance;
 	}
 	//检测p点是不是核心点，tmpLst存储核心点的直达点
-	public static List<DockPoint> isKeyPoint(List<DockPoint> lst,DockPoint p,double e,int minp){
+	public static ArrayList<DockPoint> isKeyPoint(List<DockPoint> lst,DockPoint p,double e,int minp){
 		int count=0;
 		double distance=0;
-		List<DockPoint> tmpLst=new ArrayList<DockPoint>();
+		ArrayList<DockPoint> tmpLst=new ArrayList<DockPoint>();
 		for(Iterator<DockPoint> it=lst.iterator();it.hasNext();){	//遍历lst中的点
 			DockPoint q=it.next();
 			distance=MapDistance.GetDistance(p.getLatitude(), p.getLongitude(), q.getLatitude(), q.getLongitude());
@@ -82,12 +82,12 @@ public final class Utility {
 		}
 		return merge;
 	}
-	public static void input_not_classed_point(List<List<DockPoint>> resultList,DockPoint notclassed){
+	public static void input_not_classed_point(List<ArrayList<DockPoint>> resultList,DockPoint notclassed){
 		int index=0;
 		double mindistance=-1;
 		double distance=0;
 		List<DockPoint> tmp = null;
-		for(Iterator<List<DockPoint>> it=resultList.iterator();it.hasNext();){
+		for(Iterator<ArrayList<DockPoint>> it=resultList.iterator();it.hasNext();){
 			List<DockPoint> lst=it.next();
 			if(lst.isEmpty()){
 				continue;
@@ -126,9 +126,9 @@ public final class Utility {
 		return lst;
 	}
 	   //显示聚类的结果
-	public static void display(List<List<DockPoint>> resultList){
+	public static void display(List<ArrayList<DockPoint>> resultList){
 		int index=1;
-		for(Iterator<List<DockPoint>> it=resultList.iterator();it.hasNext();){
+		for(Iterator<ArrayList<DockPoint>> it=resultList.iterator();it.hasNext();){
 			List<DockPoint> lst=it.next();
 			if(lst.isEmpty()){
 				continue;

@@ -115,7 +115,7 @@ public  class MapDistance
 	
 	public static void main(String[] args)
 	{
-		System.out.println(GetDistance(126.629889,45.744779,126.634219,45.745630));
+		System.out.println(GetDistance(126.633344,45.745630,126.634219,45.745630));
 		boolean b=ispasscircle(126.633344,45.745630,126.634219,45.745630,126.633344,45.745019,68.12);
 		if(b)
 		{
