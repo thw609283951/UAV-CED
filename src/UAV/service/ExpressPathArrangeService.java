@@ -236,10 +236,10 @@ public class ExpressPathArrangeService {
 			S = dock.getNeedPoint_arr();//所有需求点
 			DockPoint next_dock = childZone.get_next_dock(dock);//获取下一个停靠点;
 			div = Divid_need(S, dock, car.getUavCount());//划分所有需求点，分派给无人机
-			ArrayList<NeedPoint> l;//保存每个划分的无人机路径序列，不含路径头和尾，因为这两个点都应该是停靠点dock，数据类型不同保存不方便
+			List<Point> l;//保存每个划分的无人机路径序列，不含路径头和尾，因为这两个点都应该是停靠点dock，数据类型不同保存不方便
 			UavForExpress uav = null;
 			for(List<NeedPoint> part : div){ //遍历所有需求划分区域
-				l = TPS(part, dock);         //该区域的路线
+				l = TSP(part, dock);         //该区域的路线
 				uav = car.sendUav();         //从car中派出一辆无人机
 				uav.add_P(dock,l,time);     //通过路径，向uav中添加时序路径序列
 				l_length = get_l_length(l); //得到l长度
@@ -262,7 +262,7 @@ public class ExpressPathArrangeService {
 	 * @param l路径序列
 	 * @return
 	 */
-	private double get_l_length(ArrayList<NeedPoint> l) {
+	private double get_l_length(List<Point> l) {
 		// TODO Auto-generated method stub
 		double l_length = 0;
 		for (int i=0; i<l.size()-1;i++){
@@ -296,13 +296,33 @@ public class ExpressPathArrangeService {
 
 		return div;
 	}
+	/**
+	 * 妥
+	 * k均值算法划分需求点为var_uav个部分
+	 * @param s 需求点集合
+	 * @param var_uav 无人及数量，也是划分子区域数量
+	 * @return
+	 */
+	private ArrayList<ArrayList<NeedPoint>> k_means_with_Point(
+			List<NeedPoint> s, int var_uav) {
+		// TODO Auto-generated method stub
+		
+		return null;
+	}
+
 
 	/**
 	 * 妥
 	 * 旅行商问题求解从dock点出发遍历part中点，并返回dock的最短路径的路径序列
 	 */
-	private ArrayList<NeedPoint> TPS(List<NeedPoint> part, DockPoint dock){
-		ArrayList<NeedPoint> l = new ArrayList<NeedPoint>();
+	private List<Point> TSP(List<NeedPoint> part, DockPoint dock){
+		List<Point> l = new ArrayList<Point>();
+		List<Point> points = new ArrayList<Point>();
+		points.add(dock);
+		points.addAll(part);
+		
+		double[][] p_dist = getPointDisByAir(points);//记录停靠点和所有需求点彼此路径长度
+		l =  carPathArrange(points, p_dist);//这里完全可以使用掌印的TSP代码
 		
 		return l;
 	}
@@ -325,6 +345,7 @@ public class ExpressPathArrangeService {
 			return to_next_dock_time - t_max_charge + t_max_fly;
 		}
 	}
+	
 	/**
 	 * 马
 	 * 计算points数组中各个点之间的距离,此距离为路上距离，而不是直线距离。以二维数组形式返回
@@ -384,9 +405,9 @@ public class ExpressPathArrangeService {
 	}
 		
 
-	public List<Point> getTestCzPoints() {
-		
-	}
+//	public List<Point> getTestCzPoints() {
+//		
+//	}
 	
 	
 	

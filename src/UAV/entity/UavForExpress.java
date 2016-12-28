@@ -49,7 +49,7 @@ public class UavForExpress implements java.io.Serializable {
 	}
 
 	// Property accessors
-	public void add_P(DockPoint dock, ArrayList<NeedPoint> l,double time){
+	public void add_P(DockPoint dock, List<Point> l,double time){
 		ArrayList<Double> item = new ArrayList<Double>();
 		item.add(time);//时间
 		item.add(dock.getLongitude());//经度
