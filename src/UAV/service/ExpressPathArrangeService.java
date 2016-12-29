@@ -102,6 +102,7 @@ public class ExpressPathArrangeService {
 			
 			double[][] pDis = getPointDisByRoad(czPs);
 			List<Point> carPath = carPathArrange(czPs, pDis);
+			
 			UAVArrange(childZone);
 		}
 	}
@@ -177,7 +178,7 @@ public class ExpressPathArrangeService {
 			dockPoint.setSelected(true);
 			dockPoint.setCzid(-1);
 			needPointMap.get(dockPoint.getId()).toArray();
-			dockPoint.setNeedPoint_arr((NeedPoint[]) needPointMap.get(dockPoint.getId()).toArray(new NeedPoint[0]));
+			//dockPoint.setNeedPoint_arr((NeedPoint[]) needPointMap.get(dockPoint.getId()).toArray(new NeedPoint[0]));
 		}
 		
 		selectedDockPoints = allDockPoints;
@@ -236,29 +237,33 @@ public class ExpressPathArrangeService {
 		Double max_wait_time;//指定停靠点的最大等待时间，等待是为了充电
 		Double time = new Double(0);//相对时间，从0起
 		Double dist;//保存距离计算结果输出
-		ArrayList<Point> point_list = new ArrayList<Point>();//记录点集合，计算距离使用
+		
 		Double tmp_time;
 		Car car = childZone.getCar();//获取子区域负责车辆
 		for(DockPoint dock : childZone.getDockPoint_arr()){ //遍历停靠点
 			S = dock.getNeedPoint_arr();//所有需求点
 			DockPoint next_dock = childZone.get_next_dock(dock);//获取下一个停靠点;
-			div = Divid_need(S, dock, car.getUavCount());//划分所有需求点，分派给无人机
+			div = Divid_need(S, dock, car.getUavCount());//划分所有需求点
 			List<Point> l;//保存每个划分的无人机路径序列，不含路径头和尾，因为这两个点都应该是停靠点dock，数据类型不同保存不方便
 			UavForExpress uav = null;
 			for(List<NeedPoint> part : div){ //遍历所有需求划分区域
 				l = TSP(part, dock);         //该区域的路线
 				uav = car.sendUav();         //从car中派出一辆无人机
-				uav.add_P(dock,l,time);     //通过路径，向uav中添加时序路径序列
-				l_length = get_l_length(l); //得到l长度
-				if (max_l < l_length){
+				uav.add_P(dock,l,time);      //通过路径，向uav中添加时序路径序列
+				l_length = get_l_length(l);  //得到l长度
+				if (max_l < l_length){       //得到最长路径，计算充电时间
 					max_l = l_length;
 				}
 			}
 			if (next_dock != null){//未到最后一个停靠点
 				dist = getDistanceByAir(dock,next_dock);
 				tmp_time = dist/car.getV();//到下一个停靠点的时间
+				double t_max_fly = max_l/uav.getVelocity();//无人机最长飞行时间
 				max_wait_time = get_max_wait_time(max_l,uav.getVelocity(),car.getV(),tmp_time,dock,childZone);//获取car在dock的最大等待时间
-				tmp_time += max_wait_time;
+				tmp_time += max_wait_time + t_max_fly;
+				if (max_wait_time>0){
+					car.add_P(max_wait_time+time+t_max_fly,dock);//需要原地等待
+				}
 				time += tmp_time;//过了tmp_time时间，车行驶到下一个停靠点
 				car.add_P(time,next_dock);//为车添加时序路径
 			}
@@ -352,15 +357,13 @@ public class ExpressPathArrangeService {
 	 * uavZ_v,car_v:无人机、车速
 	 */
 	private double get_max_wait_time(double max_l,double uav_v,double car_v,double to_next_dock_time, DockPoint dock, ChildZone childZone){
-		double t_max_charge = 10;//先设一个常数，后面换成数学模型
-		double t_max_fly = get_max_charge_time(max_l);//无人机最长飞行时间
+		double t_max_charge = get_max_charge_time(max_l);//先设一个常数，后面换成数学模型
 		
-		t_max_fly = max_l/uav_v;
 		if (to_next_dock_time > t_max_charge){// 在路上即可完成充电
-			return t_max_fly;
+			return 0;
 		}
 		else{//需要等待充一会电再出发
-			return to_next_dock_time - t_max_charge + t_max_fly;
+			return to_next_dock_time - t_max_charge;
 		}
 	}
 	/**
