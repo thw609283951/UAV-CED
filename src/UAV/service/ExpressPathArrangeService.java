@@ -27,6 +27,9 @@ import UAV.factory.ExpressPathArrangeDAOFactory;
 
 import UAV.entity.UavForExpress;
 
+import kmeans.KMeans;
+import kmeans.Cluster;
+
 /*
  * entity中咱们能用到的类（也即是数据库中咱们能用到的表）:
  * ChildZone, DockPoint, NeedPoint, Point(无数据表对应), UavForExpress, UavVersionInfo, WarePoint
@@ -306,8 +309,18 @@ public class ExpressPathArrangeService {
 	private ArrayList<ArrayList<NeedPoint>> k_means_with_Point(
 			List<NeedPoint> s, int var_uav) {
 		// TODO Auto-generated method stub
-		
-		return null;
+		List<Cluster> clusters= new ArrayList<Cluster>();
+		ArrayList<ArrayList<NeedPoint>> div_points = new ArrayList<ArrayList<NeedPoint>>();
+		KMeans k = new KMeans();
+		k.init(s);
+		k.calculate();
+		clusters = k.getClusters();
+		for (Cluster cluster : clusters){
+			ArrayList<NeedPoint> tmp_points = new ArrayList<NeedPoint>();
+			tmp_points = cluster.getNeedPoints();
+			div_points.add(tmp_points);
+		}
+		return div_points;
 	}
 
 
@@ -372,7 +385,7 @@ public class ExpressPathArrangeService {
 		return dis;
 	}
 	
-	public double getDistanceByAir(Point a, Point b) {
+	public static double getDistanceByAir(Point a, Point b) {
 		return MapDistance.GetDistance(a.getLongitude(), 
 										a.getLatitude(),
 										b.getLongitude(),
