@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
 <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=您申请的key值"></script>
 <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
-
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=您申请的key值&plugin=AMap.Driving"></script>
 </head>
 <body>
 	<div id="body-wrapper" class="myfont">
@@ -54,6 +54,7 @@
 		<div id="getlanlat"><input type="text" readonly="true" id="lnglat"></div>
     	<input type="hidden" id="newlongitudecomment" />
     	<input type="hidden" id="newlatitudecomment" />
+    	<input type="hidden" id="index" value=0>
 		<div id="TraveTest" style="height:600px"></div>
     	<div id="panel"></div>
     	<script type="text/javascript">
@@ -71,19 +72,34 @@
 	            document.getElementById("newlatitudecomment").value=e.lnglat.getLat();
 	            var x=document.getElementById("newlongitudecomment").value;
 	            var y=document.getElementById("newlatitudecomment").value;
-	            console.log(x,y);
+	            //console.log(x,y);
 	            positions.push([x,y]);
-	            console.log(positions);
+	            //console.log(positions);
 	            for (var i = 0, marker; i < positions.length; i++) {
 	                    marker = new AMap.Marker({
 	                    map: map,
 	                    position: positions[i]
 	                });
 	                markers.push(marker);
-	                console.log(markers);
+	                //console.log(markers);
 	            }   
 	        });
-    		
+    		function showroad() {
+    			var index=document.getElementById("index").value;
+    			var alldriving=[];
+    			var driving = new AMap.Driving({
+        			map: map,
+    			}); 
+    			// 根据起终点经纬度规划驾车导航路线
+    			console.log(index);
+              	index++;
+              	index--;
+              	console.log(index);
+              	driving.search([positions[index][0],positions[index][1]], [positions[index+1][0],positions[index+1][1]], function(status, result) {
+     			document.getElementById("index").value=index+1;
+     			//TODO 解析返回结果，自己生成操作界面和地图展示界面
+ 				});
+    		}
     	</script>
 		<div class="button-group">
     		<input type="button" class="btn btn-info" value="展示路径" id="showonline" onclick="showroad()"/>    		
