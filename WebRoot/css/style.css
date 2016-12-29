@@ -1,4 +1,4 @@
-/********************************      Basic Structure 基本结构      ********************************/
+/********************************      Basic Structure 鍩烘湰缁撴瀯      ********************************/
 
 html {
                 font-size: 100%;
@@ -15,10 +15,10 @@ body {
 
 #body-wrapper {
                 background: url('../images/bg-radial-gradient.gif') fixed 230px top no-repeat;
-                font-family: 微软雅黑;
+                font-family: 寰蒋闆呴粦;
                 }                
 
-/********************************      Elements styling 元素样式      ********************************/
+/********************************      Elements styling 鍏冪礌鏍峰紡      ********************************/
 
 h1, h2, h3, h4, h5, h6 {
                 font-family: Helvetica, Arial, sans-serif;
@@ -53,7 +53,7 @@ p {
                 line-height: 1.6em;
                 }
 
-/********************************      General Classes 通用的类      ********************************/
+/********************************      General Classes 閫氱敤鐨勭被      ********************************/
 
 .clear {
                 clear: both;
@@ -67,9 +67,9 @@ p {
                 float: right;
                 }
 
-/************ Button 按钮 ************/
+/************ Button 鎸夐挳 ************/
 .button {
-				font-family: 微软雅黑,Verdana, Arial, sans-serif;
+				font-family: 寰蒋闆呴粦,Verdana, Arial, sans-serif;
                 display: inline-block;
                 background: #459300 url('../images/bg-button-green.gif') top left repeat-x !important;
                 border: 1px solid #459300 !important;
@@ -96,7 +96,7 @@ a.remove-link:hover {
 				color: #000;
 				}
 
-/********************************      Sidebar 侧边栄1�7      ********************************/
+/********************************      Sidebar 渚ц竟鏍�锟�      ********************************/
 
 #sidebar {
                 background: url('../images/bg-sidebar.gif') top left no-repeat;
@@ -132,7 +132,7 @@ a.remove-link:hover {
                 line-height: 1.5em;
                 }
 
-/************ Sidebar Accordion Menu 侧边栏手风琴菜单  ************/
+/************ Sidebar Accordion Menu 渚ц竟鏍忔墜椋庣惔鑿滃崟  ************/
 
 #sidebar #main-nav {
                 width: 206px;
@@ -198,7 +198,7 @@ a.remove-link:hover {
                 }
 
 
-/************ Messages 文字 ************/
+/************ Messages 鏂囧瓧 ************/
 
 #messages p,
 #messages form {
@@ -217,9 +217,9 @@ a.remove-link:hover {
 #messages textarea {
                 margin: 0 0 15px 0;
                 }
-/********************************      Main Content 主要内容      ********************************/
+/********************************      Main Content 涓昏鍐呭      ********************************/
 
-/************ Layout 布局 ************/
+/************ Layout 甯冨眬 ************/
 
 #main-content {
                 margin: 0 30px 0 260px;
@@ -227,7 +227,10 @@ a.remove-link:hover {
 				/**background: url('../images/paper.jpg');**/
                 }
                 
-
+#TraveTest {
+	margin:0 0 0 240px;
+	padding:0 0 0 0;
+}
 
 #main-contindex {
                 margin: 0 30px 0 260px;
@@ -300,21 +303,21 @@ a.remove-link:hover {
 				padding: 20px 0;
 				font-size: 12px;
                 }
-/************ Lists 列表 ************/
+/************ Lists 鍒楄〃 ************/
 
 #main-content ul,
 #main-content ol {
                 padding: 10px 0;
                 }
 
-/* Unordered List 无序列表 */
+/* Unordered List 鏃犲簭鍒楄〃 */
 
 #main-content ul li {
                 background: url('../images/icons/bullet_black.png') center left no-repeat;
                 padding: 4px 0 4px 20px;
                 }
 
-/* Ordered List 有序列表 */
+/* Ordered List 鏈夊簭鍒楄〃 */
 
 #main-content ol {
                 padding: 0 0 0 24px;
@@ -325,7 +328,7 @@ a.remove-link:hover {
                 padding: 4px 0;
                 }
 
-/*************** Content Box 内容桄1�7 ***************/
+/*************** Content Box 鍐呭妗�锟� ***************/
 
 .content-box {
                 border: 1px solid #ccc;
@@ -382,7 +385,7 @@ ul.content-box-tabs li a.current {
                 border-top: 1px solid #ccc;
                 }
                 
-/************ Table 表格 ************/
+/************ Table 琛ㄦ牸 ************/
 
 #main-content table {
                 width: 100%;
@@ -424,7 +427,7 @@ ul.content-box-tabs li a.current {
 				border: 1px solid #ccc;
                 }      
 				
-/*************** Pagination 分页 ***************/
+/*************** Pagination 鍒嗛〉 ***************/
 
 #main-content .pagination {
                 text-align: right;
@@ -451,7 +454,7 @@ ul.content-box-tabs li a.current {
 				text-decoration: underline;
                 }
 
-/************ Shortcut Buttons 快捷按钮 ************/
+/************ Shortcut Buttons 蹇嵎鎸夐挳 ************/
 
 .shortcut-button {
                 border: 1px solid #ccc;
@@ -654,7 +657,7 @@ ul.shortcut-buttons-set li {
 	padding: 5px;
 }
 
-/*************** Notifications 通知 ***************/
+/*************** Notifications 閫氱煡 ***************/
 
 .notification {
                 position: relative;
@@ -712,7 +715,7 @@ ul.shortcut-buttons-set li {
                 top:5px;
                 }
 
-/* Notification for form inputs 输入框的通知 */
+/* Notification for form inputs 杈撳叆妗嗙殑閫氱煡 */
 
 .input-notification {
 				background-position: left 2px;
@@ -722,15 +725,15 @@ ul.shortcut-buttons-set li {
 				margin: 0 0 0 5px;
 				}
 
-/* Notification for login page 登陆框的通知 */
+/* Notification for login page 鐧婚檰妗嗙殑閫氱煡 */
 
 #login-wrapper #login-content .notification {
 				border: 0;
 				background-color: #141414;		
-				color: #fff !important;		/* !important:提高指定样式规则的应用优先权 */
+				color: #fff !important;		/* !important:鎻愰珮鎸囧畾鏍峰紡瑙勫垯鐨勫簲鐢ㄤ紭鍏堟潈 */
 				}
 
-/********************************      Login Page 登陆页面      ********************************/
+/********************************      Login Page 鐧婚檰椤甸潰      ********************************/
 
 
 
@@ -785,7 +788,7 @@ body#login {
 				margin-top: 20px;
 				}
 
-/********************************      jQuery plugins styles jQuery插件风格      ********************************/
+/********************************      jQuery plugins styles jQuery鎻掍欢椋庢牸      ********************************/
 
 /*************** Facebox ***************/
 
@@ -940,7 +943,7 @@ div.wysiwyg ul.panel li a.empty { background-position: -64px -80px; }
 div.wysiwyg iframe { border: 0; margin: 5px 0 0 0; clear: left; width: 97.5% !important; }
 
 .myfont{
-	font-family: 微软雅黑;
+	font-family: 寰蒋闆呴粦;
 }
 
 .mytable th, .mytable td{
@@ -965,7 +968,7 @@ div.wysiwyg iframe { border: 0; margin: 5px 0 0 0; clear: left; width: 97.5% !im
 #mylogin_ft{
 	text-align: center;
 	font-size: 25px; 
-	font-family: 微软雅黑;
+	font-family: 寰蒋闆呴粦;
 }
    
 #main-info tbody tr {
@@ -979,11 +982,11 @@ div.wysiwyg iframe { border: 0; margin: 5px 0 0 0; clear: left; width: 97.5% !im
 .path-div{
 	width:850px;
 	margin-left: 260px;
-	font-family: 微软雅黑;	
+	font-family: 寰蒋闆呴粦;	
 }
 
 .main-cont-font{
-	font-family: 微软雅黑;	
+	font-family: 寰蒋闆呴粦;	
 	text-align: center;
 	font-size: 22px;
 }

@@ -12,9 +12,10 @@ import java.util.List;
 public class DockPoint extends Point implements java.io.Serializable {
 
 	// Fields
-	private Integer czid;
+	private Integer czid;//子区域
 	//private Integer id;
 	private Integer group;//没用了。。。。
+	private Integer wrid;//仓库点
 	private Boolean selected;//是否是被选择了的停靠点
 
 	private boolean isKey;//判断是否是核心点
@@ -24,6 +25,12 @@ public class DockPoint extends Point implements java.io.Serializable {
 	private int idnumber=0;
 	
 	
+	public Integer getWrid() {
+		return wrid;
+	}
+	public void setWrid(Integer wrid) {
+		this.wrid = wrid;
+	}
 	public Integer getId() {
 		return id;
 	}
