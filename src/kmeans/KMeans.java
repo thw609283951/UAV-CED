@@ -21,7 +21,7 @@ public class KMeans {
 	//Number of Clusters. This metric should be related to the number of points
     private int NUM_CLUSTERS = 10;    
     //Number of Points
-    private int NUM_POINTS = 150;
+    //private int NUM_POINTS = 150;
     //Min and Max X and Y
     private static final int MIN_COORDINATE = 0;
     private static final int MAX_COORDINATE = 100;
@@ -41,7 +41,7 @@ public class KMeans {
     	points = Point.createPoints(s);
     	//Create Clusters
     	//Set Random Centroids
-    	for (int i = 0; i < NUM_CLUSTERS; i++) {
+    	for (int i = 0; i < getNUM_CLUSTERS(); i++) {
     		Cluster cluster = new Cluster(i);
     		//可以随意设置中心点，这里就设置为第i个点
     		Point centroid = points.get(i);
@@ -54,7 +54,7 @@ public class KMeans {
     }
 
 	private void plotClusters() {
-    	for (int i = 0; i < NUM_CLUSTERS; i++) {
+    	for (int i = 0; i < getNUM_CLUSTERS(); i++) {
     		Cluster c = getClusters().get(i);
     		c.plotCluster();
     	}
@@ -105,7 +105,7 @@ public class KMeans {
     }
     
     private List<Point> getCentroids() {
-    	List<Point> centroids = new ArrayList<Point>(NUM_CLUSTERS);
+    	List<Point> centroids = new ArrayList<Point>(getNUM_CLUSTERS());
     	for(Cluster cluster : getClusters()) {
     		Point aux = cluster.getCentroid();
     		Point point = new Point(aux.getP().getLongitude(),aux.getP().getLatitude());
@@ -122,7 +122,7 @@ public class KMeans {
         
         for(Point point : points) {
         	min = max;
-            for(int i = 0; i < NUM_CLUSTERS; i++) {
+            for(int i = 0; i < getNUM_CLUSTERS(); i++) {
             	Cluster c = getClusters().get(i);
                 distance = Point.distance(point, c.getCentroid());
                 if(distance < min){
@@ -162,5 +162,13 @@ public class KMeans {
 
 	public void setClusters(List<Cluster> clusters) {
 		this.clusters = clusters;
+	}
+
+	public int getNUM_CLUSTERS() {
+		return NUM_CLUSTERS;
+	}
+
+	public void setNUM_CLUSTERS(int nUM_CLUSTERS) {
+		NUM_CLUSTERS = nUM_CLUSTERS;
 	}
 }
