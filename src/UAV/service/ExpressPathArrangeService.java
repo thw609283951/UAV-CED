@@ -90,11 +90,10 @@ public class ExpressPathArrangeService {
 		pointPreProcess();
 		List<ChildZone> childZones = childZonePatition();
 		for (ChildZone childZone : childZones) {
-			//TODO:czPs是子区域的所有停靠点和对应的仓库点，需要使用childZone从数据库获得
-			List<Point> czPs = new ArrayList<Point>();
-			
-			double[][] pDis = getPointDisByRoad(czPs);
-			List<Point> carPath = carPathArrange(czPs, pDis);
+			List<Point> czPoints = childZone.getCzPoints();
+			double[][] pDis = getPointDisByRoad(czPoints);
+//			List<Point> carPath = carPathArrange(czPoints, pDis);
+			childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
 			UAVArrange(childZone);
 		}
 	}
@@ -123,9 +122,9 @@ public class ExpressPathArrangeService {
 		allDockPoints = epaDao.getAllDockPoints();
 		allNeedPoints = epaDao.getAllNeedPoints();
 		KDTree<Integer> kdTree = new KDTree<Integer>(2);
-		Map<Integer, ArrayList<NeedPoint>> needPointMap = new TreeMap<Integer, ArrayList<NeedPoint>>();
+		//Map<Integer, ArrayList<NeedPoint>> needPointMap = new TreeMap<Integer, ArrayList<NeedPoint>>();
 		for (DockPoint dockPoint : allDockPoints) {
-			needPointMap.put(dockPoint.getId(), new ArrayList<NeedPoint>());
+			//needPointMap.put(dockPoint.getId(), new ArrayList<NeedPoint>());
 			double[] coord = {dockPoint.getLongitude().doubleValue(),
 					dockPoint.getLatitude().doubleValue()};
 			try {
@@ -148,7 +147,8 @@ public class ExpressPathArrangeService {
 				//System.out.println(id + "\t\t" + needPoint.getId());
 				for (DockPoint d : allDockPoints) {
 					if (d.getId().equals(id)) {
-						needPointMap.get(d.getId()).add(needPoint);
+						//needPointMap.get(d.getId()).add(needPoint);
+						d.getNeedPoint_arr().add(needPoint);
 						needPoint.setDockid(d.getId());
 						needPoint.setDockdis(MapDistance.GetDistance(
 								needPoint.getLongitude(), 
@@ -166,12 +166,12 @@ public class ExpressPathArrangeService {
 			
 		}
 		
-		for (DockPoint dockPoint : allDockPoints) {
-			dockPoint.setSelected(true);
-			dockPoint.setCzid(-1);
-			needPointMap.get(dockPoint.getId()).toArray();
-			dockPoint.setNeedPoint_arr((NeedPoint[]) needPointMap.get(dockPoint.getId()).toArray(new NeedPoint[0]));
-		}
+//		for (DockPoint dockPoint : allDockPoints) {
+//			dockPoint.setSelected(true);
+//			dockPoint.setCzid(-1);
+//			needPointMap.get(dockPoint.getId()).toArray();
+//			dockPoint.setNeedPoint_arr((NeedPoint[]) needPointMap.get(dockPoint.getId()).toArray(new NeedPoint[0]));
+//		}
 		
 		selectedDockPoints = allDockPoints;
 		

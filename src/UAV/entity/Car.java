@@ -6,7 +6,8 @@ import UAV.entity.DockPoint;
 
 
 public class Car {
-	private float v;//速度
+	private Integer Id;
+	private double v;//速度
 	private int uavCount;//无人机数目
 	private ArrayList<UavForExpress> Uavs;
 	
@@ -24,10 +25,16 @@ public class Car {
 		
 	}
 	
-	public float getV() {
+	public Integer getId() {
+		return Id;
+	}
+	public void setId(Integer id) {
+		Id = id;
+	}
+	public double getV() {
 		return v;
 	}
-	public void setV(float v) {
+	public void setV(double v) {
 		this.v = v;
 	}
 	public int getUavCount() {
