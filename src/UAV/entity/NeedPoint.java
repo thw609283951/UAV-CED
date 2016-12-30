@@ -12,12 +12,12 @@ public class NeedPoint extends Point implements java.io.Serializable {
 	// Fields
 
 	
-	private Integer group;
-	private Integer amount;
-	private Timestamp deadline;
-	
-	
-	
+	private Integer group;//没用了
+	private Integer amount;//需求点需要送快递的数量
+	private Timestamp deadline;//需求点的deadline，不考虑了，没时间就不做了
+	private Integer dockid;
+	private Double dockdis;
+
 	
 	public NeedPoint() {
 		super();
@@ -28,11 +28,13 @@ public class NeedPoint extends Point implements java.io.Serializable {
 	
 	
 	
-	public NeedPoint(Integer group, Integer amount, Timestamp deadline) {
-		super();
+	public NeedPoint(Integer id, Integer group, Double longitude, Double latitude, Integer amount, Timestamp deadline, Integer dockid, Double dockdis) {
+		super(id, longitude, latitude);
 		this.group = group;
 		this.amount = amount;
 		this.deadline = deadline;
+		this.dockid = dockid;
+		this.dockdis = dockdis;
 	}
 
 
@@ -56,6 +58,48 @@ public class NeedPoint extends Point implements java.io.Serializable {
 	}
 	public void setDeadline(Timestamp deadline) {
 		this.deadline = deadline;
+	}
+
+
+
+
+
+	public Integer getDockid() {
+		return dockid;
+	}
+
+
+
+
+
+	public void setDockid(Integer dockid) {
+		this.dockid = dockid;
+	}
+
+
+
+
+
+	public Double getDockdis() {
+		return dockdis;
+	}
+
+
+
+
+
+	public void setDockdis(Double dockdis) {
+		this.dockdis = dockdis;
+	}
+
+
+
+
+
+	@Override
+	public String toString() {
+		return super.toString() + "NeedPoint [amount=" + amount + ", dockid=" + dockid
+				+ ", dockdis=" + dockdis + "]";
 	}
 
 	

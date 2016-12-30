@@ -1,4 +1,8 @@
 package UAV.entity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 // default package
 
 /**
@@ -8,21 +12,32 @@ package UAV.entity;
 public class DockPoint extends Point implements java.io.Serializable {
 
 	// Fields
-
+	private Integer czid;
 	//private Integer id;
 	private Integer group;//没用了。。。。
 	//private Double longitude;
 	//private Double latitude;
 	private Boolean selected;//是否是被选择了的停靠点
-    private NeedPoint NeedPoint_arr[];//保存这个停靠点所有的需求点
+    private ArrayList<NeedPoint> NeedPoint_arr;//保存这个停靠点所有的需求点
+
 	public DockPoint() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public DockPoint(Integer group, Boolean selected) {
-		super();
+
+	public DockPoint(Integer id, Integer czid, Integer group, Double longitude, Double latitude, Boolean selected) {
+		super(id, longitude, latitude);
+		this.czid = czid;
 		this.group = group;
 		this.selected = selected;
+	}
+
+
+	public Integer getCzid() {
+		return czid;
+	}
+	public void setCzid(Integer czid) {
+		this.czid = czid;
 	}
 	public Integer getGroup() {
 		return group;
@@ -36,12 +51,24 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setSelected(Boolean selected) {
 		this.selected = selected;
 	}
-    public NeedPoint[] getNeedPoint_arr() {
-        return NeedPoint_arr;
-    }
-    public void setNeedPoint_arr(NeedPoint needPoint_arr[]) {
-        NeedPoint_arr = needPoint_arr;
-    }
+	public ArrayList<NeedPoint> getNeedPoint_arr() {
+		return NeedPoint_arr;
+	}
+	public void setNeedPoint_arr(ArrayList<NeedPoint> needPoint_arr) {
+		NeedPoint_arr = needPoint_arr;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
+				+ ", NeedPoint_arr=" + NeedPoint_arr + "]";
+	}
+
+//    @Override
+//    public String toString() {
+//        return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
+//                + ", NeedPoint_arr=" + Arrays.toString(NeedPoint_arr) + "]";
+//    }
 	
 
 }
