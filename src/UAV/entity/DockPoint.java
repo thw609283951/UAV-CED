@@ -18,7 +18,7 @@ public class DockPoint extends Point implements java.io.Serializable {
 	//private Double longitude;
 	//private Double latitude;
 	private Boolean selected;//是否是被选择了的停靠点
-    private ArrayList<NeedPoint> NeedPoint_arr;//保存这个停靠点所有的需求点
+    private ArrayList<NeedPoint> NeedPoint_arr = new ArrayList<NeedPoint>();//保存这个停靠点所有的需求点
 
 	public DockPoint() {
 		super();
