@@ -197,7 +197,7 @@ public class ExpressPathArrangeService {
 	 * 在selectedDockPoints中修改并将修改添加到数据库
 	 * 生成ChildZone序列，并填写其中的wrid
 	 */
-	private static List<ChildZone> childZonePatition() {
+	private static List<ArrayList<Point>> childZonePatition() {
 		int index = 1;
 		ArrayList<WarePoint> UAVWarePoint = new ArrayList<WarePoint>();
 		ArrayList<Car> UAVCar = new ArrayList<Car>();//存放一个仓库点所有的车
@@ -205,43 +205,50 @@ public class ExpressPathArrangeService {
 		ChildZone Zone = new ChildZone();//单个子区域
 		Car car = new Car();//单辆车 应该直接从UAVCar中获得，这里暂时有自己创建
 		String[] args = null;
-		DockPoint fake=new DockPoint();//伪装成停靠点的仓库点（为了添加到子区域中）
 		int wareid=0;
+		List<ArrayList<Point>> AllChildZone = new ArrayList<ArrayList<Point>>();
+		ArrayList<Point> onechildzone = new ArrayList<Point>();
+		Point mypoint = new Point();
 //		Utility.display(resultList);
 		for (WarePoint warePoint:UAVWarePoint){
 			//根据仓库点的id从数据库获得子区域划分结果
-			resultList=DBscan.resultList(wareid);
-			fake.setLatitude(warePoint.getLatitude());
-			fake.setLongitude(warePoint.getLongitude());
+			resultList=DBscan.resultList(wareid);//获得一个仓库点的子区域集合
 			for(Iterator<ArrayList<DockPoint>> it=resultList.iterator();it.hasNext();){
 				ArrayList<DockPoint> lst=it.next();//子区域
 				if(lst.isEmpty()){
 					continue;
 				}
-				System.out.println("-----第"+index+"个聚类-----");
+				onechildzone.clear();//清楚子区域伪装数组
+//				System.out.println("-----第"+index+"个聚类-----");
 				//为每个子区域配子区域id 负责子区域的仓库点 子区域的停靠点集合 负责子区域的车 多个仓库点的话需要再加一层循环
 				// 这里只考虑了一个仓库点
-				lst.add(0, fake);//将仓库点（伪装的停靠点）添加到第一位
+				
 				Zone.setDockPoint_arr(lst);//设置子区域停靠点
 				Zone.setId(index);//设置子区域id
 				Zone.setWrid(index);//设置负责子区域的仓库点
 				Zone.setCar(car);//设置负责子区域的车
 				
-				//以下是打印出来自己看的
 				int number=1;
+				//以下是伪装
+				//添加仓库点
+				mypoint.setLatitude(warePoint.getLatitude());
+				mypoint.setLongitude(warePoint.getLongitude());
+				//添加停靠点
 				for(Iterator<DockPoint> it1=lst.iterator();it1.hasNext();){
 					DockPoint p=it1.next();
-					System.out.print(number);
-					number++;
-					System.out.println(":"+p.print());
-					
+//					System.out.print(number);
+//					number++;
+//					System.out.println(":"+p.print());
+					mypoint.setLatitude(p.getLatitude());
+					mypoint.setLongitude(p.getLongitude());
+					onechildzone.add(mypoint);
 				}
+				AllChildZone.add(onechildzone);
 				index++;
 		    }
 		}
 		
-//		return new ArrayList<ChildZone>();
-		return UAVChildZone;
+		return AllChildZone;
 	}
 	public static void main(String[] args) {
 		childZonePatition();
