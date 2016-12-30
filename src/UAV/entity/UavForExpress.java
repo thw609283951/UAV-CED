@@ -14,6 +14,7 @@ public class UavForExpress implements java.io.Serializable {
 	// Fields
 
 	private Integer id;
+	private Integer carId;
 	private String version;//无人机的型号，注意一些同型号无人机的属性被保存到了使用这个字段链接的UavVersionInfo表中
 	private Double longitude;//经度
 	private Double latitude;//纬度
@@ -39,14 +40,30 @@ public class UavForExpress implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public UavForExpress(String version, Double longitude, Double latitude,
-			Integer remainingpower, Integer expressamount) {
+//	public UavForExpress(String version, Double longitude, Double latitude,
+//			Integer remainingpower, Integer expressamount) {
+//		this.version = version;
+//		this.longitude = longitude;
+//		this.latitude = latitude;
+//		this.remainingpower = remainingpower;
+//		this.expressamount = expressamount;
+//		this.P=new ArrayList<ArrayList<Double>>();
+//	}
+
+	public UavForExpress(Integer id, Integer carId, String version,
+			Double longitude, Double latitude, Integer remainingpower,
+			ArrayList<ArrayList<Double>> p, double velocity,
+			Integer expressamount) {
+		super();
+		this.id = id;
+		this.carId = carId;
 		this.version = version;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.remainingpower = remainingpower;
+		P = p;
+		this.velocity = velocity;
 		this.expressamount = expressamount;
-		this.P=new ArrayList<ArrayList<Double>>();
 	}
 
 	// Property accessors
@@ -72,12 +89,22 @@ public class UavForExpress implements java.io.Serializable {
 			time+=dist / this.velocity;
 		}
 	}
+
+
 	public Integer getId() {
 		return this.id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getCarId() {
+		return carId;
+	}
+
+	public void setCarId(Integer carId) {
+		this.carId = carId;
 	}
 
 	public String getVersion() {

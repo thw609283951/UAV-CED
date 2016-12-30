@@ -58,6 +58,12 @@ public class DockPoint extends Point implements java.io.Serializable {
 		NeedPoint_arr = needPoint_arr;
 	}
 
+	@Override
+	public String toString() {
+		return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
+				+ ", NeedPoint_arr=" + NeedPoint_arr + "]";
+	}
+
 //    @Override
 //    public String toString() {
 //        return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
