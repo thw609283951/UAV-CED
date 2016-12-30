@@ -95,10 +95,10 @@
               	index++;
               	index--;
               	console.log(index);
-              	driving.search([positions[index][0],positions[index][1]], [positions[index+1][0],positions[index+1][1]], function(status, result) {
-     			document.getElementById("index").value=index+1;
+              	
+              	driving.search([positions[index][0],positions[index][1]], [positions[index+1][0],positions[index+1][1]], function(status, result) {});
+    			document.getElementById("index").value=index+1;
      			//TODO 解析返回结果，自己生成操作界面和地图展示界面
- 				});
     		}
     	</script>
 		<div class="button-group">
