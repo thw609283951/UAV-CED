@@ -15,10 +15,41 @@ public class DockPoint extends Point implements java.io.Serializable {
 	private Integer czid;
 	//private Integer id;
 	private Integer group;//没用了。。。。
-	//private Double longitude;
-	//private Double latitude;
 	private Boolean selected;//是否是被选择了的停靠点
-    private ArrayList<NeedPoint> NeedPoint_arr = new ArrayList<NeedPoint>();//保存这个停靠点所有的需求点
+	private ArrayList<NeedPoint> NeedPoint_arr = new ArrayList<NeedPoint>();//保存这个停靠点所有的需求点
+
+	private boolean isKey;//判断是否是核心点
+	private boolean isClassed;//判断是否已经分类
+	private String name;//显示点的名称
+	private Integer id;//点的ID
+	private int idnumber=0;
+
+
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public boolean isKey() {
+		return isKey;
+	}
+	public void setKey(boolean isKey) {
+		this.isKey = isKey;
+	}
+	public boolean isClassed() {
+		return isClassed;
+	}
+	public void setClassed(boolean isClassed) {
+		this.isClassed = isClassed;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+
 
 	public DockPoint() {
 		super();
@@ -51,6 +82,16 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setSelected(Boolean selected) {
 		this.selected = selected;
 	}
+	public DockPoint(String str,int id){//打印分类结果
+		String[] p=str.split(",");
+		this.setLongitude(Double.parseDouble(p[0]));
+		this.setLatitude(Double.parseDouble(p[1]));
+		this.name=p[2];
+		this.id=id;
+	}
+	public String print(){
+		return "<"+this.getLongitude()+","+this.getLatitude()+"> 地点:"+this.getName()+" id:"+this.getId();
+	}
 	public ArrayList<NeedPoint> getNeedPoint_arr() {
 		return NeedPoint_arr;
 	}
@@ -70,5 +111,6 @@ public class DockPoint extends Point implements java.io.Serializable {
 //                + ", NeedPoint_arr=" + Arrays.toString(NeedPoint_arr) + "]";
 //    }
 	
+
 
 }

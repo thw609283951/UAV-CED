@@ -2,6 +2,7 @@ package UAV.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,10 +26,13 @@ import UAV.entity.DockPoint;
 import UAV.entity.NeedPoint;
 import UAV.entity.Point;
 import UAV.entity.WarePoint;
+import UAV.service.Utility;
+import UAV.service.DBscan;
 
 import UAV.factory.ExpressPathArrangeDAOFactory;
 
 import UAV.entity.UavForExpress;
+
 
 /*
  * entity中咱们能用到的类（也即是数据库中咱们能用到的表）:
@@ -60,10 +64,10 @@ public class ExpressPathArrangeService {
 	private List<NeedPoint> allNeedPoints;//所有需求点
 	private List<DockPoint> selectedDockPoints;//选择的停靠点
 	private List<WarePoint> warePoints;//仓库店
-	// 一些常量在这里集中存放
-	private Double max_trade = new Double(20);//无人机总航程,单位km
-	private Double total_charge_time = new Double(20);//无人机总充电时间，单位h
 
+	private int total_charge_time = 100; //最长充电总时间
+	private double max_trade = 10;       //最长飞行距离
+	private static List<ArrayList<DockPoint>> resultList=new ArrayList<ArrayList<DockPoint>>();
 	public List<DockPoint> getAllDockPoints() {
 		return allDockPoints;
 	}
@@ -99,7 +103,7 @@ public class ExpressPathArrangeService {
 		for (ChildZone childZone : childZones) {
 			List<Point> czPoints = childZone.getCzPoints();
 			double[][] pDis = getPointDisByRoad(czPoints);
-//			List<Point> carPath = carPathArrange(czPoints, pDis);
+			//List<Point> carPath = carPathArrange(czPoints, pDis);
 			childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
 			UAVArrange(childZone);
 		}
@@ -200,10 +204,40 @@ public class ExpressPathArrangeService {
 	 * 在selectedDockPoints中修改并将修改添加到数据库
 	 * 生成ChildZone序列，并填写其中的wrid
 	 */
-	private List<ChildZone> childZonePatition() {
-		
-		
-		return new ArrayList<ChildZone>();
+	private static List<ChildZone> childZonePatition() {
+		int index = 1;
+		ArrayList<Car> UAVCar = new ArrayList<Car>();//存放一个仓库点所有的车
+		ArrayList<ChildZone> UAVChildZone = new ArrayList<ChildZone>();//存放所有子区域
+		ChildZone Zone = new ChildZone();//单个子区域
+		Car car = new Car();//单辆车 应该直接从UAVCar中获得，这里暂时有自己创建
+		String[] args = null;
+		resultList=DBscan.resultList();
+//		Utility.display(resultList);
+		for(Iterator<ArrayList<DockPoint>> it=resultList.iterator();it.hasNext();){
+			ArrayList<DockPoint> lst=it.next();
+			if(lst.isEmpty()){
+				continue;
+			}
+			System.out.println("-----第"+index+"个聚类-----");
+			//为每个子区域配子区域id 负责子区域的仓库点 子区域的停靠点集合 负责子区域的车 多个仓库点的话需要再加一层循环
+			// 这里只考虑了一个仓库点
+			Zone.setDockPoint_arr(lst);//设置子区域停靠点
+			Zone.setId(index);//设置子区域id
+			Zone.setWrid(index);//设置负责子区域的仓库点
+			Zone.setCar(car);//设置负责子区域的车
+			//以下是打印出来自己看的
+			int number=1;
+			for(Iterator<DockPoint> it1=lst.iterator();it1.hasNext();){
+				DockPoint p=it1.next();
+				System.out.print(number);
+				number++;
+				System.out.println(":"+p.print());
+
+			}
+			index++;
+	    }
+//		return new ArrayList<ChildZone>();
+		return null;
 	}
 	
 	/**
@@ -249,7 +283,7 @@ public class ExpressPathArrangeService {
 		tmp_time = dist/car.getV();//到下一个停靠点的时间
 		time+=tmp_time;
 		car.add_P(time,next_dock);//向仓库点添加时序序列表示其由仓库点开始，走向了第一个停靠点
-		
+
 		for(DockPoint dock : dps){ //遍历停靠点
 			S = dock.getNeedPoint_arr();//所有需求点
 			next_dock = childZone.get_next_dock(dock);//获取下一个停靠点;
@@ -386,14 +420,14 @@ public class ExpressPathArrangeService {
 		// TODO Auto-generated method stub
 		return total_charge_time*(max_l/max_trade);
 	}
-	
+
 	/**
 	 * 妥
 	 * 测试代码
 	 * @param args
 	 */
 	public static void main(String[] args) {
-    	
+
     	ExpressPathArrangeService ep = new ExpressPathArrangeService();
     	ep.pathArrange();
     }
