@@ -26,6 +26,13 @@ public class DockPoint extends Point implements java.io.Serializable {
 	private int idnumber=0;
 	
 
+
+	public int getIdnumber() {
+		return idnumber;
+	}
+	public void setIdnumber(int idnumber) {
+		this.idnumber = idnumber;
+	}
 	public Integer getWrid() {
 		return wrid;
 	}

@@ -197,7 +197,7 @@ public class ExpressPathArrangeService {
 			}
 			
 		}
-		
+
 //		for (DockPoint dockPoint : allDockPoints) {
 //			dockPoint.setSelected(true);
 //			dockPoint.setCzid(-1);
@@ -229,7 +229,7 @@ public class ExpressPathArrangeService {
 		int index = 1;
 		ArrayList<WarePoint> UAVWarePoint = new ArrayList<WarePoint>();
 		ArrayList<Car> UAVCar = new ArrayList<Car>();//存放一个仓库点所有的车
-		ArrayList<ChildZone> UAVChildZone = new ArrayList<ChildZone>();//存放所有子区域
+		ArrayList<ChildZone> UAVChildZone = new ArrayList<ChildZone>();//存放所有子区域 不同仓库点的子区域都在
 		ChildZone Zone = new ChildZone();//单个子区域
 		Car car = new Car();//单辆车 应该直接从UAVCar中获得，这里暂时有自己创建
 		String[] args = null;
@@ -251,7 +251,6 @@ public class ExpressPathArrangeService {
 				//为每个子区域配子区域id 负责子区域的仓库点 子区域的停靠点集合 负责子区域的车 多个仓库点的话需要再加一层循环
 				// 这里只考虑了一个仓库点
 
-				Zone.setDockPoint_arr(lst);//设置子区域停靠点
 				Zone.setId(index);//设置子区域id
 				Zone.setWrid(index);//设置负责子区域的仓库点
 				Zone.setCar(car);//设置负责子区域的车
@@ -271,12 +270,13 @@ public class ExpressPathArrangeService {
 					mypoint.setLongitude(p.getLongitude());
 					onechildzone.add(mypoint);
 				}
-				AllChildZone.add(onechildzone);
+				Zone.setCzPoints(onechildzone);
+//				AllChildZone.add(Zone);
+				UAVChildZone.add(Zone);
 				index++;
 		    }
 		}
-
-		return AllChildZone;
+		return UAVChildZone;
 	}
 
 	/**
@@ -466,7 +466,6 @@ public class ExpressPathArrangeService {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
     	ExpressPathArrangeService ep = new ExpressPathArrangeService();
     	ep.pathArrange();
     }
