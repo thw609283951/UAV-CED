@@ -108,7 +108,7 @@ public class ExpressPathArrangeService {
 			List<Point> czPoints = childZone.getCzPoints();
 			double[][] pDis = getPointDisByRoad(czPoints);
 			//List<Point> carPath = carPathArrange(czPoints, pDis);
-			//childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
+			childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
 			UAVArrange(childZone);
 		}
 	}
@@ -350,7 +350,6 @@ public class ExpressPathArrangeService {
 		for (int i = 1; i < czps.size(); i++) {
 			dps.add((DockPoint) czps.get(i));
 		}
-		
 		car.add_P(time,czps.get(0));//向仓库点添加时序序列表示其由仓库点开始，走向了第一个停靠点
 		Point next_dock = childZone.get_next_dock(dps.get(0));//获取第一个停靠点;
 		dist = getDistanceByAir(dps.get(0),next_dock);
