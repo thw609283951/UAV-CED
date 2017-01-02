@@ -66,7 +66,8 @@ public class DBscan {
  			e.printStackTrace();
  		}     
  	}
- 	public static List<ArrayList<DockPoint>> resultList(){
+ 	public static List<ArrayList<DockPoint>> resultList(int index){
+ 		//根据index获取仓库点所管理的停靠点
  		try {
  			//调用DBSCAN的实现算法
  			applyDbscan();

@@ -60,13 +60,14 @@ public class ExpressPathArrangeService {
 
 	
 	private List<DockPoint> allDockPoints;//所有停靠点
-	
+
 	private List<NeedPoint> allNeedPoints;//所有需求点
 	private List<DockPoint> selectedDockPoints;//选择的停靠点
 	private List<WarePoint> warePoints;//仓库店
 
 	private int total_charge_time = 100; //最长充电总时间
 	private double max_trade = 10;       //最长飞行距离
+	private int uavsInEveryCar = 10;     //每辆车上的无人机数量
 	private static List<ArrayList<DockPoint>> resultList=new ArrayList<ArrayList<DockPoint>>();
 	public List<DockPoint> getAllDockPoints() {
 		return allDockPoints;
@@ -100,6 +101,7 @@ public class ExpressPathArrangeService {
 //		allNeedPoints = epaDao.getAllNeedPoints();
 		pointPreProcess();
 		List<ChildZone> childZones = childZonePatition();
+		createCarAndUavs(childZones);//根据子区域，产生Car以及uav对象
 		for (ChildZone childZone : childZones) {
 			List<Point> czPoints = childZone.getCzPoints();
 			double[][] pDis = getPointDisByRoad(czPoints);
@@ -109,7 +111,26 @@ public class ExpressPathArrangeService {
 		}
 	}
 	
-	
+	/**
+	 * 妥
+	 * new出car和uav对象，并将Car绑定到子区域上，将uav绑定到car上
+	 * @param childZones
+	 */
+	private void createCarAndUavs(List<ChildZone> childZones) {
+		// TODO Auto-generated method stub
+		for (ChildZone childZone : childZones){
+			Car car= new Car();
+			ArrayList<UavForExpress> uavs = new ArrayList<UavForExpress>();
+			for (int i = 0; i < uavsInEveryCar ; i++){
+				UavForExpress uav = new UavForExpress();
+				uavs.add(uav);
+			}
+			car.setUavs(uavs);
+			childZone.setCar(car);
+		}
+	}
+
+
 	/**
 	 * 路径显示
 	 * 如果本功能放到pathArrange里面更简单，那就放进去。。
@@ -206,40 +227,58 @@ public class ExpressPathArrangeService {
 	 */
 	private static List<ChildZone> childZonePatition() {
 		int index = 1;
+		ArrayList<WarePoint> UAVWarePoint = new ArrayList<WarePoint>();
 		ArrayList<Car> UAVCar = new ArrayList<Car>();//存放一个仓库点所有的车
 		ArrayList<ChildZone> UAVChildZone = new ArrayList<ChildZone>();//存放所有子区域
 		ChildZone Zone = new ChildZone();//单个子区域
 		Car car = new Car();//单辆车 应该直接从UAVCar中获得，这里暂时有自己创建
 		String[] args = null;
-		resultList=DBscan.resultList();
+		int wareid=0;
+		List<ArrayList<Point>> AllChildZone = new ArrayList<ArrayList<Point>>();
+		ArrayList<Point> onechildzone = new ArrayList<Point>();
+		Point mypoint = new Point();
 //		Utility.display(resultList);
-		for(Iterator<ArrayList<DockPoint>> it=resultList.iterator();it.hasNext();){
-			ArrayList<DockPoint> lst=it.next();
-			if(lst.isEmpty()){
-				continue;
-			}
-			System.out.println("-----第"+index+"个聚类-----");
-			//为每个子区域配子区域id 负责子区域的仓库点 子区域的停靠点集合 负责子区域的车 多个仓库点的话需要再加一层循环
-			// 这里只考虑了一个仓库点
-			Zone.setDockPoint_arr(lst);//设置子区域停靠点
-			Zone.setId(index);//设置子区域id
-			Zone.setWrid(index);//设置负责子区域的仓库点
-			Zone.setCar(car);//设置负责子区域的车
-			//以下是打印出来自己看的
-			int number=1;
-			for(Iterator<DockPoint> it1=lst.iterator();it1.hasNext();){
-				DockPoint p=it1.next();
-				System.out.print(number);
-				number++;
-				System.out.println(":"+p.print());
+		for (WarePoint warePoint:UAVWarePoint){
+			//根据仓库点的id从数据库获得子区域划分结果
+			resultList=DBscan.resultList(wareid);//获得一个仓库点的子区域集合
+			for(Iterator<ArrayList<DockPoint>> it=resultList.iterator();it.hasNext();){
+				ArrayList<DockPoint> lst=it.next();//子区域
+				if(lst.isEmpty()){
+					continue;
+				}
+				onechildzone.clear();//清楚子区域伪装数组
+//				System.out.println("-----第"+index+"个聚类-----");
+				//为每个子区域配子区域id 负责子区域的仓库点 子区域的停靠点集合 负责子区域的车 多个仓库点的话需要再加一层循环
+				// 这里只考虑了一个仓库点
 
-			}
-			index++;
-	    }
-//		return new ArrayList<ChildZone>();
-		return null;
+				Zone.setDockPoint_arr(lst);//设置子区域停靠点
+				Zone.setId(index);//设置子区域id
+				Zone.setWrid(index);//设置负责子区域的仓库点
+				Zone.setCar(car);//设置负责子区域的车
+
+				int number=1;
+				//以下是伪装
+				//添加仓库点
+				mypoint.setLatitude(warePoint.getLatitude());
+				mypoint.setLongitude(warePoint.getLongitude());
+				//添加停靠点
+				for(Iterator<DockPoint> it1=lst.iterator();it1.hasNext();){
+					DockPoint p=it1.next();
+//					System.out.print(number);
+//					number++;
+//					System.out.println(":"+p.print());
+					mypoint.setLatitude(p.getLatitude());
+					mypoint.setLongitude(p.getLongitude());
+					onechildzone.add(mypoint);
+				}
+				AllChildZone.add(onechildzone);
+				index++;
+		    }
+		}
+
+		return AllChildZone;
 	}
-	
+
 	/**
 	 * 冯
 	 * 返回0;6;11;13;2;10;1;5;4;14;3;12;9;8;7，其中0代表仓库点
