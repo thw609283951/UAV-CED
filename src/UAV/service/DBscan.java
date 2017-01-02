@@ -77,7 +77,7 @@ public class DBscan {
  				Utility.input_not_classed_point(resultList,i);
  			}
  			notclassed.clear();
-// 			Utility.display(resultList);
+ 			Utility.display(resultList);
 // 			Utility.display_notclassed(notclassed);
  		} catch (IOException e) {
  			// TODO Auto-generated catch block

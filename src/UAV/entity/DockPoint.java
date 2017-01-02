@@ -39,6 +39,12 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setWrid(Integer wrid) {
 		this.wrid = wrid;
 	}
+//	public Integer getId() {
+//		return id;
+//	}
+//	public void setId(Integer id) {
+//		this.id = id;
+//	}
 	public boolean isKey() {
 		return isKey;
 	}
@@ -95,10 +101,10 @@ public class DockPoint extends Point implements java.io.Serializable {
 		this.setLongitude(Double.parseDouble(p[0]));
 		this.setLatitude(Double.parseDouble(p[1]));
 		this.name=p[2];
-		this.idnumber = id;
+//		this.id=id;
 	}
 	public String print(){
-		return "<"+this.getLongitude()+","+this.getLatitude()+"> 地点:"+this.getName()+" id:"+this.getIdnumber();
+		return "<"+this.getLongitude()+","+this.getLatitude()+"> 地点:"+this.getName()+" id:"+this.getId();
 	}
 	public ArrayList<NeedPoint> getNeedPoint_arr() {
 		return NeedPoint_arr;
@@ -106,17 +112,10 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setNeedPoint_arr(ArrayList<NeedPoint> needPoint_arr) {
 		NeedPoint_arr = needPoint_arr;
 	}
-
 	@Override
 	public String toString() {
-		return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
-				+ ", NeedPoint_arr=" + NeedPoint_arr + "]";
+		return super.toString() + "DockPoint [czid=" + czid + ", wrid=" + wrid
+				+ ", NeedPoint_arr=" + NeedPoint_arr + ", isClassed="
+				+ isClassed + ", name=" + name + "]";
 	}
-
-//    @Override
-//    public String toString() {
-//        return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
-//                + ", NeedPoint_arr=" + Arrays.toString(NeedPoint_arr) + "]";
-//    }
-	
 }
