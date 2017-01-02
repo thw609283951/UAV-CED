@@ -14,8 +14,8 @@ public class DBscan {
  	private static List<ArrayList<DockPoint>> resultList=new ArrayList<ArrayList<DockPoint>>();//存储最后的聚类结果
  	private static List<DockPoint> notclassed=new ArrayList<DockPoint>();//存放没有被分类的点
 
- 	private static void applyDbscan() throws IOException{
- 		pointsList=Utility.getPointsList();
+ 	private static void applyDbscan(List<DockPoint> selectedDockPoints, int index2) throws IOException{
+ 		pointsList=Utility.getPointsList(selectedDockPoints,index2);
  		for(int index=0;index<pointsList.size();++index){
  			ArrayList<DockPoint> tmpLst=new ArrayList<DockPoint>();
  			DockPoint p=pointsList.get(index);
@@ -52,7 +52,7 @@ public class DBscan {
  	public static void main(String[] args) {
  		try {
  			//调用DBSCAN的实现算法
- 			applyDbscan();
+ 			applyDbscan(notclassed, 0);
 // 			Utility.display(resultList);+
 // 			Utility.display_notclassed(notclassed);
  			for (DockPoint i:notclassed){
@@ -66,11 +66,11 @@ public class DBscan {
  			e.printStackTrace();
  		}     
  	}
- 	public static List<ArrayList<DockPoint>> resultList(int index){
+ 	public static List<ArrayList<DockPoint>> resultList(int index, List<DockPoint> selectedDockPoints){
  		//根据index获取仓库点所管理的停靠点
  		try {
  			//调用DBSCAN的实现算法
- 			applyDbscan();
+ 			applyDbscan(selectedDockPoints,index);
 // 			Utility.display(resultList);+
 // 			Utility.display_notclassed(notclassed);
  			for (DockPoint i:notclassed){

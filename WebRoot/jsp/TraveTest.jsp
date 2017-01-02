@@ -16,6 +16,8 @@
 <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=您申请的key值"></script>
 <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
 <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=您申请的key值&plugin=AMap.Driving"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=MLSjqW8E6qbunua0gTEvjTWMXqrjwC6x"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/LuShu/1.2/src/LuShu_min.js"></script>
 </head>
 <body>
 	<div id="body-wrapper" class="myfont">
@@ -57,53 +59,76 @@
     	<input type="hidden" id="index" value=0>
 		<div id="TraveTest" style="height:600px"></div>
     	<div id="panel"></div>
-    	<script type="text/javascript">
-    		var marker, map = new AMap.Map("TraveTest", {
-	            resizeEnable: true,
-	            center: [126.629889,45.744779],
-	            zoom: 13
-	        });
-	        var markers=[];
-	        var positions=[];//倒是可以直接将点读取到positions中
-	        var clickEventListener = map.on('click', function(e) {
-	            markers=[];
-	            document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat();
-	            document.getElementById("newlongitudecomment").value=e.lnglat.getLng() ;
-	            document.getElementById("newlatitudecomment").value=e.lnglat.getLat();
-	            var x=document.getElementById("newlongitudecomment").value;
-	            var y=document.getElementById("newlatitudecomment").value;
-	            //console.log(x,y);
-	            positions.push([x,y]);
-	            //console.log(positions);
-	            for (var i = 0, marker; i < positions.length; i++) {
-	                    marker = new AMap.Marker({
-	                    map: map,
-	                    position: positions[i]
-	                });
-	                markers.push(marker);
-	                //console.log(markers);
-	            }   
-	        });
-    		function showroad() {
-    			var index=document.getElementById("index").value;
-    			var alldriving=[];
-    			var driving = new AMap.Driving({
-        			map: map,
-    			}); 
-    			// 根据起终点经纬度规划驾车导航路线
-    			console.log(index);
-              	index++;
-              	index--;
-              	console.log(index);
-              	
-              	driving.search([positions[index][0],positions[index][1]], [positions[index+1][0],positions[index+1][1]], function(status, result) {});
-    			document.getElementById("index").value=index+1;
-     			//TODO 解析返回结果，自己生成操作界面和地图展示界面
-    		}
-    	</script>
-		<div class="button-group">
-    		<input type="button" class="btn btn-info" value="展示路径" id="showonline" onclick="showroad()"/>    		
+    	<div class="button-group">
+    		<button id="run">开始</button> 
+    		<br>    		
+    		<input type="button" class="btn btn-info" value="添加点" id=showonline onclick="addPoint()"/>  
+   
+    		 		
         </div>
+		<script type="text/javascript">
+	// 百度地图API功能
+			var map = new BMap.Map("TraveTest");    // 创建Map实例
+			map.centerAndZoom(new BMap.Point(126.629889,45.744779), 15);  // 初始化地图,设置中心点坐标和地图级别
+			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+			map.setCurrentCity("哈尔滨");          // 设置地图显示的城市 此项是必须设置的
+			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+			var positions=[[126.660917,45.759976],[126.665166,45.760425],[126.668771,45.760156]];//倒是可以直接将点读取到positions中
+			var lushu;
+			// 实例化一个驾车导航用来生成路线
+    		var drv = new BMap.DrivingRoute('哈尔滨', {
+	        onSearchComplete: function(res) {
+	            if (drv.getStatus() == BMAP_STATUS_SUCCESS) {
+	                var plan = res.getPlan(0);
+	                var arrPois =[];
+	                for(var j=0;j<plan.getNumRoutes();j++){
+	                    var route = plan.getRoute(j);
+	                    arrPois= arrPois.concat(route.getPath());
+	                }
+	                map.addOverlay(new BMap.Polyline(arrPois, {strokeColor: '#111'}));
+	                map.setViewport(arrPois);
+	                
+	                lushu = new BMapLib.LuShu(map,arrPois,{
+	                defaultContent:"",//"从天安门到百度大厦"
+	                autoView:true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
+	                icon  : new BMap.Icon('http://developer.baidu.com/map/jsdemo/img/car.png', new BMap.Size(52,26),{anchor : new BMap.Size(27, 13)}),
+	                speed: 450,
+	                enableRotation:true,//是否设置marker随着道路的走向进行旋转
+	                landmarkPois: [
+	                   {lng:116.314782,lat:39.913508,html:'加油站',pauseTime:2},
+	                   {lng:116.315391,lat:39.964429,html:'高速公路收费<div><img src="http://map126.629889,45.744779com/img/logo-map.gif"/></div>',pauseTime:3},
+	                   {lng:116.381476,lat:39.974073,html:'肯德基早餐<div><img src="http://ishouji.baidu.com/resource/images/map/show_pic04.gif"/></div>',pauseTime:2}
+	                ]});          
+	            }
+	        }
+	    	});
+      		var p1 = new BMap.Point(126.660917,45.759976);
+			var p2 = new BMap.Point(126.665166,45.760425);
+			var p3 = new BMap.Point(126.651304,45.751143);
+			drv.search(p2,p3);
+			$("run").onclick = function(p,q){
+				lushu.start();
+			}
+			function $(element){
+				return document.getElementById(element);
+			}
+			function addPoint() {
+				for (i=0;i<positions.length;i++){
+					//console.log(positions[i]);
+					x=positions[i][0];
+					y=positions[i][1];
+					var point = new BMap.Point(x,y); // 创建标注
+					var marker = new BMap.Marker(point);// 将标注添加到地图中
+					map.addOverlay(marker);
+				}      
+				//marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+			}
+			
+	        
+	       
+			
+		</script>
+		
 	</div> 
 	 
 </body>

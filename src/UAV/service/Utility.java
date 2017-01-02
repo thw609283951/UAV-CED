@@ -110,19 +110,24 @@ public final class Utility {
 		
 	}
 	//获取文本中的样本点集合
-	public static List<DockPoint> getPointsList() throws IOException{
+	public static List<DockPoint> getPointsList(List<DockPoint> selectedDockPoints, int index2) throws IOException{
 		//链接数据库，将所有的DockPoint中select=true的点添加到lst中
 		//现在是模拟，真实操作的时候需要修改代码
 		List<DockPoint> lst=new ArrayList<DockPoint>();
-		String txtPath="src\\UAV\\service\\points.txt";
-		BufferedReader br=new BufferedReader(new FileReader(txtPath));
-		String str="";
-		int id=0;
-		while((str=br.readLine())!=null && str!=""){
-			lst.add(new DockPoint(str,id));
-			id++;
+		for(DockPoint it:selectedDockPoints){
+			if (it.getWrid() == index2){
+				lst.add(it);
+			}
 		}
-		br.close();
+//		String txtPath="src\\UAV\\service\\points.txt";
+//		BufferedReader br=new BufferedReader(new FileReader(txtPath));
+//		String str="";
+//		int id=0;
+//		while((str=br.readLine())!=null && str!=""){
+//			lst.add(new DockPoint(str,id));
+//			id++;
+//		}
+//		br.close();
 		return lst;
 	}
 	   //显示聚类的结果

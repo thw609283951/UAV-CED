@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package UAV.entity;
 
 import java.util.ArrayList;
