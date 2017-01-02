@@ -15,9 +15,9 @@ public class ChildZone implements java.io.Serializable {
 	// Fields
 	private Integer id;//子区域的id，逻辑主键
     private Integer wrid;//子区域所包含的仓库点的id，因为仓库点对子区域是一对多的关系，所以在ChildZone中添加此字段
-	private ArrayList<DockPoint> DockPoint_arr;//保存所有的停靠点
+	//private ArrayList<DockPoint> DockPoint_arr;//保存所有的停靠点
 	private Car car;//保存负责车辆
-
+	private ArrayList<Point> czPoints;
 	// Constructors
 
 	/** default constructor */
@@ -25,12 +25,14 @@ public class ChildZone implements java.io.Serializable {
 	}
 
 
-	public ChildZone(Integer id, Integer wrid) {
+	public ChildZone(Integer id, Integer wrid, Car car,
+			ArrayList<Point> czPoints) {
 		super();
 		this.id = id;
 		this.wrid = wrid;
+		this.car = car;
+		this.czPoints = czPoints;
 	}
-
 
 	// Property accessors
 
@@ -78,15 +80,22 @@ public class ChildZone implements java.io.Serializable {
 	}
 
 
-	public ArrayList<DockPoint> getDockPoint_arr() {
-		return DockPoint_arr;
+//	public ArrayList<DockPoint> getDockPoint_arr() {
+//		return DockPoint_arr;
+//	}
+//
+//
+//	public void setDockPoint_arr(ArrayList<DockPoint> dockPoint_arr) {
+//		DockPoint_arr = dockPoint_arr;
+//	}
+
+
+	public ArrayList<Point> getCzPoints() {
+		return czPoints;
 	}
 
-
-	public void setDockPoint_arr(ArrayList<DockPoint> dockPoint_arr) {
-		DockPoint_arr = dockPoint_arr;
+	public void setCzPoints(ArrayList<Point> czPoints) {
+		this.czPoints = czPoints;
 	}
-
-
 
 }

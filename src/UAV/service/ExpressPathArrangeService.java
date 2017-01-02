@@ -94,11 +94,10 @@ public class ExpressPathArrangeService {
 		pointPreProcess();
 		List<ChildZone> childZones = childZonePatition();
 		for (ChildZone childZone : childZones) {
-			//TODO:czPs是子区域的所有停靠点和对应的仓库点，需要使用childZone从数据库获得
-			List<Point> czPs = new ArrayList<Point>();
-			
-			double[][] pDis = getPointDisByRoad(czPs);
-			List<Point> carPath = carPathArrange(czPs, pDis);
+			List<Point> czPoints = childZone.getCzPoints();
+			double[][] pDis = getPointDisByRoad(czPoints);
+//			List<Point> carPath = carPathArrange(czPoints, pDis);
+			childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
 			UAVArrange(childZone);
 		}
 	}
@@ -127,9 +126,9 @@ public class ExpressPathArrangeService {
 		allDockPoints = epaDao.getAllDockPoints();
 		allNeedPoints = epaDao.getAllNeedPoints();
 		KDTree<Integer> kdTree = new KDTree<Integer>(2);
-		Map<Integer, ArrayList<NeedPoint>> needPointMap = new TreeMap<Integer, ArrayList<NeedPoint>>();
+		//Map<Integer, ArrayList<NeedPoint>> needPointMap = new TreeMap<Integer, ArrayList<NeedPoint>>();
 		for (DockPoint dockPoint : allDockPoints) {
-			needPointMap.put(dockPoint.getId(), new ArrayList<NeedPoint>());
+			//needPointMap.put(dockPoint.getId(), new ArrayList<NeedPoint>());
 			double[] coord = {dockPoint.getLongitude().doubleValue(),
 					dockPoint.getLatitude().doubleValue()};
 			try {
@@ -152,7 +151,8 @@ public class ExpressPathArrangeService {
 				//System.out.println(id + "\t\t" + needPoint.getId());
 				for (DockPoint d : allDockPoints) {
 					if (d.getId().equals(id)) {
-						needPointMap.get(d.getId()).add(needPoint);
+						//needPointMap.get(d.getId()).add(needPoint);
+						d.getNeedPoint_arr().add(needPoint);
 						needPoint.setDockid(d.getId());
 						needPoint.setDockdis(MapDistance.GetDistance(
 								needPoint.getLongitude(), 
@@ -169,13 +169,13 @@ public class ExpressPathArrangeService {
 			}
 			
 		}
-		
-		for (DockPoint dockPoint : allDockPoints) {
-			dockPoint.setSelected(true);
-			dockPoint.setCzid(-1);
-			needPointMap.get(dockPoint.getId()).toArray();
-			//dockPoint.setNeedPoint_arr((NeedPoint[]) needPointMap.get(dockPoint.getId()).toArray(new NeedPoint[0]));
-		}
+//		for (DockPoint dockPoint : allDockPoints) {
+//			dockPoint.setSelected(true);
+//			dockPoint.setCzid(-1);
+//			needPointMap.get(dockPoint.getId()).toArray();
+//			dockPoint.setNeedPoint_arr((NeedPoint[]) needPointMap.get(dockPoint.getId()).toArray(new NeedPoint[0]));
+//		}
+
 		
 		selectedDockPoints = allDockPoints;
 		
@@ -197,11 +197,11 @@ public class ExpressPathArrangeService {
 	 * 在selectedDockPoints中修改并将修改添加到数据库
 	 * 生成ChildZone序列，并填写其中的wrid
 	 */
-	private static List<ArrayList<Point>> childZonePatition() {
+	private static List<ChildZone> childZonePatition() {
 		int index = 1;
 		ArrayList<WarePoint> UAVWarePoint = new ArrayList<WarePoint>();
 		ArrayList<Car> UAVCar = new ArrayList<Car>();//存放一个仓库点所有的车
-		ArrayList<ChildZone> UAVChildZone = new ArrayList<ChildZone>();//存放所有子区域
+		ArrayList<ChildZone> UAVChildZone = new ArrayList<ChildZone>();//存放所有子区域 不同仓库点的子区域都在
 		ChildZone Zone = new ChildZone();//单个子区域
 		Car car = new Car();//单辆车 应该直接从UAVCar中获得，这里暂时有自己创建
 		String[] args = null;
@@ -223,7 +223,6 @@ public class ExpressPathArrangeService {
 				//为每个子区域配子区域id 负责子区域的仓库点 子区域的停靠点集合 负责子区域的车 多个仓库点的话需要再加一层循环
 				// 这里只考虑了一个仓库点
 				
-				Zone.setDockPoint_arr(lst);//设置子区域停靠点
 				Zone.setId(index);//设置子区域id
 				Zone.setWrid(index);//设置负责子区域的仓库点
 				Zone.setCar(car);//设置负责子区域的车
@@ -243,12 +242,13 @@ public class ExpressPathArrangeService {
 					mypoint.setLongitude(p.getLongitude());
 					onechildzone.add(mypoint);
 				}
-				AllChildZone.add(onechildzone);
+				Zone.setCzPoints(onechildzone);
+//				AllChildZone.add(Zone);
+				UAVChildZone.add(Zone);
 				index++;
 		    }
 		}
-		
-		return AllChildZone;
+		return UAVChildZone;
 	}
 	public static void main(String[] args) {
 		childZonePatition();

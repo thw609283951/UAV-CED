@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package UAV.entity;
 
 import java.util.ArrayList;
@@ -23,8 +24,15 @@ public class DockPoint extends Point implements java.io.Serializable {
 	private String name;//显示点的名称
 	private Integer id;//点的ID
 	private int idnumber=0;
+	private ArrayList<NeedPoint> NeedPoint_arr;//保存这个停靠点所有的需求点
 	
 	
+	public int getIdnumber() {
+		return idnumber;
+	}
+	public void setIdnumber(int idnumber) {
+		this.idnumber = idnumber;
+	}
 	public Integer getWrid() {
 		return wrid;
 	}
@@ -55,7 +63,6 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-    private ArrayList<NeedPoint> NeedPoint_arr;//保存这个停靠点所有的需求点
 
 	public DockPoint() {
 		super();
@@ -104,13 +111,14 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setNeedPoint_arr(ArrayList<NeedPoint> needPoint_arr) {
 		NeedPoint_arr = needPoint_arr;
 	}
-
+	@Override
+	public String toString() {
+		return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
+				+ ", NeedPoint_arr=" + NeedPoint_arr + "]";
+	}
 //    @Override
 //    public String toString() {
 //        return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
 //                + ", NeedPoint_arr=" + Arrays.toString(NeedPoint_arr) + "]";
 //    }
-	
-
-
 }
