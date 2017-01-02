@@ -1,4 +1,3 @@
-
 package UAV.entity;
 
 import java.util.ArrayList;
@@ -119,19 +118,4 @@ public class DockPoint extends Point implements java.io.Serializable {
 				+ ", NeedPoint_arr=" + NeedPoint_arr + ", isClassed="
 				+ isClassed + ", name=" + name + "]";
 	}
-
-//	@Override
-//	public String toString() {
-//		return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
-//				+ ", NeedPoint_arr=" + NeedPoint_arr + "]";
-//	}
-
-//    @Override
-//    public String toString() {
-//        return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
-//                + ", NeedPoint_arr=" + Arrays.toString(NeedPoint_arr) + "]";
-//    }
-	
-
-
 }

@@ -57,6 +57,9 @@
     	<input type="hidden" id="newlongitudecomment" />
     	<input type="hidden" id="newlatitudecomment" />
     	<input type="hidden" id="index" value=0>
+    	
+    	<input type="hidden" id="road1" value=0>;
+    	
 		<div id="TraveTest" style="height:600px"></div>
     	<div id="panel"></div>
     	<div class="button-group">
@@ -69,14 +72,15 @@
 		<script type="text/javascript">
 	// 百度地图API功能
 			var map = new BMap.Map("TraveTest");    // 创建Map实例
-			map.centerAndZoom(new BMap.Point(126.629889,45.744779), 15);  // 初始化地图,设置中心点坐标和地图级别
+			map.centerAndZoom(new BMap.Point(126.629889,45.744779), 18);  // 初始化地图,设置中心点坐标和地图级别
 			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
 			map.setCurrentCity("哈尔滨");          // 设置地图显示的城市 此项是必须设置的
 			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 			var positions=[[126.660917,45.759976],[126.665166,45.760425],[126.668771,45.760156]];//倒是可以直接将点读取到positions中
 			var lushu;
 			// 实例化一个驾车导航用来生成路线
-    		var drv = new BMap.DrivingRoute('哈尔滨', {
+			var drv1 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+    		var drv = new BMap.DrivingRoute('哈尔滨',{
 	        onSearchComplete: function(res) {
 	            if (drv.getStatus() == BMAP_STATUS_SUCCESS) {
 	                var plan = res.getPlan(0);
@@ -87,24 +91,46 @@
 	                }
 	                map.addOverlay(new BMap.Polyline(arrPois, {strokeColor: '#111'}));
 	                map.setViewport(arrPois);
-	                
 	                lushu = new BMapLib.LuShu(map,arrPois,{
 	                defaultContent:"",//"从天安门到百度大厦"
 	                autoView:true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
 	                icon  : new BMap.Icon('http://developer.baidu.com/map/jsdemo/img/car.png', new BMap.Size(52,26),{anchor : new BMap.Size(27, 13)}),
 	                speed: 450,
 	                enableRotation:true,//是否设置marker随着道路的走向进行旋转
-	                });          
+	                landmarkPois: [
+	                   {lng:116.314782,lat:39.913508,html:'加油站',pauseTime:2},
+	                   {lng:116.315391,lat:39.964429,html:'高速公路收费<div><img src="http://map.baidu.com/img/logo-map.gif"/></div>',pauseTime:3},
+	                   {lng:116.381476,lat:39.974073,html:'肯德基早餐<div><img src="http://ishouji.baidu.com/resource/images/map/show_pic04.gif"/></div>',pauseTime:2}
+                	]});          
 	            }
+	            console.log(lushu);
 	        }
 	    	});
+	    	var road1 = document.getElementById("road1").value;
+	    	road1 = road1 + 1;
+	    	road1 = road1 - 1 ;
       		var p1 = new BMap.Point(126.660917,45.759976);
 			var p2 = new BMap.Point(126.665166,45.760425);
 			var p3 = new BMap.Point(126.651304,45.751143);
-			drv.search(p2,p3);
-			$("run").onclick = function(p,q){
+			var p4 = new BMap.Point(126.629932,45.737052);
+			console.log(road1);
+			if (road1==0){
+				drv.search(p1,p2);
+				road1=road1+1;
+				document.getElementById("road1").value = road1+1;
+			}
+			else if (road1 ==1){
+				drv.search(p2,p3);
+				road1=road1+1;
+				document.getElementById("road1").value = road1+1;
+			}
+			drv1.search(p1,p1,{waypoints:[p2,p3,p4]});
+			//drv.search(p1,p1,{waypoints:[p2,p3,p4]});
+			
+			$("run").onclick = function(){
 				lushu.start();
 			}
+			
 			function $(element){
 				return document.getElementById(element);
 			}

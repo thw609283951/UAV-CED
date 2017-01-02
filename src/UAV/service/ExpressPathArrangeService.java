@@ -62,8 +62,8 @@ public class ExpressPathArrangeService {
 	private List<DockPoint> allDockPoints;//所有停靠点
 
 	private List<NeedPoint> allNeedPoints;//所有需求点
-	private List<DockPoint> selectedDockPoints;//选择的停靠点
-	private List<WarePoint> warePoints;//仓库店
+	private static List<DockPoint> selectedDockPoints;//选择的停靠点
+	private static List<WarePoint> warePoints;//仓库店
 
 	private int total_charge_time = 100; //最长充电总时间
 	private double max_trade = 10;       //最长飞行距离
@@ -271,11 +271,11 @@ public class ExpressPathArrangeService {
 				if(lst.isEmpty()){
 					continue;
 				}
-				onechildzone.clear();//清楚子区域伪装数组
+				onechildzone=new ArrayList<Point>();//清楚子区域伪装数组
 //				System.out.println("-----第"+index+"个聚类-----");
 				//为每个子区域配子区域id 负责子区域的仓库点 子区域的停靠点集合 负责子区域的车 多个仓库点的话需要再加一层循环
 				// 这里只考虑了一个仓库点
-
+				Zone = new ChildZone();
 				Zone.setId(index);//设置子区域id
 				Zone.setWrid(index);//设置负责子区域的仓库点
 				Zone.setCar(car);//设置负责子区域的车
