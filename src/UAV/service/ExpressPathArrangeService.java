@@ -106,7 +106,7 @@ public class ExpressPathArrangeService {
 			List<Point> czPoints = childZone.getCzPoints();
 			double[][] pDis = getPointDisByRoad(czPoints);
 			//List<Point> carPath = carPathArrange(czPoints, pDis);
-			childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
+			//childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
 			UAVArrange(childZone);
 		}
 	}
@@ -341,7 +341,7 @@ public class ExpressPathArrangeService {
 		Car car = childZone.getCar();//获取子区域负责车辆
 		ArrayList<DockPoint> dps = new ArrayList<DockPoint>();//将czpoint中的对象从第2分开始往后转化为dockPoint
 		ArrayList<Point> czps = childZone.getCzPoints();
-		for (int i = 1; i < childZone.getCzPoints().size(); i++) {
+		for (int i = 1; i < czps.size(); i++) {
 			dps.add((DockPoint) czps.get(i));
 		}
 		Point next_dock = childZone.get_next_dock(dps.get(0));//获取下一个停靠点;
