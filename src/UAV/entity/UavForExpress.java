@@ -30,6 +30,7 @@ public class UavForExpress implements java.io.Serializable {
 	
 	private double velocity;//无人机速度
 	private Integer expressamount;//无人机当前载有货物的数量（不是最大能载货数量哦）
+	private Boolean is_sended = false;//记录无人机是否已派出
 
 	// Constructors
 
@@ -88,8 +89,8 @@ public class UavForExpress implements java.io.Serializable {
 			time+=dist / this.velocity;
 		}
 	}
-	
-	
+
+
 	public Integer getId() {
 		return this.id;
 	}
@@ -152,6 +153,14 @@ public class UavForExpress implements java.io.Serializable {
 
 	public void setVelocity(double velocity) {
 		this.velocity = velocity;
+	}
+
+	public Boolean getIs_sended() {
+		return is_sended;
+	}
+
+	public void setIs_sended(Boolean is_sended) {
+		this.is_sended = is_sended;
 	}
 
 }

@@ -17,15 +17,16 @@ public class DockPoint extends Point implements java.io.Serializable {
 	private Integer group;//没用了。。。。
 	private Integer wrid;//仓库点
 	private Boolean selected;//是否是被选择了的停靠点
+	private ArrayList<NeedPoint> NeedPoint_arr = new ArrayList<NeedPoint>();//保存这个停靠点所有的需求点
 
 	private boolean isKey;//判断是否是核心点
 	private boolean isClassed;//判断是否已经分类
 	private String name;//显示点的名称
-	private Integer id;//点的ID
+//	private Integer id;//点的ID
 	private int idnumber=0;
-	private ArrayList<NeedPoint> NeedPoint_arr;//保存这个停靠点所有的需求点
 	
-	
+
+
 	public int getIdnumber() {
 		return idnumber;
 	}
@@ -37,12 +38,6 @@ public class DockPoint extends Point implements java.io.Serializable {
 	}
 	public void setWrid(Integer wrid) {
 		this.wrid = wrid;
-	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
 	}
 	public boolean isKey() {
 		return isKey;
@@ -62,6 +57,7 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public DockPoint() {
 		super();
@@ -99,10 +95,10 @@ public class DockPoint extends Point implements java.io.Serializable {
 		this.setLongitude(Double.parseDouble(p[0]));
 		this.setLatitude(Double.parseDouble(p[1]));
 		this.name=p[2];
-		this.id=id;
+		this.idnumber = id;
 	}
 	public String print(){
-		return "<"+this.getLongitude()+","+this.getLatitude()+"> 地点:"+this.getName()+" id:"+this.getId();
+		return "<"+this.getLongitude()+","+this.getLatitude()+"> 地点:"+this.getName()+" id:"+this.getIdnumber();
 	}
 	public ArrayList<NeedPoint> getNeedPoint_arr() {
 		return NeedPoint_arr;
@@ -110,14 +106,19 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setNeedPoint_arr(ArrayList<NeedPoint> needPoint_arr) {
 		NeedPoint_arr = needPoint_arr;
 	}
+
 	@Override
 	public String toString() {
 		return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
 				+ ", NeedPoint_arr=" + NeedPoint_arr + "]";
 	}
+
 //    @Override
 //    public String toString() {
 //        return super.toString() + "DockPoint [czid=" + czid + ", selected=" + selected
 //                + ", NeedPoint_arr=" + Arrays.toString(NeedPoint_arr) + "]";
 //    }
+	
+
+
 }

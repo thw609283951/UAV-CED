@@ -1,12 +1,8 @@
-.svn/
-<<<<<<< HEAD
-*.class
-.idea
-=======
 # 编译文件
 *.class
 # Jetbrain产生的文件
 .idea/*
 # 不知什么东西
->>>>>>> origin/tuo
 *.iml
+*.umr
+*.umr~
