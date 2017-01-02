@@ -277,29 +277,33 @@ public class ExpressPathArrangeService {
 				// 这里只考虑了一个仓库点
 				Zone = new ChildZone();
 				Zone.setId(index);//设置子区域id
-				Zone.setWrid(index);//设置负责子区域的仓库点
+				Zone.setWrid(wareid);//设置负责子区域的仓库点
 				Zone.setCar(car);//设置负责子区域的车
-
-				int number=1;
-				//以下是伪装
-				//添加仓库点
-				mypoint.setLatitude(warePoint.getLatitude());
-				mypoint.setLongitude(warePoint.getLongitude());
-				//添加停靠点
-				for(Iterator<DockPoint> it1=lst.iterator();it1.hasNext();){
-					DockPoint p=it1.next();
-//					System.out.print(number);
-//					number++;
-//					System.out.println(":"+p.print());
-					mypoint = new Point();
-					mypoint.setLatitude(p.getLatitude());
-					mypoint.setLongitude(p.getLongitude());
-					onechildzone.add(mypoint);
+				Zone.getCzPoints().add(warePoint);
+				for(DockPoint dockPoint: lst){
+					Zone.getCzPoints().add(dockPoint);
 				}
-				Zone.setCzPoints(onechildzone);
-//				AllChildZone.add(Zone);
 				UAVChildZone.add(Zone);
-				index++;
+//				int number=1;
+//				//以下是伪装
+//				//添加仓库点
+//				mypoint.setLatitude(warePoint.getLatitude());
+//				mypoint.setLongitude(warePoint.getLongitude());
+//				//添加停靠点
+//				for(Iterator<DockPoint> it1=lst.iterator();it1.hasNext();){
+//					DockPoint p=it1.next();
+////					System.out.print(number);
+////					number++;
+////					System.out.println(":"+p.print());
+//					mypoint = new Point();
+//					mypoint.setLatitude(p.getLatitude());
+//					mypoint.setLongitude(p.getLongitude());
+//					onechildzone.add(mypoint);
+//				}
+//				Zone.setCzPoints(onechildzone);
+////				AllChildZone.add(Zone);
+//				UAVChildZone.add(Zone);
+//				index++;
 		    }
 		}
 		return UAVChildZone;
