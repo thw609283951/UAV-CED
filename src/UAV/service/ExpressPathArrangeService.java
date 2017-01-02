@@ -156,8 +156,23 @@ public class ExpressPathArrangeService {
 		warePoints = epaDao.getAllWarePoints();
 //		System.out.println(allDockPoints);
 //		System.out.println(allNeedPoints);
-		KDTree<Integer> kdTree = new KDTree<Integer>(2);
+		KDTree<Integer> wareKdTree = new KDTree<Integer>(2);
+		KDTree<Integer> dockKdTree = new KDTree<Integer>(2);
 		//Map<Integer, ArrayList<NeedPoint>> needPointMap = new TreeMap<Integer, ArrayList<NeedPoint>>();
+		
+		for (WarePoint warePoint : warePoints) {
+			double[] coord = {warePoint.getLongitude().doubleValue(),
+					warePoint.getLatitude().doubleValue()};
+			try {
+				wareKdTree.insert(coord, warePoint.getId());
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		System.out.println("dockpoint\t\twarepoint");
+		
+		Integer wrId = null;
 		for (DockPoint dockPoint : allDockPoints) {
 			//needPointMap.put(dockPoint.getId(), new ArrayList<NeedPoint>());
 			double[] coord = {dockPoint.getLongitude().doubleValue(),
@@ -165,8 +180,10 @@ public class ExpressPathArrangeService {
 //			System.out.println(coord);
 			try {
 				//System.out.println("kkkkk"+dockPoint.getId());
-				kdTree.insert(coord, dockPoint.getId());
-				System.out.println(kdTree.size());
+				wrId = wareKdTree.nearest(coord);
+				dockPoint.setWrid(wrId);
+				System.out.println(dockPoint.getId() + "\t\t\t" + dockPoint.getWrid() );
+				dockKdTree.insert(coord, dockPoint.getId());
 			} catch (KeySizeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -178,14 +195,14 @@ public class ExpressPathArrangeService {
 		for (NeedPoint needPoint : allNeedPoints) {
 			double[] coord = {needPoint.getLongitude().doubleValue(),
 					needPoint.getLatitude().doubleValue()};
-			Integer id = null;
+			Integer dockId = null;
 			try {
 //				System.out.println(needPoint);
 //				System.out.println(kdTree.size());
-				id = kdTree.nearest(coord);
+				dockId = dockKdTree.nearest(coord);
 				//System.out.println(id + "\t\t" + needPoint.getId());
 				for (DockPoint d : allDockPoints) {
-					if (d.getId().equals(id)) {
+					if (d.getId().equals(dockId)) {
 						//needPointMap.get(d.getId()).add(needPoint);
 						d.getNeedPoint_arr().add(needPoint);
 						needPoint.setDockid(d.getId());
