@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//WebRoot/css/style.css=UTF-8
 encoding//WebRoot/jsp/AreaCoverage.jsp=UTF-8
 encoding//WebRoot/jsp/GotoDestination.jsp=UTF-8
 encoding//WebRoot/jsp/Historicalpath.jsp=UTF-8
@@ -6,6 +7,7 @@ encoding//WebRoot/jsp/LeastUAV.jsp=UTF-8
 encoding//WebRoot/jsp/LessTime.jsp=UTF-8
 encoding//WebRoot/jsp/MaxTask.jsp=UTF-8
 encoding//WebRoot/jsp/Record.jsp=UTF-8
+encoding//WebRoot/jsp/TraveTest.jsp=UTF-8
 encoding//WebRoot/jsp/UAV-Online.jsp=UTF-8
 encoding//WebRoot/jsp/addUAVInBase.jsp=UTF-8
 encoding/<project>=UTF-8

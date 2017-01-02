@@ -4,6 +4,10 @@ public class Point {
 	private Integer id;
 	private Double longitude;//经度
 	private Double latitude;//纬度
+//	private boolean isKey;//判断是否是核心点
+//	private boolean isClassed;//判断是否已经分类
+//	private String name;
+	
 	
 	public Point() {
 		super();
@@ -38,6 +42,5 @@ public class Point {
 		return "Point [id=" + id + ", longitude=" + longitude + ", latitude="
 				+ latitude + "]";
 	}
-	
-	
+
 }
