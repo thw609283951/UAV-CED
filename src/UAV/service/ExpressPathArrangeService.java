@@ -153,15 +153,19 @@ public class ExpressPathArrangeService {
 		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
 		allDockPoints = epaDao.getAllDockPoints();
 		allNeedPoints = epaDao.getAllNeedPoints();
+//		System.out.println(allDockPoints);
+//		System.out.println(allNeedPoints);
 		KDTree<Integer> kdTree = new KDTree<Integer>(2);
 		//Map<Integer, ArrayList<NeedPoint>> needPointMap = new TreeMap<Integer, ArrayList<NeedPoint>>();
 		for (DockPoint dockPoint : allDockPoints) {
 			//needPointMap.put(dockPoint.getId(), new ArrayList<NeedPoint>());
 			double[] coord = {dockPoint.getLongitude().doubleValue(),
 					dockPoint.getLatitude().doubleValue()};
+//			System.out.println(coord);
 			try {
 				//System.out.println("kkkkk"+dockPoint.getId());
 				kdTree.insert(coord, dockPoint.getId());
+				System.out.println(kdTree.size());
 			} catch (KeySizeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -175,6 +179,8 @@ public class ExpressPathArrangeService {
 					needPoint.getLatitude().doubleValue()};
 			Integer id = null;
 			try {
+//				System.out.println(needPoint);
+//				System.out.println(kdTree.size());
 				id = kdTree.nearest(coord);
 				//System.out.println(id + "\t\t" + needPoint.getId());
 				for (DockPoint d : allDockPoints) {
