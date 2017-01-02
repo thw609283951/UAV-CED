@@ -2,6 +2,7 @@ package UAV.entity;
 import java.util.ArrayList;
 import java.util.List;
 import UAV.service.ExpressPathArrangeService;
+import UAV.comm.MapDistance;
 // default package
 import UAV.entity.NeedPoint;
 /**
@@ -66,30 +67,34 @@ public class UavForExpress implements java.io.Serializable {
 		this.expressamount = expressamount;
 	}
 
-	// Property accessors
-	public void add_P(DockPoint dock, List<Point> l,double time){
-		ArrayList<Double> item = new ArrayList<Double>();
-		item.add(time);//时间
-		item.add(dock.getLongitude());//经度
-		item.add(dock.getLatitude());//纬度
+	// 根据路径l向无人机添加时序路径
+	public void add_P(List<Point> l,double time){
+		ArrayList<Double> item;
 		double dist = 0;//得到dock和第一个需求点的距离，待完成。
-		time += dist / this.velocity;
 		for (int i=0;i<l.size();i++){
+			if (i == l.size()-1){//已经到最后一个需求点，计算需求点到dock的距离
+				dist = getDistanceByAir(l.get(i),l.get(0));
+			}
+			else{//需求点到下一需求点的距离
+				dist = getDistanceByAir(l.get(i),l.get(i+1));
+			}
+			time+=dist / this.velocity;
 			item = new ArrayList<Double>();
 			item.add(time);//时间
 			item.add(l.get(i).getLongitude());//经度
 			item.add(l.get(i).getLatitude());//纬度
 			this.P.add(item);//添加到路径序列
-			if (i == l.size()-1){//已经到最后一个需求点，计算需求点到dock的距离
-				dist = 0;
-			}
-			else{//需求点到下一需求点的距离
-				dist = 0;
-			}
-			time+=dist / this.velocity;
 		}
 	}
-
+	// 根据停靠点向无人机添加时序路径
+	public void add_P(Double time, Point dock) {
+		// TODO Auto-generated method stub
+		ArrayList<Double> item = new ArrayList<Double>();
+		item.add(time);//时间
+		item.add(dock.getLongitude());//经度
+		item.add(dock.getLatitude());//纬度
+		this.P.add(item);//添加到路径序列
+	}
 
 	public Integer getId() {
 		return this.id;
@@ -161,6 +166,13 @@ public class UavForExpress implements java.io.Serializable {
 
 	public void setIs_sended(Boolean is_sended) {
 		this.is_sended = is_sended;
+	}
+	
+	private double getDistanceByAir(Point a, Point b) {
+		return MapDistance.GetDistance(a.getLongitude(), 
+										a.getLatitude(),
+										b.getLongitude(),
+										b.getLatitude());
 	}
 
 }

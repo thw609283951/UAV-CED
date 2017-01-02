@@ -17,7 +17,7 @@ public class ChildZone implements java.io.Serializable {
     private Integer wrid;//子区域所包含的仓库点的id，因为仓库点对子区域是一对多的关系，所以在ChildZone中添加此字段
 	//private ArrayList<DockPoint> DockPoint_arr;//保存所有的停靠点
 	private Car car;//保存负责车辆
-	private ArrayList<Point> czPoints; //第一个点是停靠点，后面的点是该区域的停靠点
+	private ArrayList<Point> czPoints = new ArrayList<Point>(); //第一个点是停靠点，后面的点是该区域的停靠点
 	// Constructors
 
 	/** default constructor */

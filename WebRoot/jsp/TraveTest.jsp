@@ -71,6 +71,7 @@
         </div>
 		<script type="text/javascript">
 	// 百度地图API功能
+			
 			var map = new BMap.Map("TraveTest");    // 创建Map实例
 			map.centerAndZoom(new BMap.Point(126.629889,45.744779), 18);  // 初始化地图,设置中心点坐标和地图级别
 			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
@@ -78,6 +79,8 @@
 			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 			var positions=[[126.660917,45.759976],[126.665166,45.760425],[126.668771,45.760156]];//倒是可以直接将点读取到positions中
 			var lushu;
+			var alllushu=[];
+			var alldrv=[];
 			// 实例化一个驾车导航用来生成路线
 			var drv1 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
     		var drv = new BMap.DrivingRoute('哈尔滨',{
@@ -103,9 +106,11 @@
 	                   {lng:116.381476,lat:39.974073,html:'肯德基早餐<div><img src="http://ishouji.baidu.com/resource/images/map/show_pic04.gif"/></div>',pauseTime:2}
                 	]});          
 	            }
-	            console.log(lushu);
+	            //console.log(lushu);
+	            //alllushu.push(lushu);
 	        }
 	    	});
+	    	
 	    	var road1 = document.getElementById("road1").value;
 	    	road1 = road1 + 1;
 	    	road1 = road1 - 1 ;
@@ -128,7 +133,11 @@
 			//drv.search(p1,p1,{waypoints:[p2,p3,p4]});
 			
 			$("run").onclick = function(){
-				lushu.start();
+				//console.log(alllushu);
+				//console.log(alllushu[0]);
+				//console.log(lushu);
+				console.log(road1);
+				alllushu[road1].start();
 			}
 			
 			function $(element){

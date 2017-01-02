@@ -64,10 +64,12 @@ public class ExpressPathArrangeService {
 	private List<NeedPoint> allNeedPoints;//所有需求点
 	private static List<DockPoint> selectedDockPoints;//选择的停靠点
 	private static List<WarePoint> warePoints;//仓库店
-
+	//下面是一些常量，可根据需求调整
 	private int total_charge_time = 100; //最长充电总时间
 	private double max_trade = 10;       //最长飞行距离
 	private int uavsInEveryCar = 10;     //每辆车上的无人机数量
+	private double carV = 60;            //快递车速，km/h
+	private double uavV = 40;            //无人机速度，km/h
 	private static List<ArrayList<DockPoint>> resultList=new ArrayList<ArrayList<DockPoint>>();
 	public List<DockPoint> getAllDockPoints() {
 		return allDockPoints;
@@ -277,30 +279,33 @@ public class ExpressPathArrangeService {
 				// 这里只考虑了一个仓库点
 				Zone = new ChildZone();
 				Zone.setId(index);//设置子区域id
-				Zone.setWrid(index);//设置负责子区域的仓库点
+				Zone.setWrid(wareid);//设置负责子区域的仓库点
 				Zone.setCar(car);//设置负责子区域的车
-
-				int number=1;
-				//以下是伪装
-				//添加仓库点
-				mypoint.setLatitude(warePoint.getLatitude());
-				mypoint.setLongitude(warePoint.getLongitude());
-				onechildzone.add(mypoint);
-				//添加停靠点
-				for(Iterator<DockPoint> it1=lst.iterator();it1.hasNext();){
-					DockPoint p=it1.next();
-//					System.out.print(number);
-//					number++;
-//					System.out.println(":"+p.print());
-					mypoint = new Point();
-					mypoint.setLatitude(p.getLatitude());
-					mypoint.setLongitude(p.getLongitude());
-					onechildzone.add(mypoint);
+				Zone.getCzPoints().add(warePoint);
+				for(DockPoint dockPoint: lst){
+					Zone.getCzPoints().add(dockPoint);
 				}
-				Zone.setCzPoints(onechildzone);
-//				AllChildZone.add(Zone);
 				UAVChildZone.add(Zone);
-				index++;
+//				int number=1;
+//				//以下是伪装
+//				//添加仓库点
+//				mypoint.setLatitude(warePoint.getLatitude());
+//				mypoint.setLongitude(warePoint.getLongitude());
+//				//添加停靠点
+//				for(Iterator<DockPoint> it1=lst.iterator();it1.hasNext();){
+//					DockPoint p=it1.next();
+////					System.out.print(number);
+////					number++;
+////					System.out.println(":"+p.print());
+//					mypoint = new Point();
+//					mypoint.setLatitude(p.getLatitude());
+//					mypoint.setLongitude(p.getLongitude());
+//					onechildzone.add(mypoint);
+//				}
+//				Zone.setCzPoints(onechildzone);
+////				AllChildZone.add(Zone);
+//				UAVChildZone.add(Zone);
+//				index++;
 		    }
 		}
 		return UAVChildZone;
@@ -331,7 +336,7 @@ public class ExpressPathArrangeService {
 		ArrayList<NeedPoint> S = new ArrayList<NeedPoint>();//保存child_zone的所有需求点
 		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();//指定停靠点所属需求点的划分
 //		ArrayList<Double> l_all = new ArrayList<Double>();//指定停靠点的无人机路径序列
-		Double max_l = new Double(0);//保存最长的区域路径长度
+		Double max_l;//保存最长的区域路径长度
 		Double l_length = new Double(0);//l长度
 		Double max_wait_time;//指定停靠点的最大等待时间，等待是为了充电
 		Double time = new Double(0);//相对时间，从0起
@@ -339,44 +344,53 @@ public class ExpressPathArrangeService {
 		Point warePoint = childZone.getCzPoints().get(0);//保存仓库点
 		Double tmp_time;
 		Car car = childZone.getCar();//获取子区域负责车辆
+	
 		ArrayList<DockPoint> dps = new ArrayList<DockPoint>();//将czpoint中的对象从第2分开始往后转化为dockPoint
 		ArrayList<Point> czps = childZone.getCzPoints();
 		for (int i = 1; i < czps.size(); i++) {
 			dps.add((DockPoint) czps.get(i));
 		}
-		Point next_dock = childZone.get_next_dock(dps.get(0));//获取下一个停靠点;
+		
+		car.add_P(time,czps.get(0));//向仓库点添加时序序列表示其由仓库点开始，走向了第一个停靠点
+		Point next_dock = childZone.get_next_dock(dps.get(0));//获取第一个停靠点;
 		dist = getDistanceByAir(dps.get(0),next_dock);
-		tmp_time = dist/car.getV();//到下一个停靠点的时间
+		tmp_time = dist/carV;//到下一个停靠点的时间
 		time+=tmp_time;
-		car.add_P(time,next_dock);//向仓库点添加时序序列表示其由仓库点开始，走向了第一个停靠点
-
+		
 		for(DockPoint dock : dps){ //遍历停靠点
+			car.add_P(time,dock);//车行驶到停靠点
 			S = dock.getNeedPoint_arr();//所有需求点
 			next_dock = childZone.get_next_dock(dock);//获取下一个停靠点;
-			div = Divid_need(S, dock, car.getUavCount());//划分所有需求点
-			List<Point> l;//保存每个划分的无人机路径序列，不含路径头和尾，因为这两个点都应该是停靠点dock，数据类型不同保存不方便
-			UavForExpress uav = null;
-			for(List<NeedPoint> part : div){ //遍历所有需求划分区域
-				l = TSP(part, dock);         //该区域的路线
-				uav = car.sendUav();         //从car中派出一辆无人机
-				uav.add_P(dock,l,time);      //通过路径，向uav中添加时序路径序列
-				l_length = get_l_length(l);  //得到l长度
-				if (max_l < l_length){       //得到最长路径，计算充电时间
-					max_l = l_length;
+			max_l = new Double(0);
+			max_wait_time = new Double(0);
+			double t_max_fly = 0;
+			
+			if (S.size() != 0){ //停靠点包含至少一个需求点
+				div = Divid_need(S, dock, car.getUavCount());//划分所有需求点
+				List<Point> l;//保存每个划分的无人机路径序列，第一个为停靠点，后面为需求点
+				UavForExpress uav = null;
+				for(List<NeedPoint> part : div){ //遍历所有需求划分区域
+					l = TSP(part, dock);         //该区域的路线，借助旅行商算法
+					uav = car.sendUav();         //从car中派出一辆无人机
+					uav.add_P(l,time);      //通过路径，向uav中添加时序路径序列
+					l_length = get_l_length(l);  //得到l长度，为从停靠点出发，再返回停靠点的长度
+					if (max_l < l_length){       //得到最长路径，计算充电时间
+						max_l = l_length;
+					}
 				}
+				t_max_fly = max_l/uav.getVelocity();//无人机最长飞行时间
+				max_wait_time = get_max_wait_time(max_l,uavV,carV,tmp_time,dock,childZone);//获取car在dock的最大等待时间
 			}
 			if (next_dock != null){//未到最后一个停靠点
 				dist = getDistanceByAir(dock,next_dock);
-				tmp_time = dist/car.getV();//到下一个停靠点的时间
-				double t_max_fly = max_l/uav.getVelocity();//无人机最长飞行时间
-				max_wait_time = get_max_wait_time(max_l,uav.getVelocity(),car.getV(),tmp_time,dock,childZone);//获取car在dock的最大等待时间
+				tmp_time = dist/carV;//到下一个停靠点的时间
 				tmp_time += max_wait_time + t_max_fly;
 				if (max_wait_time>0){
 					car.add_P(max_wait_time+time+t_max_fly,dock);//需要原地等待
 				}
 				time += tmp_time;//过了tmp_time时间，车行驶到下一个停靠点
-				car.add_P(time,next_dock);//为车添加时序路径
 			}
+			car.freeUavs();//设置所有无人机状态为“闲”,表示所有无人机已返回快递车
 		}
 	}
 
