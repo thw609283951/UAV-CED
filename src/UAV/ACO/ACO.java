@@ -103,6 +103,7 @@ public class ACO {
             endTime = System.currentTimeMillis();
             updatePheromone();
         }
+        System.out.println("该路径下的最低消耗：" + bestLength);
     }
     public String getBestTour() {
 		return bestTour;
