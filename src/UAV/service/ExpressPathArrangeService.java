@@ -153,6 +153,7 @@ public class ExpressPathArrangeService {
 		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
 		allDockPoints = epaDao.getAllDockPoints();
 		allNeedPoints = epaDao.getAllNeedPoints();
+		warePoints = epaDao.getAllWarePoints();
 //		System.out.println(allDockPoints);
 //		System.out.println(allNeedPoints);
 		KDTree<Integer> kdTree = new KDTree<Integer>(2);
@@ -231,7 +232,7 @@ public class ExpressPathArrangeService {
 	 * 在selectedDockPoints中修改并将修改添加到数据库
 	 * 生成ChildZone序列，并填写其中的wrid
 	 */
-	private static List<ChildZone> childZonePatition() {
+	private List<ChildZone> childZonePatition() {
 		int index = 1;
 		ArrayList<WarePoint> UAVWarePoint = (ArrayList<WarePoint>) warePoints;
 		ArrayList<Car> UAVCar = new ArrayList<Car>();//存放一个仓库点所有的车
