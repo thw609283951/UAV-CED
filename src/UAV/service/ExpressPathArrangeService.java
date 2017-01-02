@@ -285,12 +285,14 @@ public class ExpressPathArrangeService {
 				//添加仓库点
 				mypoint.setLatitude(warePoint.getLatitude());
 				mypoint.setLongitude(warePoint.getLongitude());
+				onechildzone.add(mypoint);
 				//添加停靠点
 				for(Iterator<DockPoint> it1=lst.iterator();it1.hasNext();){
 					DockPoint p=it1.next();
 //					System.out.print(number);
 //					number++;
 //					System.out.println(":"+p.print());
+					mypoint = new Point();
 					mypoint.setLatitude(p.getLatitude());
 					mypoint.setLongitude(p.getLongitude());
 					onechildzone.add(mypoint);
@@ -476,6 +478,7 @@ public class ExpressPathArrangeService {
 		}
 	}
 	/**
+	 * 妥
 	 * 最长充电时间
 	 * 充电时间=总充电时间*（已行驶航程/总航程）     <不考虑负责需求点数>
 	 * @param max_l：最长航程
