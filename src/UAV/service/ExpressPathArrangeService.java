@@ -62,8 +62,8 @@ public class ExpressPathArrangeService {
 	private List<DockPoint> allDockPoints;//所有停靠点
 
 	private List<NeedPoint> allNeedPoints;//所有需求点
-	private List<DockPoint> selectedDockPoints;//选择的停靠点
-	private List<WarePoint> warePoints;//仓库店
+	private static List<DockPoint> selectedDockPoints;//选择的停靠点
+	private static List<WarePoint> warePoints;//仓库店
 
 	private int total_charge_time = 100; //最长充电总时间
 	private double max_trade = 10;       //最长飞行距离
