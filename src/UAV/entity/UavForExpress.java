@@ -68,22 +68,29 @@ public class UavForExpress implements java.io.Serializable {
 	}
 
 	// 根据路径l向无人机添加时序路径
-	public void add_P(List<Point> l,double time){
+	public void add_P(List<Point> l,double time, double uavV){
 		ArrayList<Double> item;
 		double dist = 0;//得到dock和第一个需求点的距离，待完成。
 		for (int i=0;i<l.size();i++){
 			if (i == l.size()-1){//已经到最后一个需求点，计算需求点到dock的距离
-				dist = getDistanceByAir(l.get(i),l.get(0));
+				dist = 0.001 * getDistanceByAir(l.get(i),l.get(0));
+				time+=dist / uavV;
+				item = new ArrayList<Double>();
+				item.add(time);//时间
+				item.add(l.get(0).getLongitude());//经度
+				item.add(l.get(0).getLatitude());//纬度
+				this.P.add(item);//添加到路径序列
 			}
 			else{//需求点到下一需求点的距离
-				dist = getDistanceByAir(l.get(i),l.get(i+1));
+				dist = 0.001 * getDistanceByAir(l.get(i),l.get(i+1));
+				time+=dist / uavV;
+				item = new ArrayList<Double>();
+				item.add(time);//时间
+				item.add(l.get(i+1).getLongitude());//经度
+				item.add(l.get(i+1).getLatitude());//纬度
+				this.P.add(item);//添加到路径序列
 			}
-			time+=dist / this.velocity;
-			item = new ArrayList<Double>();
-			item.add(time);//时间
-			item.add(l.get(i).getLongitude());//经度
-			item.add(l.get(i).getLatitude());//纬度
-			this.P.add(item);//添加到路径序列
+			
 		}
 	}
 	// 根据停靠点向无人机添加时序路径

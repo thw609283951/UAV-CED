@@ -65,11 +65,11 @@ public class ExpressPathArrangeService {
 	private static List<DockPoint> selectedDockPoints;//选择的停靠点
 	private static List<WarePoint> warePoints;//仓库店
 	//下面是一些常量，可根据需求调整
-	private int total_charge_time = 100; //最长充电总时间
+	private int total_charge_time = 1; //最长充电总时间
 	private double max_trade = 10;       //最长飞行距离
-	private int uavsInEveryCar = 10;     //每辆车上的无人机数量
-	private double carV = 60;            //快递车速，km/h
-	private double uavV = 40;            //无人机速度，km/h
+	private int uavsInEveryCar = 2;     //每辆车上的无人机数量
+	private double carV = 6;            //快递车速，km/h
+	private double uavV = 4;            //无人机速度，km/h
 	private static List<ArrayList<DockPoint>> resultList=new ArrayList<ArrayList<DockPoint>>();
 	public List<DockPoint> getAllDockPoints() {
 		return allDockPoints;
@@ -331,8 +331,8 @@ public class ExpressPathArrangeService {
 		for (int i = 1; i < czps.size(); i++) {
 			dps.add((DockPoint) czps.get(i));
 		}
-		car.add_P(time,czps.get(0));//向仓库点添加时序序列表示其由仓库点开始，走向了第一个停靠点
-		dist = getDistanceByAir(czps.get(0),dps.get(0));//仓库点到第一个停靠点的距离
+		car.add_P(time,warePoint);//向仓库点添加时序序列表示其由仓库点开始，走向了第一个停靠点
+		dist = 0.001 * getDistanceByAir(warePoint,dps.get(0));//仓库点到第一个停靠点的距离
 		tmp_time = dist/carV;//到下一个停靠点的时间
 		time+=tmp_time;
 		
@@ -351,7 +351,7 @@ public class ExpressPathArrangeService {
 				for(List<NeedPoint> part : div){ //遍历所有需求划分区域
 					l = TSP(part, dock);         //该区域的路线，借助旅行商算法
 					uav = car.sendUav();         //从car中派出一辆无人机
-					uav.add_P(l,time);      //通过路径，向uav中添加时序路径序列
+					uav.add_P(l,time,uavV);      //通过路径，向uav中添加时序路径序列
 					l_length = get_l_length(l);  //得到l长度，为从停靠点出发，再返回停靠点的长度
 					if (max_l < l_length){       //得到最长路径，计算充电时间
 						max_l = l_length;
@@ -361,7 +361,7 @@ public class ExpressPathArrangeService {
 				max_wait_time = get_max_wait_time(max_l,uavV,carV,tmp_time,dock,childZone);//获取car在dock的最大等待时间
 			}
 			if (next_dock != null){//未到最后一个停靠点
-				dist = getDistanceByAir(dock,next_dock);
+				dist = 0.001 * getDistanceByAir(dock,next_dock);
 				tmp_time = dist/carV;//到下一个停靠点的时间
 				tmp_time += max_wait_time + t_max_fly;
 				if (max_wait_time>0){
@@ -369,21 +369,28 @@ public class ExpressPathArrangeService {
 				}
 				time += tmp_time;//过了tmp_time时间，车行驶到下一个停靠点
 			}
+			else{//添加到仓库点的时序路径
+				dist = 0.001 * getDistanceByAir(dock,warePoint);
+				time += dist/carV;
+				car.add_P(time, warePoint);
+			}
 			car.freeUavs();//设置所有无人机状态为“闲”,表示所有无人机已返回快递车
 		}
 	}
 
 	/**
 	 * 妥，计算路径序列总长度
-	 * @param l路径序列
+	 * @param l路径序列长度
 	 * @return
 	 */
 	private Double get_l_length(List<Point> l) {
 		// TODO Auto-generated method stub
 		Double l_length = new Double(0);
-		for (int i=0; i<l.size()-1;i++){
-			l_length += getDistanceByAir(l.get(i),l.get(i+1));
+		int i;
+		for (i=0; i<l.size()-1;i++){
+			l_length += 0.001 * getDistanceByAir(l.get(i),l.get(i+1));
 		}
+		l_length += 0.001 *getDistanceByAir(l.get(i), l.get(0));//加上到最后一个需求点到停靠点的距离
 		return l_length;
 	}
 
@@ -467,7 +474,7 @@ public class ExpressPathArrangeService {
 			return 0;
 		}
 		else{//需要等待充一会电再出发
-			return to_next_dock_time - t_max_charge;
+			return t_max_charge - to_next_dock_time;
 		}
 	}
 	/**
