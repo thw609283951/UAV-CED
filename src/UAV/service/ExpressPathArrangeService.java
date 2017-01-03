@@ -286,26 +286,7 @@ public class ExpressPathArrangeService {
 					Zone.getCzPoints().add(dockPoint);
 				}
 				UAVChildZone.add(Zone);
-//				int number=1;
-//				//以下是伪装
-//				//添加仓库点
-//				mypoint.setLatitude(warePoint.getLatitude());
-//				mypoint.setLongitude(warePoint.getLongitude());
-//				//添加停靠点
-//				for(Iterator<DockPoint> it1=lst.iterator();it1.hasNext();){
-//					DockPoint p=it1.next();
-////					System.out.print(number);
-////					number++;
-////					System.out.println(":"+p.print());
-//					mypoint = new Point();
-//					mypoint.setLatitude(p.getLatitude());
-//					mypoint.setLongitude(p.getLongitude());
-//					onechildzone.add(mypoint);
-//				}
-//				Zone.setCzPoints(onechildzone);
-////				AllChildZone.add(Zone);
-//				UAVChildZone.add(Zone);
-//				index++;
+
 		    }
 		}
 		return UAVChildZone;
@@ -377,7 +358,7 @@ public class ExpressPathArrangeService {
 						max_l = l_length;
 					}
 				}
-				t_max_fly = max_l/uav.getVelocity();//无人机最长飞行时间
+				t_max_fly = max_l/uavV;//无人机最长飞行时间
 				max_wait_time = get_max_wait_time(max_l,uavV,carV,tmp_time,dock,childZone);//获取car在dock的最大等待时间
 			}
 			if (next_dock != null){//未到最后一个停靠点
