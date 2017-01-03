@@ -76,29 +76,34 @@
 		<script type="text/javascript">
 	// 百度地图API功能
 			var map = new BMap.Map("TraveTest");    // 创建Map实例
-			map.centerAndZoom(new BMap.Point(126.629889,45.744779), 18);  // 初始化地图,设置中心点坐标和地图级别
+			map.centerAndZoom(new BMap.Point(126.644968,45.747209), 15);  // 初始化地图,设置中心点坐标和地图级别
 			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
 			map.setCurrentCity("哈尔滨");          // 设置地图显示的城市 此项是必须设置的
 			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 			var all1=[];
 			var all2=[];
-			var needpoints=[[126.714904, 45.77011, 1],
-						[126.713898, 45.771217, 2],
-						[126.709442, 45.770412, 3],
-						[126.614598, 45.764219, 4],
-						[126.610358, 45.76593, 5],
-						[126.610933, 45.76271, 6],
-						[126.688693, 45.793739, 7],
-						[126.686609, 45.79208, 8]];
+			var needpoints=[[126.637637,45.752744 ,"11"],
+							[126.63735,45.751436 ,"12"],
+							[126.635769,45.751436 ,"13"],
+							[126.637062,45.753951,"14"],
+							[126.644249,45.748719 ,"21"],
+							[126.649998,45.746605 ,"22"],
+							[126.64353,45.746304,"23"],
+							[126.644608,45.753146 ,"31"],
+							[126.646549,45.75385,"32"],
+							[126.649279,45.727583 ,"41"],
+							[126.648058,45.72869 ,"42"],
+							[126.649208,45.730301,"43"],
+							[126.6574,45.73171 ,"51"],
+							[126.657256,45.733321,"52"],
+							[126.647537,45.734723,"61"],
+							];
 			
-			var positions1=[[126.629889,45.744779],
-						[126.630769,45.746022],
-						[126.632121,45.745214],
-						[126.634481,45.746427],
-						[126.632915,45.744435],
-						[126.63446,45.742953],
-						[126.633752,45.742354],
-						[126.640446,45.73861]];
+			var positions1=[[126.636613,45.738045,"0"],
+							[126.63735,45.75214,"1"],
+							[126.644968,45.747209,"2" ],
+							[126.645111,45.752542,"3" ],
+							];
 			for (i=0;i<positions1.length;i++){
 					//console.log(positions[i]);
 					x=positions1[i][0];
@@ -106,14 +111,11 @@
 					var point = new BMap.Point(x,y); // 创建标注
 					all1.push(point);
 				}     
-			var positions2=[[126.655295,45.74713],
-						[126.652334,45.746022],
-						[126.660445,45.74728],
-						[126.658771,45.744944],
-						[126.666196,45.75818],
-						[126.668771,45.760156],
-						[126.665166,45.760425],
-						[126.660917,45.759976]];
+			var positions2=[[126.636613,45.738045,"0"],
+							[126.65007,45.728539,"4"],
+							[126.655819,45.73171,"5"],
+							[126.649926,45.73317,"6"],
+							];
 			for (i=0;i<positions1.length;i++){
 					//console.log(positions[i]);
 					x=positions2[i][0];
@@ -121,36 +123,13 @@
 					var point = new BMap.Point(x,y); // 创建标注
 					all2.push(point);
 				}  
-			var positions=[[126.629889,45.744779],
-						[126.630769,45.746022],
-						[126.632121,45.745214],
-						[126.634481,45.746427],
-						[126.632915,45.744435],
-						[126.63446,45.742953],
-						[126.633752,45.742354],
-						[126.640446,45.73861],
-						[126.642099,45.739493],
-						[126.640683,45.739823],
-						[126.638515,45.740452],
-						[126.628795,45.73807],
-						[126.625748,45.73864],
-						[126.625963,45.739373],
-						[126.623817,45.739209],
-						[126.624933,45.73816],
-						[126.629932,45.737052],
-						[126.625104,45.736648],
-						[126.651948,45.752191],
-						[126.65654,45.752341],
-						[126.654051,45.751083],
-						[126.651304,45.751143],
-						[126.655295,45.74713],
-						[126.652334,45.746022],
-						[126.660445,45.74728],
-						[126.658771,45.744944],
-						[126.666196,45.75818],
-						[126.668771,45.760156],
-						[126.665166,45.760425],
-						[126.660917,45.759976]
+			var positions=[[126.63735,45.75214,"1"],
+							[126.644968,45.747209,"2" ],
+							[126.645111,45.752542,"3" ],
+							[126.65007,45.728539,"4"],
+							[126.655819,45.73171,"5"],
+							[126.649926,45.73317,"6"],
+
 						];//倒是可以直接将点读取到positions中
 			function test (p,q,all) {
 				var lushu;
@@ -210,7 +189,7 @@
 			var q4 = new BMap.Point(126.629932,45.737052);
 			$("run").onclick = function(){
 				test(all1[0],all1[0],all1);
-				//test(all2[0],all2[0],all2);
+				test(all2[0],all2[0],all2);
 				
 			}
 			$("run1").onclick = function(){
@@ -229,24 +208,26 @@
 				title : "信息窗口" , // 信息窗口标题
 				enableMessage:true//设置允许信息窗发送短息
 			   };
+				for (i=0;i<needpoints.length;i++){
+					//console.log(positions[i]);
+					x=needpoints[i][0];
+					y=needpoints[i][1];
+					var content = needpoints[i][2];
+					var point = new BMap.Point(x,y); // 创建标注
+					var marker = new BMap.Marker(point);// 将标注添加到地图中
+					map.addOverlay(marker);
+					addClickHandler(content,marker);
+				}     
 				for (i=0;i<positions.length;i++){
 					//console.log(positions[i]);
 					x=positions[i][0];
 					y=positions[i][1];
 					var content = positions[i][2];
 					var point = new BMap.Point(x,y); // 创建标注
-					var marker = new BMap.Marker(point);// 将标注添加到地图中
-					map.addOverlay(marker);
-					addClickHandler(content,marker);
-				}     
-				for (i=0;i<needpoints.length;i++){
-					//console.log(positions[i]);
-					x=needpoints[i][0];
-					y=needpoints[i][1];
-					var point = new BMap.Point(x,y); // 创建标注
 					var myIcon = new BMap.Icon("http://developer.baidu.com/map/jsdemo/img/fox.gif", new BMap.Size(300,157));
 					var marker =  new BMap.Marker(point,{icon:myIcon});// 将标注添加到地图中
 					map.addOverlay(marker);
+					addClickHandler(content,marker);
 				}     
 				//marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 				function addClickHandler(content,marker){
