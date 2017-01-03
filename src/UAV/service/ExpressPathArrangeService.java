@@ -332,15 +332,14 @@ public class ExpressPathArrangeService {
 			dps.add((DockPoint) czps.get(i));
 		}
 		car.add_P(time,czps.get(0));//向仓库点添加时序序列表示其由仓库点开始，走向了第一个停靠点
-		Point next_dock = childZone.get_next_dock(dps.get(0));//获取第一个停靠点;
-		dist = getDistanceByAir(dps.get(0),next_dock);
+		dist = getDistanceByAir(czps.get(0),dps.get(0));//仓库点到第一个停靠点的距离
 		tmp_time = dist/carV;//到下一个停靠点的时间
 		time+=tmp_time;
 		
 		for(DockPoint dock : dps){ //遍历停靠点
 			car.add_P(time,dock);//车行驶到停靠点
 			S = dock.getNeedPoint_arr();//所有需求点
-			next_dock = childZone.get_next_dock(dock);//获取下一个停靠点;
+			Point next_dock = childZone.get_next_dock(dock);//获取下一个停靠点;
 			max_l = new Double(0);
 			max_wait_time = new Double(0);
 			double t_max_fly = 0;
