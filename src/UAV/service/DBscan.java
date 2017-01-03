@@ -8,7 +8,7 @@ import UAV.entity.DockPoint;
 import UAV.service.Utility;
 
 public class DBscan {
-	private final static double e=500;//ε半径
+	private final static double e=1000;//ε半径
 	private final static int minp=3;//密度阈值
 	private static List<DockPoint> pointsList=new ArrayList<DockPoint>();//存储原始样本点
  	private static List<ArrayList<DockPoint>> resultList=new ArrayList<ArrayList<DockPoint>>();//存储最后的聚类结果
