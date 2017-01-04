@@ -92,8 +92,9 @@ public class ExpressPathArrangeService {
 
 	/**
 	 * 路径规划总算法
+	 * @return 
 	 */
-	public void pathArrange() {
+	public List<ChildZone> pathArrange() {
 		
 		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
 //		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
@@ -109,6 +110,7 @@ public class ExpressPathArrangeService {
 			childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
 			UAVArrange(childZone);
 		}
+		return childZones;
 	}
 	
 	/**

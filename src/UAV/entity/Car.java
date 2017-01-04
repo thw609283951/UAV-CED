@@ -25,6 +25,12 @@ public class Car {
 		}
 		return null;
 	}
+	public ArrayList<ArrayList<Double>> getP() {
+		return P;
+	}
+	public void setP(ArrayList<ArrayList<Double>> p) {
+		P = p;
+	}
 	/*
 	 * 向车辆添加一个时序路径，就是从当前dock走到下一个dock。
 	 */
