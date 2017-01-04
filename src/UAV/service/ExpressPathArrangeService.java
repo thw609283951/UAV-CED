@@ -16,6 +16,7 @@ import UAV.entity.Car;
 import UAV.ACO.ACO;
 
 import UAV.comm.MapDistance;
+import UAV.comm.RoadDistance;
 import UAV.comm.kdtree.KDTree;
 import UAV.comm.kdtree.KeyDuplicateException;
 import UAV.comm.kdtree.KeySizeException;
@@ -92,8 +93,9 @@ public class ExpressPathArrangeService {
 
 	/**
 	 * 路径规划总算法
+	 * @throws Exception 
 	 */
-	public void pathArrange() {
+	public void pathArrange() throws Exception {
 		
 		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
 //		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
@@ -495,10 +497,12 @@ public class ExpressPathArrangeService {
 	 * 妥
 	 * 测试代码
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
-    	ExpressPathArrangeService ep = new ExpressPathArrangeService();
-    	ep.pathArrange();
+	public static void main(String[] args) throws Exception {
+//    	ExpressPathArrangeService ep = new ExpressPathArrangeService();
+//    	ep.pathArrange();
+		System.out.println(RoadDistance.getDistanceByRoad(126.638715,45.749146, 126.6173,45.726199));
     }
 
 	/**
@@ -506,15 +510,16 @@ public class ExpressPathArrangeService {
 	 * 计算points数组中各个点之间的距离,此距离为路上距离，而不是直线距离。以二维数组形式返回
 	 * @param points
 	 * @return
+	 * @throws Exception 
 	 */
-	public static double[][] getPointDisByRoad(List<Point> points) {
+	public static double[][] getPointDisByRoad(List<Point> points) throws Exception {
 		double[][] dis = new double[points.size()][points.size()];
 		for (int i = 0; i < points.size(); i++) {
 			for (int j = 0; j < points.size(); j++) {
 				if (j == i) {
 					dis[i][j] = 0;
 				} else if (j > i){
-					dis[i][j] = dis[j][i] = MapDistance.GetDistance(
+					dis[i][j] = dis[j][i] = RoadDistance.getDistanceByRoad(
 							points.get(i).getLongitude(),
 							points.get(i).getLatitude(),
 							points.get(j).getLongitude(),
