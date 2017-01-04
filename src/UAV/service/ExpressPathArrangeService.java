@@ -97,7 +97,7 @@ public class ExpressPathArrangeService {
 	 * 路径规划总算法
 	 * @throws Exception 
 	 */
-	public void pathArrange() throws Exception {
+	public List<ChildZone> pathArrange() throws Exception {
 		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
 //		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
 //		allDockPoints = epaDao.getAllDockPoints();
