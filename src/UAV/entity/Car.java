@@ -3,14 +3,13 @@ import java.util.ArrayList;
 
 import UAV.entity.UavForExpress;
 import UAV.entity.DockPoint;
+import UAV.test.carPathArrangeTest;
 
 
 public class Car {
 	private Integer Id;
-	private double v;//速度
-	private int uavCount;//无人机数目
 	private ArrayList<UavForExpress> Uavs;
-    private ArrayList<ArrayList<Double>> P;//时序路径
+    private ArrayList<ArrayList<Double>> P = new ArrayList<ArrayList<Double>>();//时序路径
 	
 	/*
 	 * 派出一架无人机，从数组中选择一个无人机派出，设置无人机状态为“忙”
@@ -18,7 +17,7 @@ public class Car {
 	public UavForExpress sendUav(){
 		//后续实现
 		for (UavForExpress uav : Uavs){
-			if (uav.getIs_sended()){
+			if (!uav.getIs_sended()){
 				uav.setIs_sended(true);
 				return uav;
 			}
@@ -32,14 +31,17 @@ public class Car {
 		P = p;
 	}
 	/*
-	 * 向车辆添加一个时序路径，就是从当前dock走到下一个dock。
+	 * 向车辆添加一个时序路径，就是走到当前dock。
 	 */
-	public void add_P(Double time,Point next_dock){
+	public void add_P(Double time,Point dock){
 		ArrayList<Double> tmp_arr = new ArrayList<Double>();
 		tmp_arr.add(time);
-		tmp_arr.add(next_dock.getLongitude());
-		tmp_arr.add(next_dock.getLatitude());
+		tmp_arr.add(dock.getLongitude());
+		tmp_arr.add(dock.getLatitude());
 		P.add(tmp_arr);
+		for(UavForExpress uav : Uavs){
+			uav.add_P(time,dock);
+		}
 	}
 	
 	public Integer getId() {
@@ -48,18 +50,10 @@ public class Car {
 	public void setId(Integer id) {
 		Id = id;
 	}
-	public double getV() {
-		return v;
-	}
-	public void setV(double v) {
-		this.v = v;
-	}
 	public int getUavCount() {
-		return uavCount;
+		return Uavs.size();
 	}
-	public void setUavCount(int uavCount) {
-		this.uavCount = uavCount;
-	}
+
 
 	public ArrayList<UavForExpress> getUavs() {
 		return Uavs;
@@ -67,6 +61,12 @@ public class Car {
 
 	public void setUavs(ArrayList<UavForExpress> uavs) {
 		Uavs = uavs;
+	}
+	public void freeUavs() {
+		// TODO Auto-generated method stub
+		for(UavForExpress uav : Uavs){
+			uav.setIs_sended(false);
+		}
 	}
 
 	
