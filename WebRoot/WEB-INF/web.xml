@@ -131,6 +131,14 @@
  <servlet-name>AddUAVInBaseServlet</servlet-name>
  <servlet-class>UAV.servlet.AddUAVInBaseServlet</servlet-class>
  </servlet>
+ <servlet>
+ <servlet-name>ShowTravelPointServlet</servlet-name>
+ <servlet-class>UAV.servlet.ShowTravelPointServlet</servlet-class>
+ </servlet>
+   <servlet-mapping>
+    <servlet-name>ShowTravelPointServlet</servlet-name>
+    <url-pattern>/jsp/ShowTravelPointServlet.action</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/jsp/LoginServlet.action</url-pattern>

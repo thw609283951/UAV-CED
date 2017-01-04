@@ -2,9 +2,8 @@ package UAV.test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import UAV.ACO.ACO;
-import UAV.comm.TSPUtils;
 import UAV.dao.ExpressPathArrangeDAO;
 import UAV.entity.Point;
 import UAV.factory.ExpressPathArrangeDAOFactory;
@@ -30,14 +29,22 @@ public class carPathArrangeTest {
 //				System.out.print(dis[i][j] + "\t");
 //			}
 //			System.out.println("");
-//		} 	
-		ExpressPathArrangeService expressPathArrangeService = new ExpressPathArrangeService();
-		List<Point> carPath = new ArrayList<Point>();
-		carPath= expressPathArrangeService.carPathArrange(testPs,dis);
+//		} 
+//		for(int i=0;i<10;i++) {
+			ExpressPathArrangeService expressPathArrangeService = new ExpressPathArrangeService();
+			List<Point> carPath = new ArrayList<Point>();
+			carPath= expressPathArrangeService.carPathArrange(testPs,dis);
+//		}
+
+		
 		for(int i=0;i<testPs.size();i++) {
 			System.out.println(carPath.get(i).getId());
 		}
+//		Random random = new Random();
+//	     double ss = random.nextDouble();
+//	     System.out.println(ss);
 	     
 	}
+
 
 }

@@ -43,8 +43,9 @@ public class KMeans {
     	//Set Random Centroids
     	for (int i = 0; i < getNUM_CLUSTERS(); i++) {
     		Cluster cluster = new Cluster(i);
-    		//可以随意设置中心点，这里就设置为第i个点
-    		Point centroid = points.get(i);
+    		//可以随意设置中心点，但不能设置样本点。
+    		
+    		Point centroid = new Point(points.get(i).getP().getLongitude(),points.get(i).getP().getLatitude());
     		cluster.setCentroid(centroid);
     		getClusters().add(cluster);
     	}
@@ -104,7 +105,7 @@ public class KMeans {
     	}
     }
     
-    private List<Point> getCentroids() {
+    private List<Point> getCentroids() {//获取所有的中心点
     	List<Point> centroids = new ArrayList<Point>(getNUM_CLUSTERS());
     	for(Cluster cluster : getClusters()) {
     		Point aux = cluster.getCentroid();
@@ -135,24 +136,11 @@ public class KMeans {
         }
     }
     
-    private void calculateCentroids() {
+    private void calculateCentroids() {//更新簇中心点
         for(Cluster cluster : getClusters()) {
-            double sumX = 0;
-            double sumY = 0;
             List<Point> list = cluster.getPoints();
-            int n_points = list.size();
-            
-            for(Point point : list) {
-            	sumX += point.getP().getLongitude();
-                sumY += point.getP().getLatitude();
-            }
-            
-            Point centroid = cluster.getCentroid();
-            if(n_points > 0) {
-            	double newX = sumX / n_points;
-            	double newY = sumY / n_points;
-                centroid.setP(newX,newY);
-            }
+            Point centroid = Point.GetCenterPointFromListOfCoordinates(list);
+            cluster.setCentroid(centroid);
         }
     }
 

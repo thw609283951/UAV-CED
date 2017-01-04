@@ -13,13 +13,11 @@
 <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
 
 <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
-<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=您申请的key值"></script>
 <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
-<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=您申请的key值&plugin=AMap.Driving"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=MLSjqW8E6qbunua0gTEvjTWMXqrjwC6x"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/library/LuShu/1.2/src/LuShu_min.js"></script>
 </head>
-<body>
+<body >
 	<div id="body-wrapper" class="myfont">
 		<div id="sidebar">
 			<div id="sidebar-wrapper">
@@ -57,106 +55,77 @@
     	<input type="hidden" id="newlongitudecomment" />
     	<input type="hidden" id="newlatitudecomment" />
     	<input type="hidden" id="index" value=0>
-    	
     	<input type="hidden" id="road1" value=0>;
     	
-		<div id="TraveTest" style="height:600px"></div>
+		<div id="ZoneShow" style="height:600px"></div>
     	<div id="panel"></div>
     	<div class="button-group">
-    		<button id="run">开始</button> 
-    		<br>    		
+    		<button onclick="allcar(all1[0],all1[1],all1[0],all1[1],all1,all1)">开始</button> 
+    		<br>
+    		<button onclick="flight()">flight</button> 
+    		<br>   
+    		<button onclick="lushu1()">lushu1</button> 
+    		<button onclick="lushu2()">lushu2</button> 
+    		<br>  	
+    		<button onclick="flight1(0)">flight1</button> 
+    		<br> 
+    		<button onclick="flight2(1)">flight2</button> 
+    		<br>  		
+    		<input type="button" id="run1" value="第一辆车开始" onclick="">
+    		<input type="button" id="run2" value="第二辆车开始" onclick="">
     		<input type="button" class="btn btn-info" value="添加点" id=showonline onclick="addPoint()"/>  
    
     		 		
         </div>
+       <%@ include file="var.jsp" %>
+       <%@ include file="oneflight.jsp" %>
+       <%@ include file="carroad.jsp" %>
+       <%@ include file="showpoint.jsp" %>
+       <%@ include file="showcarroad.jsp" %>
 		<script type="text/javascript">
 	// 百度地图API功能
-			
+			var myIcon = new BMap.Icon("../images/icons/flight.png", new BMap.Size(48,32), {imageOffset: new BMap.Size(0, 0)});
 			var map = new BMap.Map("TraveTest");    // 创建Map实例
-			map.centerAndZoom(new BMap.Point(126.629889,45.744779), 18);  // 初始化地图,设置中心点坐标和地图级别
+			map.centerAndZoom(new BMap.Point(126.63735,45.75214), 18);  // 初始化地图,设置中心点坐标和地图级别
 			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
 			map.setCurrentCity("哈尔滨");          // 设置地图显示的城市 此项是必须设置的
 			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-			var positions=[[126.660917,45.759976],[126.665166,45.760425],[126.668771,45.760156]];//倒是可以直接将点读取到positions中
-			var lushu;
-			var alllushu=[];
-			var alldrv=[];
-			// 实例化一个驾车导航用来生成路线
-			var drv1 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
-    		var drv = new BMap.DrivingRoute('哈尔滨',{
-	        onSearchComplete: function(res) {
-	            if (drv.getStatus() == BMAP_STATUS_SUCCESS) {
-	                var plan = res.getPlan(0);
-	                var arrPois =[];
-	                for(var j=0;j<plan.getNumRoutes();j++){
-	                    var route = plan.getRoute(j);
-	                    arrPois= arrPois.concat(route.getPath());
-	                }
-	                map.addOverlay(new BMap.Polyline(arrPois, {strokeColor: '#111'}));
-	                map.setViewport(arrPois);
-	                lushu = new BMapLib.LuShu(map,arrPois,{
-	                defaultContent:"",//"从天安门到百度大厦"
-	                autoView:true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
-	                icon  : new BMap.Icon('http://developer.baidu.com/map/jsdemo/img/car.png', new BMap.Size(52,26),{anchor : new BMap.Size(27, 13)}),
-	                speed: 450,
-	                enableRotation:true,//是否设置marker随着道路的走向进行旋转
-	                landmarkPois: [
-	                   {lng:116.314782,lat:39.913508,html:'加油站',pauseTime:2},
-	                   {lng:116.315391,lat:39.964429,html:'高速公路收费<div><img src="http://map.baidu.com/img/logo-map.gif"/></div>',pauseTime:3},
-	                   {lng:116.381476,lat:39.974073,html:'肯德基早餐<div><img src="http://ishouji.baidu.com/resource/images/map/show_pic04.gif"/></div>',pauseTime:2}
-                	]});          
-	            }
-	            //console.log(lushu);
-	            //alllushu.push(lushu);
-	        }
-	    	});
-	    	
-	    	var road1 = document.getElementById("road1").value;
-	    	road1 = road1 + 1;
-	    	road1 = road1 - 1 ;
-      		var p1 = new BMap.Point(126.660917,45.759976);
-			var p2 = new BMap.Point(126.665166,45.760425);
-			var p3 = new BMap.Point(126.651304,45.751143);
-			var p4 = new BMap.Point(126.629932,45.737052);
-			console.log(road1);
-			if (road1==0){
-				drv.search(p1,p2);
-				road1=road1+1;
-				document.getElementById("road1").value = road1+1;
-			}
-			else if (road1 ==1){
-				drv.search(p2,p3);
-				road1=road1+1;
-				document.getElementById("road1").value = road1+1;
-			}
-			drv1.search(p1,p1,{waypoints:[p2,p3,p4]});
-			//drv.search(p1,p1,{waypoints:[p2,p3,p4]});
 			
-			$("run").onclick = function(){
-				//console.log(alllushu);
-				//console.log(alllushu[0]);
-				//console.log(lushu);
-				console.log(road1);
-				alllushu[road1].start();
-			}
-			
-			function $(element){
-				return document.getElementById(element);
-			}
-			function addPoint() {
-				for (i=0;i<positions.length;i++){
+
+			for (i=0;i<positions1.length;i++){
 					//console.log(positions[i]);
-					x=positions[i][0];
-					y=positions[i][1];
+					x=positions1[i][0];
+					y=positions1[i][1];
 					var point = new BMap.Point(x,y); // 创建标注
-					var marker = new BMap.Marker(point);// 将标注添加到地图中
-					map.addOverlay(marker);
-				}      
-				//marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+					all1.push(point);
+				}     
+			
+			for (i=0;i<positions1.length;i++){
+					//console.log(positions[i]);
+					x=positions2[i][0];
+					y=positions2[i][1];
+					var point = new BMap.Point(x,y); // 创建标注
+					all2.push(point);
+				}  
+			//倒是可以直接将点读取到positions中
+			
+			
+			function lushu1(){
+				car1(all1[0],all1[0],all1);
+				
+			}
+			function lushu2(){
+				car2(all2[0],all2[0],all2);
 			}
 			
-	        
-	       
+			
+			
+			function test(j){
+				o=j;
+				setInterval("goWay(ex[o],ey[o],sx[o],sy[o],o)",1000);
+				setInterval("changepoint(o,o)",2000);
+			}
+   			
 			
 		</script>
 		

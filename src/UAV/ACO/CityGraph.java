@@ -25,7 +25,7 @@ public class CityGraph {
         this.num = num;
         //initDistance(ifDuichen);
         this.setDistance(distance2);
-        initPheronome();
+        initPheronome(distance2);
     }
 /*
     private void initDistance(boolean ifDuichen) {
@@ -54,11 +54,13 @@ public class CityGraph {
 printlndistance();
     }
 */
-    private void initPheronome() {
+    private void initPheronome(double[][] distance2) {
         pheromone = new double[num][num];
         for (int i = 0; i < num; i++) {
             for (int j = 0; j < num; j++) {
-                pheromone[i][j] = 0.1;
+               // pheromone[i][j] = 0.1;
+            	double x = distance2[i][j]/num;
+            	pheromone[i][j] = (1- 2/(Math.pow(2.718281828459045,2*x)+1))*0.1;
             }
         }
     }
