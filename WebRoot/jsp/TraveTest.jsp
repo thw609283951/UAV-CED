@@ -91,18 +91,18 @@
 			map.setCurrentCity("哈尔滨");          // 设置地图显示的城市 此项是必须设置的
 			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 			
-			for (i=0;i<positions1.length;i++){
+			for (i=0;i<UAVCars[0].length;i++){
 					//console.log(positions[i]);
-					x=positions1[i][0];
-					y=positions1[i][1];
+					x=UAVCars[0][i][0];
+					y=UAVCars[0][i][1];
 					var point = new BMap.Point(x,y); // 创建标注
 					all1.push(point);
 				}     
 			
-			for (i=0;i<positions1.length;i++){
+			for (i=0;i<UAVCars[1].length;i++){
 					//console.log(positions[i]);
-					x=positions2[i][0];
-					y=positions2[i][1];
+					x=UAVCars[1][i][0];
+					y=UAVCars[1][i][1];
 					var point = new BMap.Point(x,y); // 创建标注
 					all2.push(point);
 				}  
