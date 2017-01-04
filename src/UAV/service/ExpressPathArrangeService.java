@@ -75,7 +75,30 @@ public class ExpressPathArrangeService {
 	public List<DockPoint> getAllDockPoints() {
 		return allDockPoints;
 	}
-
+	
+	public List<double[]> getWpCoords() {
+		List<double[]> coordList = new ArrayList<double[]>();
+		for (WarePoint wp : warePoints) {
+			coordList.add(wp.toCoordArray());
+		}
+		return coordList;
+	}
+	
+	public List<double[]> getSdpCoords() {
+		List<double[]> coordList = new ArrayList<double[]>();
+		for (DockPoint sdp : selectedDockPoints) {
+			coordList.add(sdp.toCoordArray());
+		}
+		return coordList;
+	}
+	
+	public List<double[]> getNpCoords() {
+		List<double[]> coordList = new ArrayList<double[]>();
+		for (NeedPoint np : allNeedPoints) {
+			coordList.add(np.toCoordArray());
+		}
+		return coordList;
+	}
 
 	public void setAllDockPoints(List<DockPoint> allDockPoints) {
 		this.allDockPoints = allDockPoints;
@@ -98,10 +121,6 @@ public class ExpressPathArrangeService {
 	 * @throws Exception 
 	 */
 	public List<ChildZone> pathArrange() throws Exception {
-		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
-//		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
-//		allDockPoints = epaDao.getAllDockPoints();
-//		allNeedPoints = epaDao.getAllNeedPoints();
 		pointPreProcess();
 		List<ChildZone> childZones = childZonePatition();
 		createCarAndUavs(childZones);//根据子区域，产生Car以及uav对象
