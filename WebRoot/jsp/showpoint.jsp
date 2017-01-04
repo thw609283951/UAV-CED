@@ -23,30 +23,38 @@
 				title : "信息窗口" , // 信息窗口标题
 				enableMessage:true//设置允许信息窗发送短息
 			   };
-				for (i=0;i<needpoints.length;i++){
+				for (i=0;i<UAVNeedPoints.length;i++){
 					//console.log(positions[i]);
-					x=needpoints[i][0];
-					y=needpoints[i][1];
-					var content = needpoints[i][2];
+					x=UAVNeedPoints[i][0];
+					y=UAVNeedPoints[i][1];
+					//var content = needpoints[i][2];
 					var point = new BMap.Point(x,y); // 创建标注
 					var marker = new BMap.Marker(point);// 将标注添加到地图中
 					map.addOverlay(marker);
-					addClickHandler(content,marker);
+					//addClickHandler(content,marker);
 				}     
-				for (i=0;i<positions.length;i++){
+				for (i=0;i<UAVDockPoints.length;i++){
 					//console.log(positions[i]);
-					x=positions[i][0];
-					y=positions[i][1];
-					var content = positions[i][2];
+					x=UAVDockPoints[i][0];
+					y=UAVDockPoints[i][1];
+					//var content = positions[i][2];
 					var point = new BMap.Point(x,y); // 创建标注
 					//var myIcon = new BMap.Icon("http://developer.baidu.com/map/jsdemo/img/fox.gif", new BMap.Size(300,157));
 					//var myIcon = new BMap.Icon("../images/icons/flight.png", new BMap.Size(48,32));
 					var myIcon = new BMap.Icon("../images/icons/mark_b.png", new BMap.Size(48,32));
 					var marker =  new BMap.Marker(point,{icon:myIcon});// 将标注添加到地图中
 					map.addOverlay(marker);
-					addClickHandler(content,marker);
-				}     
-				//marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+					//addClickHandler(content,marker);
+				}    
+				for (i=0;i<UAVWarePoints.length;i++){
+					x=UAVWarePoints[i][0];
+					y=UAVWarePoints[i][1];
+					var point = new BMap.Point(x,y); // 创建标注
+					var myIcon = new BMap.Icon("../images/icons/mark_b.png", new BMap.Size(48,32));
+					var marker =  new BMap.Marker(point,{icon:myIcon});// 将标注添加到地图中
+					map.addOverlay(marker);
+					//a
+				} 
 				function addClickHandler(content,marker){
 					marker.addEventListener("click",function(e){
 						openInfo(content,e)}
