@@ -17,7 +17,7 @@ public class RoadDistance {
 	
 	
 	private final static String region = "哈尔滨";
-	private final static String ak = "MLSjqW8E6qbunua0gTEvjTWMXqrjwC6x";
+	private final static String ak = "2SPHCeYgDidpmS89Lb0nIFCYw1xMi0Oc";
 	
     public static String loadJSON (String url) {
         StringBuilder json = new StringBuilder();
@@ -45,8 +45,12 @@ public class RoadDistance {
 		JSONObject obj = JSONObject.fromObject(json);
 		if(obj.get("status").toString().equals("0")){
 
+			System.out.println("success road dis");
 			return ((JSONObject)obj.getJSONObject("result").getJSONArray("routes").get(0)).getDouble("distance");
-        }else{
+		}else{
+        	System.out.println(url);
+        	System.out.println(obj.get("message").toString());
+        	System.out.println(obj.get("status").toString());
         	throw new Exception("get Road Distance Error!");
         }
 	}

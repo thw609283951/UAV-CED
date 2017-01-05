@@ -2,6 +2,7 @@ package UAV.test;
 
 import java.util.List;
 
+import UAV.comm.RoadDistance;
 import UAV.comm.kdtree.KDTree;
 import UAV.comm.kdtree.KeyDuplicateException;
 import UAV.comm.kdtree.KeySizeException;
@@ -25,8 +26,9 @@ public class preProcessTest {
 
 	/**
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 //		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
 //		List<DockPoint> allDockPoints = epaDao.getAllDockPoints();
@@ -74,9 +76,10 @@ public class preProcessTest {
 //		arrangeService.pointPreProcess();
 //		
 //		System.out.println(getLngAndLat("百度大厦"));
-		
+		//45.738045,126.636613&destination=45.75214,126.63735
 		//getDistanceByRoad(116.332556,40.009424,116.316176,39.997743);
-		getDistanceByRoad(126.638715,45.749146, 126.6173,45.726199);
+		//getDistanceByRoad(126.638715,45.749146, 126.6173,45.726199);
+		System.out.println(RoadDistance.getDistanceByRoad(126.636613, 45.738045, 126.63735, 45.75214));
 	}
 //ak=MLSjqW8E6qbunua0gTEvjTWMXqrjwC6x"
 	
