@@ -38,6 +38,7 @@ public class ShowTravelPointServlet extends HttpServlet {
 			e.printStackTrace();
 		}//执行主函数
 		
+		
 		request.setAttribute("warePoints", ep.getWpCoords());
 		request.setAttribute("dockPoints", ep.getSdpCoords());
 		request.setAttribute("needPoints", ep.getNpCoords());

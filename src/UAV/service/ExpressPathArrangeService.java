@@ -80,8 +80,8 @@ public class ExpressPathArrangeService {
 	 * 获取所有仓库点，double数组形式返回
 	 * @return
 	 */
-	public List<double[]> getWpCoords() {
-		List<double[]> coordList = new ArrayList<double[]>();
+	public ArrayList<ArrayList<Double>> getWpCoords() {
+		ArrayList<ArrayList<Double>> coordList = new ArrayList<ArrayList<Double>>();
 		for (WarePoint wp : warePoints) {
 			coordList.add(wp.toCoordArray());
 		}
@@ -91,8 +91,8 @@ public class ExpressPathArrangeService {
 	 * 获取所有停靠点，double数组形式返回
 	 * @return
 	 */
-	public List<double[]> getSdpCoords() {
-		List<double[]> coordList = new ArrayList<double[]>();
+	public ArrayList<ArrayList<Double>> getSdpCoords() {
+		ArrayList<ArrayList<Double>> coordList = new ArrayList<ArrayList<Double>>();
 		for (DockPoint sdp : selectedDockPoints) {
 			coordList.add(sdp.toCoordArray());
 		}
@@ -102,8 +102,8 @@ public class ExpressPathArrangeService {
 	 * 获取所有需求点，double数组形式返回
 	 * @return
 	 */
-	public List<double[]> getNpCoords() {
-		List<double[]> coordList = new ArrayList<double[]>();
+	public ArrayList<ArrayList<Double>> getNpCoords() {
+		ArrayList<ArrayList<Double>> coordList = new ArrayList<ArrayList<Double>>();
 		for (NeedPoint np : allNeedPoints) {
 			coordList.add(np.toCoordArray());
 		}

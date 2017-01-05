@@ -1,5 +1,7 @@
 package UAV.entity;
 
+import java.util.ArrayList;
+
 public class Point {
 	private Integer id;
 	private Double longitude;//经度
@@ -46,8 +48,10 @@ public class Point {
 	 * 经度在前，纬度在后
 	 * @return
 	 */
-	public double[] toCoordArray() {
-		double[] lnglat = {longitude.doubleValue(), latitude.doubleValue()};
+	public ArrayList<Double> toCoordArray() {
+		ArrayList<Double> lnglat = new ArrayList<Double>();
+		lnglat.add(new Double(longitude));
+		lnglat.add(new Double(latitude));
 		return lnglat;
 	}
 }

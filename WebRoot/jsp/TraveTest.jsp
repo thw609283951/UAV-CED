@@ -61,6 +61,8 @@
     	<div id="panel"></div>
     	<div class="button-group">
     	 ${ warePoints }
+    	 ${ dockPoints }
+    	 ${carsPath }
     		<button onclick="allcar(all1[0],all1[1],all1[0],all1[1],all1,all1)">开始</button> 
     		<br>
     		<button onclick="flight()">flight</button> 
