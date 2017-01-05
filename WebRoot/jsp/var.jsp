@@ -128,7 +128,8 @@
 		];
 		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
 		   <c:forEach var="j" begin="1" end="${uavsInEveryCar}">
-			   <c:out value="var UAVFlight${i}${j}=${uavsPath[i+j-2]}"/>
+		   var UAVFlight${i}${j}=UAVFlights[2*${i}+${j}-3];
+		   console.log(UAVFlight${i}${j});
 			</c:forEach>
 		</c:forEach>
 		
