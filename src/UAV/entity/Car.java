@@ -32,7 +32,7 @@ public class Car {
 		tmp_arr.add(time);
 		tmp_arr.add(dock.getLongitude());
 		tmp_arr.add(dock.getLatitude());
-		P.add(tmp_arr);
+		getP().add(tmp_arr);
 		for(UavForExpress uav : Uavs){
 			uav.add_P(time,dock);
 		}
@@ -61,6 +61,12 @@ public class Car {
 		for(UavForExpress uav : Uavs){
 			uav.setIs_sended(false);
 		}
+	}
+	public ArrayList<ArrayList<Double>> getP() {
+		return P;
+	}
+	public void setP(ArrayList<ArrayList<Double>> p) {
+		P = p;
 	}
 
 	

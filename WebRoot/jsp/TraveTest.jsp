@@ -17,13 +17,13 @@
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=MLSjqW8E6qbunua0gTEvjTWMXqrjwC6x"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/library/LuShu/1.2/src/LuShu_min.js"></script>
 </head>
-<body>
+<body >
 	<div id="body-wrapper" class="myfont">
 		<div id="sidebar">
 			<div id="sidebar-wrapper">
 				<a href="#"><img id="logo" src="../images/logo.png" alt="The logo" /></a>
 				<div id="profile-links">
-					你好, <a href="javascript:void(0);" title="Edit your profile">${Identity.name}</a>！
+					你好,<a href="javascript:void(0);" title="Edit your profile">${Identity.name}</a>！
 					<br /> <br /> <a href="../jsp/LogoutServlet.action" title="Sign Out">登出</a>
 				</div>
 				<ul id="main-nav">
@@ -57,9 +57,10 @@
     	<input type="hidden" id="index" value=0>
     	<input type="hidden" id="road1" value=0>;
     	
-		<div id="TraveTest" style="height:600px"></div>
+		<div id="ZoneShow" style="height:600px"></div>
     	<div id="panel"></div>
     	<div class="button-group">
+    	 ${ warePoints }
     		<button onclick="allcar(all1[0],all1[1],all1[0],all1[1],all1,all1)">开始</button> 
     		<br>
     		<button onclick="flight()">flight</button> 
@@ -92,7 +93,7 @@
 			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
 			map.setCurrentCity("哈尔滨");          // 设置地图显示的城市 此项是必须设置的
 			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-			
+
 			for (i=0;i<UAVCars[0].length;i++){
 					//console.log(positions[i]);
 					x=UAVCars[0][i][0];

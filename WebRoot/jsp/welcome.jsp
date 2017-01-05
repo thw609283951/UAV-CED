@@ -112,7 +112,7 @@
 											<a href="MaxTask.jsp">额定时间额定无人机最大派送任务</a>
 										</li>			
 										<li>
-											<a href="TraveTest.jsp">车队-无人机集群快递派送任务</a>
+											<a href="/UAV/jsp/ShowTravelPointServlet.action">车队-无人机集群快递派送任务</a>
 										</li>							 
 									</ul>
 								</li>

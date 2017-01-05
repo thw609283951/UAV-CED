@@ -81,7 +81,8 @@ printlndistance();
     }
 
     public static double getDistance(int i, int j) { //注意i,j和城市之间的对应关系
-        return distance[i][j];
+    	//System.out.println(i +"  "+j);
+    	return distance[i][j];
     }
 
     public static double getPheronmone(int i, int j) {
