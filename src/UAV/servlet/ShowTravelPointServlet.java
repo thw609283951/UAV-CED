@@ -45,6 +45,8 @@ public class ShowTravelPointServlet extends HttpServlet {
 		
 		request.setAttribute("carsPath", ep.getDemoCarPath());
 		request.setAttribute("uavsPath", ep.getDemoUavPath());
+		
+		request.setAttribute("uavsInEveryCar",ep.getUavsInEveryCar());
 	
 		RequestDispatcher de=request.getRequestDispatcher("/jsp/TraveTest.jsp"); 
 		de.forward(request, response); 
