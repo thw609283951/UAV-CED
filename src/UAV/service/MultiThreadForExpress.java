@@ -23,7 +23,13 @@ public class MultiThreadForExpress implements Runnable{
 	public void run() {
 		System.out.println("Thread "+id+" start time:"+System.currentTimeMillis());
 		List<Point> czPoints = childZone.getCzPoints();
-		double[][] pDis = ExpressPathArrangeService.getPointDisByRoad(czPoints);
+		double[][] pDis = null;
+		try {
+			pDis = ExpressPathArrangeService.getPointDisByRoad(czPoints);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//List<Point> carPath = carPathArrange(czPoints, pDis);
 		childZone.setCzPoints((ArrayList<Point>) ExpressPathArrangeService.carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
 		ExpressPathArrangeService.UAVArrange(childZone);

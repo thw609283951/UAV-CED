@@ -130,7 +130,7 @@ public class ExpressPathArrangeService {
 	 * 路径规划总算法
 	 * @throws Exception
 	 */
-	public List<ChildZone> pathArrange() {
+	public List<ChildZone> pathArrange() throws Exception {
 		
 		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
 //		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
@@ -364,7 +364,7 @@ public void multiThreadPathArrange() {
 	 * 无人机调度模块
 	 * @param carPath 已经经过计算的旅行商问题最优解的序列，车要按着这个序列走
 	 */
-	private void UAVArrange(ChildZone childZone) {
+	static void UAVArrange(ChildZone childZone) {
 		//TODO:会需要从停靠点得到停靠点所负责的所有需求点的集合
 		ArrayList<NeedPoint> S = new ArrayList<NeedPoint>();//保存child_zone的所有需求点
 		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();//指定停靠点所属需求点的划分
@@ -455,7 +455,7 @@ public void multiThreadPathArrange() {
 	 * @param var_uav无人及数量
 	 * @return 划分结果
 	 */
-	private ArrayList<ArrayList<NeedPoint>> Divid_need(List<NeedPoint> S,DockPoint dock, int var_uav){
+	private static ArrayList<ArrayList<NeedPoint>> Divid_need(List<NeedPoint> S,DockPoint dock, int var_uav){
 		int m = S.size();//需求点个数
 		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();
 		if(var_uav>=m){
@@ -478,7 +478,7 @@ public void multiThreadPathArrange() {
 	 * @param var_uav 无人及数量，也是划分子区域数量
 	 * @return
 	 */
-	private ArrayList<ArrayList<NeedPoint>> k_means_with_Point(
+	private static ArrayList<ArrayList<NeedPoint>> k_means_with_Point(
 			List<NeedPoint> s, int var_uav) {
 		// TODO Auto-generated method stub
 		List<Cluster> clusters= new ArrayList<Cluster>();
@@ -501,7 +501,7 @@ public void multiThreadPathArrange() {
 	 * 妥
 	 * 旅行商问题求解从dock点出发遍历part中点，并返回dock的最短路径的路径序列
 	 */
-	private List<Point> TSP(List<NeedPoint> part, DockPoint dock){
+	private static List<Point> TSP(List<NeedPoint> part, DockPoint dock){
 		List<Point> l = new ArrayList<Point>();
 		List<Point> points = new ArrayList<Point>();
 		points.add(dock);
@@ -519,7 +519,7 @@ public void multiThreadPathArrange() {
 	 * max_l：所有无人机最长飞行距离
 	 * uavZ_v,car_v:无人机、车速
 	 */
-	private double get_max_wait_time(double max_l,double uav_v,double car_v,double to_next_dock_time, DockPoint dock, ChildZone childZone){
+	private static double get_max_wait_time(double max_l,double uav_v,double car_v,double to_next_dock_time, DockPoint dock, ChildZone childZone){
 		double t_max_charge = get_max_charge_time(max_l);//先设一个常数，后面换成数学模型
 
 		if (to_next_dock_time > t_max_charge){// 在路上即可完成充电
@@ -536,7 +536,7 @@ public void multiThreadPathArrange() {
 	 * @param max_l：最长航程
 	 * @return
 	 */
-	private double get_max_charge_time(double max_l) {
+	private static double get_max_charge_time(double max_l) {
 		// TODO Auto-generated method stub
 		return total_charge_time*(max_l/max_trade);
 	}
@@ -547,7 +547,7 @@ public void multiThreadPathArrange() {
 	 * @param args
 	 * @throws Exception
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
     	ExpressPathArrangeService ep = new ExpressPathArrangeService();
 
     	//ExpressPathArrangeService ep2 = new ExpressPathArrangeService();

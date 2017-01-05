@@ -23,7 +23,7 @@
 			<div id="sidebar-wrapper">
 				<a href="#"><img id="logo" src="../images/logo.png" alt="The logo" /></a>
 				<div id="profile-links">
-					你好, <a href="javascript:void(0);" title="Edit your profile">${Identity.name}</a>！
+					你好,<a href="javascript:void(0);" title="Edit your profile">${Identity.name}</a>！
 					<br /> <br /> <a href="../jsp/LogoutServlet.action" title="Sign Out">登出</a>
 				</div>
 				<ul id="main-nav">
@@ -60,6 +60,7 @@
 		<div id="ZoneShow" style="height:600px"></div>
     	<div id="panel"></div>
     	<div class="button-group">
+    	 ${ warePoints }
     		<button onclick="allcar(all1[0],all1[1],all1[0],all1[1],all1,all1)">开始</button> 
     		<br>
     		<button onclick="flight()">flight</button> 

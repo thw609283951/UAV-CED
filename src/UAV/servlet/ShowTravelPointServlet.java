@@ -31,7 +31,12 @@ public class ShowTravelPointServlet extends HttpServlet {
 		System.out.println("***************ShowTravelPointServlet****************");
 		
 		ExpressPathArrangeService ep = new ExpressPathArrangeService();//创建快递规划对象
-		ep.pathArrange();//执行主函数
+		try {
+			ep.pathArrange();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}//执行主函数
 		
 		request.setAttribute("warePoints", ep.getWpCoords());
 		request.setAttribute("dockPoints", ep.getSdpCoords());
