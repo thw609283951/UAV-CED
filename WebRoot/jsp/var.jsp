@@ -17,15 +17,32 @@
   
   <body>
     <script type="text/javascript">
-    	var all1=[];
-		var all2=[];
+    	//var all1=[];
+		//var all2=[];
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			var all${i}=[];
+		</c:forEach>
 		var	q1 = new BMap.Point(126.660917,45.759976);
 		var q2 = new BMap.Point(126.665166,45.760425);
 		var q3 = new BMap.Point(126.651304,45.751143);
 		var q4 = new BMap.Point(126.629932,45.737052);
-		var index=[1,1];
+		//var index=[1,1];
+		var index=[
+			<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+				1,
+			</c:forEach>
+		];
 		var flightnumber=[0,1,2,3,4,5];//飞机编码
-		var pointnumber=[[1,1],[1,1]];
+		//var pointnumber=[[1,1],[1,1]];
+		var pointnumber=[
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			[
+		   	<c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   	1,
+			</c:forEach>
+			],
+		</c:forEach>
+		];
         var o=[0,1];
         //下列是模拟真实数据
         var UAVWarePoints=${warePoints};
