@@ -76,7 +76,10 @@ public class ExpressPathArrangeService {
 	public List<DockPoint> getAllDockPoints() {
 		return allDockPoints;
 	}
-
+	/**马
+	 * 获取所有仓库点，double数组形式返回
+	 * @return
+	 */
 	public List<double[]> getWpCoords() {
 		List<double[]> coordList = new ArrayList<double[]>();
 		for (WarePoint wp : warePoints) {
@@ -84,7 +87,10 @@ public class ExpressPathArrangeService {
 		}
 		return coordList;
 	}
-
+	/**马
+	 * 获取所有停靠点，double数组形式返回
+	 * @return
+	 */
 	public List<double[]> getSdpCoords() {
 		List<double[]> coordList = new ArrayList<double[]>();
 		for (DockPoint sdp : selectedDockPoints) {
@@ -92,7 +98,10 @@ public class ExpressPathArrangeService {
 		}
 		return coordList;
 	}
-
+	/**马
+	 * 获取所有需求点，double数组形式返回
+	 * @return
+	 */
 	public List<double[]> getNpCoords() {
 		List<double[]> coordList = new ArrayList<double[]>();
 		for (NeedPoint np : allNeedPoints) {

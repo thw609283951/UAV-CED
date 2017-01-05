@@ -29,24 +29,18 @@ public class ShowTravelPointServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println("***************ShowTravelPointServlet****************");
+		
+		ExpressPathArrangeService ep = new ExpressPathArrangeService();//创建快递规划对象
+		ep.pathArrange();//执行主函数
+		
+		request.setAttribute("warePoints", ep.getWpCoords());
+		request.setAttribute("dockPoints", ep.getSdpCoords());
+		request.setAttribute("needPoints", ep.getNpCoords());
+		
+		request.setAttribute("carsPath", ep.getDemoCarPath());
+		request.setAttribute("uavsPath", ep.getDemoUavPath());
 	
-		ArrayList<Point> points = new ArrayList<Point>();
-		ArrayList<ArrayList<Point>> ps = new ArrayList<ArrayList<Point>>();
-		ArrayList<ArrayList<ArrayList<Point>>> pss = new ArrayList<ArrayList<ArrayList<Point>>>();
-		for(int i=0;i<3;i++) {
-			Point point = new Point();
-			point.setId(1);
-			point.setLatitude(121231.3);
-			points.add(point);
-		}
-		ps.add(points);
-		ps.add(points);
-		
-		pss.add(ps);
-		pss.add(ps);
-		
-		request.setAttribute("pss", pss); 
-		RequestDispatcher de=request.getRequestDispatcher("/TraveTest.jsp"); 
+		RequestDispatcher de=request.getRequestDispatcher("/jsp/TraveTest.jsp"); 
 		de.forward(request, response); 
 		
 	}
