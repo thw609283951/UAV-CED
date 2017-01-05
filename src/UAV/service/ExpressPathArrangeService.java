@@ -175,7 +175,7 @@ public void multiThreadPathArrange() {
 		for (ChildZone childZone : childZones){
 			Car car= new Car();
 			ArrayList<UavForExpress> uavs = new ArrayList<UavForExpress>();
-			for (int i = 0; i < uavsInEveryCar ; i++){
+			for (int i = 0; i < getUavsInEveryCar() ; i++){
 				UavForExpress uav = new UavForExpress();
 				uavs.add(uav);
 			}
@@ -661,6 +661,12 @@ public void multiThreadPathArrange() {
 			}
 		}
 		return dis;
+	}
+	public int getUavsInEveryCar() {
+		return uavsInEveryCar;
+	}
+	public void setUavsInEveryCar(int uavsInEveryCar) {
+		this.uavsInEveryCar = uavsInEveryCar;
 	}
 		
 
