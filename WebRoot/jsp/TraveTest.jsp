@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -57,12 +58,9 @@
     	<input type="hidden" id="index" value=0>
     	<input type="hidden" id="road1" value=0>;
     	
-		<div id="ZoneShow" style="height:600px"></div>
+		<div id="TraveTest" style="height:600px"></div>
     	<div id="panel"></div>
     	<div class="button-group">
-    	 ${ warePoints }
-    	 ${ dockPoints }
-    	 ${carsPath }
     		<button onclick="allcar(all1[0],all1[1],all1[0],all1[1],all1,all1)">开始</button> 
     		<br>
     		<button onclick="flight()">flight</button> 
@@ -70,10 +68,12 @@
     		<button onclick="lushu1()">lushu1</button> 
     		<button onclick="lushu2()">lushu2</button> 
     		<br>  	
-    		<button onclick="flight1(0)">flight1</button> 
+    		<button onclick="UAVflight11()">flight1</button> 
     		<br> 
-    		<button onclick="flight2(1)">flight2</button> 
+    		<button onclick="UAVflight12()">flight2</button> 
     		<br>  		
+    		<button onclick="UAVflight1()">end1</button>
+    		<button onclick="UAVflight2()">end2</button>
     		<input type="button" id="run1" value="第一辆车开始" onclick="">
     		<input type="button" id="run2" value="第二辆车开始" onclick="">
     		<input type="button" class="btn btn-info" value="添加点" id=showonline onclick="addPoint()"/>  
@@ -93,20 +93,19 @@
 			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
 			map.setCurrentCity("哈尔滨");          // 设置地图显示的城市 此项是必须设置的
 			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-			
 
-			for (i=0;i<positions1.length;i++){
+			for (i=0;i<UAVCars[0].length;i++){
 					//console.log(positions[i]);
-					x=positions1[i][0];
-					y=positions1[i][1];
+					x=UAVCars[0][i][0];
+					y=UAVCars[0][i][1];
 					var point = new BMap.Point(x,y); // 创建标注
 					all1.push(point);
 				}     
 			
-			for (i=0;i<positions1.length;i++){
+			for (i=0;i<UAVCars[1].length;i++){
 					//console.log(positions[i]);
-					x=positions2[i][0];
-					y=positions2[i][1];
+					x=UAVCars[1][i][0];
+					y=UAVCars[1][i][1];
 					var point = new BMap.Point(x,y); // 创建标注
 					all2.push(point);
 				}  
@@ -120,9 +119,6 @@
 			function lushu2(){
 				car2(all2[0],all2[0],all2);
 			}
-			
-			
-			
 			function test(j){
 				o=j;
 				setInterval("goWay(ex[o],ey[o],sx[o],sy[o],o)",1000);

@@ -62,26 +62,16 @@
 					if (buttoname1=="第一辆车开始"){
 						document.getElementById("run1").value="第一辆车暂停";
 						lushu.start();
+						
 					}
 					else if (buttoname1=="第一辆车暂停"){
 						document.getElementById("run1").value="第一辆车开始";
 						lushu.pause();
+						UAVflight1();
 					}
 				}
-		    	//lushu.start();
 				drv1.search(p,q,{waypoints:all});
-				//console.log(lushu);
 				drv.search(p,q,{waypoints:all})
-				//console.log(lushu);
-				//setTimeout("lushu.pause()",2000);
-				// setTimeout("lushu.start()", 2000 )
-				/* console.log("out");
-				console.log(lushu);
-				$("run").onclick = function(){
-				console.log("clickin");
-				console.log(lushu);
-					lushu.start();
-				} */
 			}
 			
 			
@@ -113,10 +103,6 @@
 	                	]});          
 		            }
 		            console.log(lushu);
-		           // lushu.start();
-		            //setTimeout("alert(222)",2000);	            
-		            //setTimeout(function(){ lushu.pause();},2000);
-		            //setTimeout(function(){ lushu.start();},4000);
 		        }
 		    	});
 				ac2=document.getElementById("run2");
@@ -125,26 +111,16 @@
 					if (buttoname2=="第二辆车开始"){
 						document.getElementById("run2").value="第二辆车暂停";
 						lushu.start();
+						
 					}
 					else if (buttoname2=="第二辆车暂停"){
 						document.getElementById("run2").value="第二辆车开始";
 						lushu.pause();
+						UAVflight2();
 					}
 				}
-		    	//lushu.start();
 				drv1.search(p,q,{waypoints:all});
-				//console.log(lushu);
 				drv.search(p,q,{waypoints:all});
-				//console.log(lushu);
-				//setTimeout("lushu.pause()",2000);
-				// setTimeout("lushu.start()", 2000 )
-				/* console.log("out");
-				console.log(lushu);
-				$("run").onclick = function(){
-				console.log("clickin");
-				console.log(lushu);
-					lushu.start();
-				} */
 			}
     </script>
   </body>
