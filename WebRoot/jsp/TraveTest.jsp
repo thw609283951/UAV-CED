@@ -71,7 +71,8 @@
     		<br> 
     		<button onclick="UAVflight12()">flight2</button> 
     		<br>  		
-    		<button onclick="UAVflight1()">end</button>
+    		<button onclick="UAVflight1()">end1</button>
+    		<button onclick="UAVflight2()">end2</button>
     		<input type="button" id="run1" value="第一辆车开始" onclick="">
     		<input type="button" id="run2" value="第二辆车开始" onclick="">
     		<input type="button" class="btn btn-info" value="添加点" id=showonline onclick="addPoint()"/>  

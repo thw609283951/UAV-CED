@@ -68,20 +68,8 @@
 						lushu.pause();
 					}
 				}
-		    	//lushu.start();
 				drv1.search(p,q,{waypoints:all});
-				//console.log(lushu);
 				drv.search(p,q,{waypoints:all})
-				//console.log(lushu);
-				//setTimeout("lushu.pause()",2000);
-				// setTimeout("lushu.start()", 2000 )
-				/* console.log("out");
-				console.log(lushu);
-				$("run").onclick = function(){
-				console.log("clickin");
-				console.log(lushu);
-					lushu.start();
-				} */
 			}
 			
 			
@@ -113,10 +101,6 @@
 	                	]});          
 		            }
 		            console.log(lushu);
-		           // lushu.start();
-		            //setTimeout("alert(222)",2000);	            
-		            //setTimeout(function(){ lushu.pause();},2000);
-		            //setTimeout(function(){ lushu.start();},4000);
 		        }
 		    	});
 				ac2=document.getElementById("run2");
