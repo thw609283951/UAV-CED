@@ -29,20 +29,25 @@ public class ShowTravelPointServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println("***************ShowTravelPointServlet****************");
-		response.setContentType("text/xml");
-		response.setCharacterEncoding("utf-8");
-		request.setCharacterEncoding("utf-8");
-		PrintWriter out = response.getWriter();
+	
+		ArrayList<Point> points = new ArrayList<Point>();
+		ArrayList<ArrayList<Point>> ps = new ArrayList<ArrayList<Point>>();
+		ArrayList<ArrayList<ArrayList<Point>>> pss = new ArrayList<ArrayList<ArrayList<Point>>>();
+		for(int i=0;i<3;i++) {
+			Point point = new Point();
+			point.setId(1);
+			point.setLatitude(121231.3);
+			points.add(point);
+		}
+		ps.add(points);
+		ps.add(points);
 		
-		ExpressPathArrangeService expressPathArrangeService = new ExpressPathArrangeService();
-		List<ChildZone> childZones = new ArrayList<ChildZone>();
-		childZones = expressPathArrangeService.pathArrange();//mubiao
+		pss.add(ps);
+		pss.add(ps);
 		
-		request.setAttribute("childZones", childZones); 
-		RequestDispatcher de=request.getRequestDispatcher("/jsp/TraveTest.jsp"); 
+		request.setAttribute("pss", pss); 
+		RequestDispatcher de=request.getRequestDispatcher("/TraveTest.jsp"); 
 		de.forward(request, response); 
-		out.flush();
-		out.close();
 		
 	}
 }
