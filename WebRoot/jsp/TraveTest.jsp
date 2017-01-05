@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -57,10 +58,9 @@
     	<input type="hidden" id="index" value=0>
     	<input type="hidden" id="road1" value=0>;
     	
-		<div id="ZoneShow" style="height:600px"></div>
+		<div id="TraveTest" style="height:600px"></div>
     	<div id="panel"></div>
     	<div class="button-group">
-    	 ${ warePoints }
     		<button onclick="allcar(all1[0],all1[1],all1[0],all1[1],all1,all1)">开始</button> 
     		<br>
     		<button onclick="flight()">flight</button> 
@@ -119,9 +119,6 @@
 			function lushu2(){
 				car2(all2[0],all2[0],all2);
 			}
-			
-			
-			
 			function test(j){
 				o=j;
 				setInterval("goWay(ex[o],ey[o],sx[o],sy[o],o)",1000);
