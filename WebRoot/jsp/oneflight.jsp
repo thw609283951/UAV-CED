@@ -17,13 +17,12 @@
     <script type="text/javascript">
       
     	function goWay(x1,y1,x2,y2,j){  
-    			console.log("1");
-		       startLong[j] = endLong[j];  
-		       startLat[j] = endLat[j];  
-		       endLong[j] = getRound(endLong[j],x1,x2);  
-		       endLat[j] = getRound(endLat[j],y1,y2);  
-		       drawIcon(startLong,startLat,endLong,endLat,j);  
-		   }   
+		       	startLong[j] = endLong[j];  
+		       	startLat[j] = endLat[j];  
+		       	endLong[j] = getRound(endLong[j],x1,x2);  
+		       	endLat[j] = getRound(endLat[j],y1,y2);  
+		       	drawIcon(startLong,startLat,endLong,endLat,j);  
+		   }   	
 		     
 		   	function getRound(temp,x,y){  
 		       return temp+(x-y)/2;
@@ -78,24 +77,61 @@
 		       	drawGreenLine(startLong[j],startLat[j],endLong[j],endLat[j]);  
 		   	}  
 		   	
-		function flight(j){
+		function UAVflight1() {//负责控制子区域1的所有飞行
 			for (var wc=0;wc<2;wc++){
-				if(wc==0)flight1(0);
-				else if(wc==1) flight2(1);
+				if(wc==0) UAVflight11();
+				else if(wc==1) UAVflight12();
 			}
+		}
+		function UAVflight2(){//负责控制子区域2的所有飞行
+			
+		}
+		function UAVZoneNumber(j) {
+			if(j==0){
+				console.log("j=",j);
+				UAVIndex[0]++;
+			}
+			if(j==1){
+				console.log("j=",j);
+				UAVIndex[1]++;
+			}
+		}
+		function UAVflight11(){//负责一号飞机的飞行
+			ex[0]=UAVFlight1[UAVIndex[0]][1][0];
+			ey[0]=UAVFlight1[UAVIndex[0]][1][1];
+			sx[0]=UAVFlight1[UAVIndex[0]][0][0];
+			sy[0]=UAVFlight1[UAVIndex[0]][0][1];
+			startLong[0]=sx[0];
+			startLat[0]=sy[0];
+			endLong[0]=sx[0];
+			endLat[0]=sy[0];
+			clock11=setInterval("goWay(ex[0],ey[0],sx[0],sy[0],0)",1000);
+			clock12=setInterval("changepoint1(0,0)",2000);
+			setTimeout("map.removeOverlay(carMk[0])", UAVFlight1[UAVIndex[0]].length*2000-1000);
+			setTimeout("UAVZoneNumber(0)",UAVFlight1[UAVIndex[0]].length*2000);
+		}
+		
+		function UAVflight12(){//负责二号飞机的飞行
+			ex[1]=UAVFlight2[UAVIndex[1]][1][0];
+			ey[1]=UAVFlight2[UAVIndex[1]][1][1];
+			sx[1]=UAVFlight2[UAVIndex[1]][0][0];
+			sy[1]=UAVFlight2[UAVIndex[1]][0][1];
+			startLong[1]=sx[1];
+			startLat[1]=sy[1];
+			endLong[1]=sx[1];
+			endLat[1]=sy[1];
+			clock21=setInterval("goWay(ex[1],ey[1],sx[1],sy[1],1)",1000);
+			clock22=setInterval("changepoint2(1,1)",2000);
+			setTimeout("map.removeOverlay(carMk[1])", UAVFlight2[UAVIndex[1]].length*2000-1000);
+			setTimeout("UAVZoneNumber(1)",UAVFlight2[UAVIndex[1]].length*2000);
 		}
 		var clock11,clock12;
 		var clock21,clock22;
-		function flight1(j){
-			clock11=setInterval("goWay(ex[0],ey[0],sx[0],sy[0],0)",1000);
-			clock12=setInterval("changepoint1(0,0)",2000);
-			setTimeout("map.removeOverlay(carMk[0]);", road[j].length*2000-1000);
-		}
 		function changepoint1(j,k){//修改经过点
-		        console.log(pointnumber[j]);
-		        console.log(road[j].length);
-		        if (pointnumber[j]==road[j].length-1){
-		            pointnumber[j]=0;
+				console.log("pointnumber[j]=",pointnumber[j]);
+		        console.log("UAVFlight1[0][0][UAVIndex[0]].length=",UAVFlight1[UAVIndex[j]].length);
+		        if (pointnumber[j]==UAVFlight1[UAVIndex[j]].length-1){
+		            pointnumber[j]=1;
 		            clearInterval(clock11);
 		            clearInterval(clock12);
 		        }
@@ -105,19 +141,14 @@
 		       console.log(k);
 		        sx[k]=ex[k];
 		        sy[k]=ey[k];
-		        ex[k]=road[j][pointnumber[j]][0];
-		        ey[k]=road[j][pointnumber[j]][1];
+		        ex[k]=UAVFlight1[UAVIndex[j]][pointnumber[j]][0];
+		        ey[k]=UAVFlight1[UAVIndex[j]][pointnumber[j]][1];
 		    }
-		function flight2(j){
-			clock21=setInterval("goWay(ex[1],ey[1],sx[1],sy[1],1)",1000);
-			clock22=setInterval("changepoint2(1,1)",2000);
-			setTimeout("map.removeOverlay(carMk[1]);", road[j].length*2000-1000);
-		}
 		function changepoint2(j,k){//修改经过点
 		        console.log(pointnumber[j]);
 		        console.log(road[j].length);
-		        if (pointnumber[j]==road[j].length-1){
-		            pointnumber[j]=0;
+		        if (pointnumber[j]==UAVFlight2[UAVIndex[j]].length-1){
+		            pointnumber[j]=1;
 		            clearInterval(clock21);
 		            clearInterval(clock22);
 		        }
@@ -127,9 +158,11 @@
 		       console.log(k);
 		        sx[k]=ex[k];
 		        sy[k]=ey[k];
-		        ex[k]=road[j][pointnumber[j]][0];
-		        ey[k]=road[j][pointnumber[j]][1];
-		    }
+		        ex[k]=UAVFlight2[UAVIndex[j]][pointnumber[j]][0];
+		        ey[k]=UAVFlight2[UAVIndex[j]][pointnumber[j]][1];
+		    }    
+		    
+		
     </script>
   </body>
 </html>

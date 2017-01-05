@@ -67,10 +67,11 @@
     		<button onclick="lushu1()">lushu1</button> 
     		<button onclick="lushu2()">lushu2</button> 
     		<br>  	
-    		<button onclick="flight1(0)">flight1</button> 
+    		<button onclick="UAVflight11()">flight1</button> 
     		<br> 
-    		<button onclick="flight2(1)">flight2</button> 
+    		<button onclick="UAVflight12()">flight2</button> 
     		<br>  		
+    		<button onclick="UAVflight1()">end</button>
     		<input type="button" id="run1" value="第一辆车开始" onclick="">
     		<input type="button" id="run2" value="第二辆车开始" onclick="">
     		<input type="button" class="btn btn-info" value="添加点" id=showonline onclick="addPoint()"/>  
