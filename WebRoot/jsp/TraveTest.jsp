@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -74,8 +75,8 @@
     		<br>  		
     		<button onclick="UAVflight1()">end1</button>
     		<button onclick="UAVflight2()">end2</button>
-    		<input type="button" id="run1" value="第一辆车开始" onclick="">
-    		<input type="button" id="run2" value="第二辆车开始" onclick="">
+    		<input type="button" id="run1" value="开始" onclick="">
+    		<input type="button" id="run2" value="开始" onclick="">
     		<input type="button" class="btn btn-info" value="添加点" id=showonline onclick="addPoint()"/>  
    
     		 		

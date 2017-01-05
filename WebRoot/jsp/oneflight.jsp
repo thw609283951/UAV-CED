@@ -17,7 +17,6 @@
     <script type="text/javascript">
       	//z子区域 j飞机号
     	function goWay(x1,y1,x2,y2,j,z){  
-    			//console.log("z=",z);
 		       	startLong[z][j] = endLong[z][j];  
 		       	startLat[z][j] = endLat[z][j];  
 		       	endLong[z][j] = getRound(endLong[z][j],x1,x2);  
@@ -28,36 +27,6 @@
 		   	function getRound(temp,x,y){  
 		       return temp+(x-y)/2;
 		   }   
-/* 		   function changepoint(j,k){//修改经过点
-		        console.log(pointnumber[j]);
-		        console.log(road[j].length);
-		        if (pointnumber[j]==road[j].length-1){
-		            pointnumber[j]=0;
-		            clearInterval(clock1);
-		            clearInterval(clock2);
-		        }
-		        else{
-		             pointnumber[j]++;
-		        }
-		       console.log(k);
-		        sx[k]=ex[k];
-		        sy[k]=ey[k];
-		        ex[k]=road[j][pointnumber[j]][0];
-		        ey[k]=road[j][pointnumber[j]][1];
-		    }
- */		  /*  function doloop(j){
-		        index[j]++;
-		        console.log(j);
-		        if  (index[j]==2){
-		            index=0;
-		            console.log("111");
-		            clearInterval(clock1);
-		            clearInterval(clock2);
-		        }
-		        else{
-		            goWay(ex,ey,sx,sy,j);
-		        }
-		    } */
 		   	function drawGreenLine(startLong,startLat,endLong,endLat){  
 		       	var polyline = new BMap.Polyline([  
 		                                          new BMap.Point(startLong,startLat),//起始点的经纬度  
@@ -78,19 +47,23 @@
 		       	map.addOverlay(carMk[2*z+j+1]);  
 		       	drawGreenLine(startLong[z][j],startLat[z][j],endLong[z][j],endLat[z][j]);  
 		   	}  
-		   	
-		function UAVflight1() {//负责控制子区域1的所有飞行
-			for (var wc=0;wc<2;wc++){
-				if(wc==0) UAVflight11();
-				else if(wc==1) UAVflight12();
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+		   function UAVflight${i}() {//负责控制子区域1的所有飞行
+				for (var wc=0;wc<${uavsInEveryCar};wc++){
+					if(wc==0){
+						UAVflight${i}1();
+						console.log("wc=",wc);
+					}
+					<c:forEach var="j" begin="2" end="${uavsInEveryCar}">
+					else if(wc==${j}-1) {
+							console.log("wc=",wc);
+							UAVflight${i}${j}();
+						}
+					</c:forEach>
+					
+				}
 			}
-		}
-		function UAVflight2(){//负责控制子区域2的所有飞行
-			for (var wc=0;wc<2;wc++){
-				if(wc==0) UAVflight21();
-				else if(wc==1) UAVflight22();
-			}
-		}
+		</c:forEach>
 		function UAVZoneNumber(j,z) {
 			if(j==0){
 				console.log("j=",j);
@@ -101,133 +74,53 @@
 				UAVIndex[z][1]++;
 			}
 		}
-		function UAVflight11(){//负责一号飞机的飞行
-			ex[0][0]=UAVFlight11[UAVIndex[0][0]][1][0];
-			ey[0][0]=UAVFlight11[UAVIndex[0][0]][1][1];
-			sx[0][0]=UAVFlight11[UAVIndex[0][0]][0][0];
-			sy[0][0]=UAVFlight11[UAVIndex[0][0]][0][1];
-			startLong[0][0]=sx[0][0];
-			startLat[0][0]=sy[0][0];
-			endLong[0][0]=sx[0][0];
-			endLat[0][0]=sy[0][0];
-			clock111=setInterval("goWay(ex[0][0],ey[0][0],sx[0][0],sy[0][0],0,0)",1000);
-			clock112=setInterval("changepoint11(0,0)",2000);
-			setTimeout("map.removeOverlay(carMk[0])", UAVFlight11[UAVIndex[0][0]].length*2000-1000);
-			setTimeout("UAVZoneNumber(0,0)",UAVFlight11[UAVIndex[0][0]].length*2000);
-		}
-		
-		function UAVflight12(){//负责二号飞机的飞行
-			ex[0][1]=UAVFlight12[UAVIndex[0][1]][1][0];
-			ey[0][1]=UAVFlight12[UAVIndex[0][1]][1][1];
-			sx[0][1]=UAVFlight12[UAVIndex[0][1]][0][0];
-			sy[0][1]=UAVFlight12[UAVIndex[0][1]][0][1];
-			startLong[0][1]=sx[0][1];
-			startLat[0][1]=sy[0][1];
-			endLong[0][1]=sx[0][1];
-			endLat[0][1]=sy[0][1];
-			clock121=setInterval("goWay(ex[0][1],ey[0][1],sx[0][1],sy[0][1],1,0)",1000);
-			clock122=setInterval("changepoint12(1,1)",2000);
-			setTimeout("map.removeOverlay(carMk[1])", UAVFlight12[UAVIndex[0][1]].length*2000-1000);
-			setTimeout("UAVZoneNumber(1,0)",UAVFlight12[UAVIndex[0][1]].length*2000);
-		}
-		function UAVflight21(){//负责一号飞机的飞行
-			ex[1][0]=UAVFlight21[UAVIndex[1][0]][1][0];
-			ey[1][0]=UAVFlight21[UAVIndex[1][0]][1][1];
-			sx[1][0]=UAVFlight21[UAVIndex[1][0]][0][0];
-			sy[1][0]=UAVFlight21[UAVIndex[1][0]][0][1];
-			startLong[1][0]=sx[1][0];
-			startLat[1][0]=sy[1][0];
-			endLong[1][0]=sx[1][0];
-			endLat[1][0]=sy[1][0];
-			clock211=setInterval("goWay(ex[1][0],ey[1][0],sx[1][0],sy[1][0],0,1)",1000);
-			clock212=setInterval("changepoint21(0,0)",2000);
-			setTimeout("map.removeOverlay(carMk[3])", UAVFlight21[UAVIndex[1][0]].length*2000-1000);
-			setTimeout("UAVZoneNumber(0,1)",UAVFlight21[UAVIndex[1][0]].length*2000);
-		}
-		
-		function UAVflight22(){//负责二号飞机的飞行
-			ex[1][1]=UAVFlight22[UAVIndex[1][1]][1][0];
-			ey[1][1]=UAVFlight22[UAVIndex[1][1]][1][1];
-			sx[1][1]=UAVFlight22[UAVIndex[1][1]][0][0];
-			sy[1][1]=UAVFlight22[UAVIndex[1][1]][0][1];
-			startLong[1][1]=sx[1][1];
-			startLat[1][1]=sy[1][1];
-			endLong[1][1]=sx[1][1];
-			endLat[1][1]=sy[1][1];
-			clock221=setInterval("goWay(ex[1][1],ey[1][1],sx[1][1],sy[1][1],1,1)",1000);
-			clock222=setInterval("changepoint22(1,1)",2000);
-			setTimeout("map.removeOverlay(carMk[4])", UAVFlight22[UAVIndex[1][1]].length*2000-1000);
-			setTimeout("UAVZoneNumber(1,1)",UAVFlight22[UAVIndex[1][1]].length*2000);
-		}
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+		   <c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   function UAVflight${i}${j}(){//负责一号飞机的飞行
+					ex[${i}-1][${j}-1]=UAVFlight${i}${j}[UAVIndex[${i}-1][${j}-1]][1][0];
+					ey[${i}-1][${j}-1]=UAVFlight${i}${j}[UAVIndex[${i}-1][${j}-1]][1][1];
+					sx[${i}-1][${j}-1]=UAVFlight${i}${j}[UAVIndex[${i}-1][${j}-1]][0][0];
+					sy[${i}-1][${j}-1]=UAVFlight${i}${j}[UAVIndex[${i}-1][${j}-1]][0][1];
+					startLong[${i}-1][${j}-1]=sx[${i}-1][${j}-1];
+					startLat[${i}-1][${j}-1]=sy[${i}-1][${j}-1];
+					endLong[${i}-1][${j}-1]=sx[${i}-1][${j}-1];
+					endLat[${i}-1][${j}-1]=sy[${i}-1][${j}-1];
+					clock${i}${j}1=setInterval("goWay(ex[${i}-1][${j}-1],ey[${i}-1][${j}-1],sx[${i}-1][${j}-1],sy[${i}-1][${j}-1],${j}-1,${i}-1)",1000);
+					clock${i}${j}2=setInterval("changepoint${i}${j}(${i},${j})",2000);
+					setTimeout("map.removeOverlay(carMk[${i}+${j}-2])", UAVFlight${i}${j}[UAVIndex[${i}-1][${j}-1]].length*2000-1000);
+					setTimeout("UAVZoneNumber(${j}-1,${i}-1)",UAVFlight${i}${j}[UAVIndex[${i}-1][${j}-1]].length*2000);
+				}
+			</c:forEach>
+		</c:forEach>   
 		//clock[子区域][飞机号][1表示飞机图标，2表示路径图标]
-		var clock111,clock112;
-		var clock121,clock122;
-		var clock211,clock212;
-		var clock221,clock222;
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+		   <c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   var clock${i}${j}1,clock${i}${j}2;
+			</c:forEach>
+		</c:forEach>   
+		
 		//function changepoint[子区域][飞机号]
-		function changepoint11(j,k){//修改经过点
-				//console.log("pointnumber[j]=",pointnumber[j]);
-		      //console.log("UAVFlight1[0][0][UAVIndex[0][0]].length=",UAVFlight1[UAVIndex[0][j]].length);
-		        if (pointnumber[0][j]==UAVFlight11[UAVIndex[0][j]].length-1){
-		            pointnumber[0][j]=1;
-		            clearInterval(clock111);
-		            clearInterval(clock112);
-		        }
-		        else{
-		             pointnumber[0][j]++;
-		        }
-		       console.log(k);
-		        sx[0][k]=ex[0][k];
-		        sy[0][k]=ey[0][k];
-		        ex[0][k]=UAVFlight11[UAVIndex[0][j]][pointnumber[0][j]][0];
-		        ey[0][k]=UAVFlight11[UAVIndex[0][j]][pointnumber[0][j]][1];
-		    }
-		//changepoint[子区域][飞机号]
-		function changepoint12(j,k){//修改经过点
-		        if (pointnumber[0][j]==UAVFlight12[UAVIndex[0][j]].length-1){
-		            pointnumber[0][j]=1;
-		            clearInterval(clock121);
-		            clearInterval(clock122);
-		        }
-		        else{
-		             pointnumber[0][j]++;
-		        }
-		       console.log(k);
-		        sx[0][k]=ex[0][k];
-		        sy[0][k]=ey[0][k];
-		        ex[0][k]=UAVFlight12[UAVIndex[0][j]][pointnumber[0][j]][0];
-		        ey[0][k]=UAVFlight12[UAVIndex[0][j]][pointnumber[0][j]][1];
-		    }    
-		function changepoint21(j,k){//修改经过点
-		        if (pointnumber[1][j]==UAVFlight21[UAVIndex[1][j]].length-1){
-		            pointnumber[1][j]=1;
-		            clearInterval(clock211);
-		            clearInterval(clock212);
-		        }
-		        else{
-		             pointnumber[1][j]++;
-		        }
-		       console.log("k=",k);
-		        sx[1][k]=ex[1][k];
-		        sy[1][k]=ey[1][k];
-		        ex[1][k]=UAVFlight21[UAVIndex[1][j]][pointnumber[1][j]][0];
-		        ey[1][k]=UAVFlight21[UAVIndex[1][j]][pointnumber[1][j]][1];
-		    }
-		function changepoint22(j,k){//修改经过点
-		        if (pointnumber[1][j]==UAVFlight22[UAVIndex[1][j]].length-1){
-		            pointnumber[1][j]=1;
-		            clearInterval(clock221);
-		            clearInterval(clock222);
-		        }
-		        else{
-		             pointnumber[1][j]++;
-		        }
-		       console.log(k);
-		        sx[1][k]=ex[1][k];
-		        sy[1][k]=ey[1][k];
-		        ex[1][k]=UAVFlight22[UAVIndex[1][j]][pointnumber[1][j]][0];
-		        ey[1][k]=UAVFlight22[UAVIndex[1][j]][pointnumber[1][j]][1];
-		    }   
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+		   <c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   function changepoint${i}${j}(j,k){//修改经过点
+			  		console.log(UAVFlight${i}${j}[UAVIndex[${i}-1][j]].length-1);
+			        if (pointnumber[${i}-1][j]==UAVFlight${i}${j}[UAVIndex[${i}-1][j]].length-1){
+			            pointnumber[${i}-1][j]=1;
+			            clearInterval(clock${i}${j}1);
+			            clearInterval(clock${i}${j}2);
+			        }
+			        else{
+			        	console.log(pointnumber[${i}-1][j]);
+			             pointnumber[${i}-1][j]++;
+			             console.log(pointnumber[${i}-1][j]);
+			        }
+			        sx[${i}-1][k]=ex[${i}-1][k];
+			        sy[${i}-1][k]=ey[${i}-1][k];
+			        ex[${i}-1][k]=UAVFlight${i}${j}[UAVIndex[${i}-1][j]][pointnumber[${i}-1][j]][0];
+			        ey[${i}-1][k]=UAVFlight${i}${j}[UAVIndex[${i}-1][j]][pointnumber[${i}-1][j]][1];
+			    }  
+			</c:forEach>
+		</c:forEach>   
 		
     </script>
   </body>
