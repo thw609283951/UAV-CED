@@ -16,6 +16,7 @@ import UAV.entity.Car;
 import UAV.ACO.ACO;
 
 import UAV.comm.MapDistance;
+import UAV.comm.RoadDistance;
 import UAV.comm.kdtree.KDTree;
 import UAV.comm.kdtree.KeyDuplicateException;
 import UAV.comm.kdtree.KeySizeException;
@@ -76,6 +77,29 @@ public class ExpressPathArrangeService {
 		return allDockPoints;
 	}
 
+	public List<double[]> getWpCoords() {
+		List<double[]> coordList = new ArrayList<double[]>();
+		for (WarePoint wp : warePoints) {
+			coordList.add(wp.toCoordArray());
+		}
+		return coordList;
+	}
+
+	public List<double[]> getSdpCoords() {
+		List<double[]> coordList = new ArrayList<double[]>();
+		for (DockPoint sdp : selectedDockPoints) {
+			coordList.add(sdp.toCoordArray());
+		}
+		return coordList;
+	}
+
+	public List<double[]> getNpCoords() {
+		List<double[]> coordList = new ArrayList<double[]>();
+		for (NeedPoint np : allNeedPoints) {
+			coordList.add(np.toCoordArray());
+		}
+		return coordList;
+	}
 
 	public void setAllDockPoints(List<DockPoint> allDockPoints) {
 		this.allDockPoints = allDockPoints;
@@ -95,6 +119,7 @@ public class ExpressPathArrangeService {
 
 	/**
 	 * 路径规划总算法
+	 * @throws Exception
 	 */
 	public List<ChildZone> pathArrange() {
 		
@@ -115,7 +140,7 @@ public class ExpressPathArrangeService {
 		return childZones;
 	}
 public void multiThreadPathArrange() {
-		
+
 		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
 //		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
 //		allDockPoints = epaDao.getAllDockPoints();
@@ -330,7 +355,7 @@ public void multiThreadPathArrange() {
 	 * 无人机调度模块
 	 * @param carPath 已经经过计算的旅行商问题最优解的序列，车要按着这个序列走
 	 */
-	public static void UAVArrange(ChildZone childZone) {
+	private void UAVArrange(ChildZone childZone) {
 		//TODO:会需要从停靠点得到停靠点所负责的所有需求点的集合
 		ArrayList<NeedPoint> S = new ArrayList<NeedPoint>();//保存child_zone的所有需求点
 		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();//指定停靠点所属需求点的划分
@@ -421,7 +446,7 @@ public void multiThreadPathArrange() {
 	 * @param var_uav无人及数量
 	 * @return 划分结果
 	 */
-	private static ArrayList<ArrayList<NeedPoint>> Divid_need(List<NeedPoint> S,DockPoint dock, int var_uav){
+	private ArrayList<ArrayList<NeedPoint>> Divid_need(List<NeedPoint> S,DockPoint dock, int var_uav){
 		int m = S.size();//需求点个数
 		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();
 		if(var_uav>=m){
@@ -444,7 +469,7 @@ public void multiThreadPathArrange() {
 	 * @param var_uav 无人及数量，也是划分子区域数量
 	 * @return
 	 */
-	private static ArrayList<ArrayList<NeedPoint>> k_means_with_Point(
+	private ArrayList<ArrayList<NeedPoint>> k_means_with_Point(
 			List<NeedPoint> s, int var_uav) {
 		// TODO Auto-generated method stub
 		List<Cluster> clusters= new ArrayList<Cluster>();
@@ -467,7 +492,7 @@ public void multiThreadPathArrange() {
 	 * 妥
 	 * 旅行商问题求解从dock点出发遍历part中点，并返回dock的最短路径的路径序列
 	 */
-	private static List<Point> TSP(List<NeedPoint> part, DockPoint dock){
+	private List<Point> TSP(List<NeedPoint> part, DockPoint dock){
 		List<Point> l = new ArrayList<Point>();
 		List<Point> points = new ArrayList<Point>();
 		points.add(dock);
@@ -485,7 +510,7 @@ public void multiThreadPathArrange() {
 	 * max_l：所有无人机最长飞行距离
 	 * uavZ_v,car_v:无人机、车速
 	 */
-	private static double get_max_wait_time(double max_l,double uav_v,double car_v,double to_next_dock_time, DockPoint dock, ChildZone childZone){
+	private double get_max_wait_time(double max_l,double uav_v,double car_v,double to_next_dock_time, DockPoint dock, ChildZone childZone){
 		double t_max_charge = get_max_charge_time(max_l);//先设一个常数，后面换成数学模型
 
 		if (to_next_dock_time > t_max_charge){// 在路上即可完成充电
@@ -502,7 +527,7 @@ public void multiThreadPathArrange() {
 	 * @param max_l：最长航程
 	 * @return
 	 */
-	private static double get_max_charge_time(double max_l) {
+	private double get_max_charge_time(double max_l) {
 		// TODO Auto-generated method stub
 		return total_charge_time*(max_l/max_trade);
 	}
@@ -511,14 +536,15 @@ public void multiThreadPathArrange() {
 	 * 妥
 	 * 测试代码
 	 * @param args
+	 * @throws Exception
 	 */
 	public static void main(String[] args) {
     	ExpressPathArrangeService ep = new ExpressPathArrangeService();
-    	
+
     	//ExpressPathArrangeService ep2 = new ExpressPathArrangeService();
     	long start = System.currentTimeMillis();
     	List<ChildZone> childZones = ep.pathArrange();
-    	
+
     	for (ChildZone childZone: childZones){
     		Car car = childZone.getCar();
     		System.out.println("Car"+car.getP());
@@ -533,14 +559,14 @@ public void multiThreadPathArrange() {
     	System.out.println("DemoUavs:"+ep.getDemoUavPath());
 //    	long time = System.currentTimeMillis()-start;
 //    	System.out.println("One thread time:"+time);
-//    	
+//
 //    	start = System.currentTimeMillis();
 //    	System.out.println("Multi thread start time:"+start);
 //    	ep2.multiThreadPathArrange();
 //    	time = System.currentTimeMillis()-start;
 //    	System.out.println("Multi thread time:"+time);
     }
-	
+
 	public ArrayList<ArrayList<ArrayList<Double>>> getDemoCarPath(){
 		ArrayList<ArrayList<ArrayList<Double>>> pss = new ArrayList<ArrayList<ArrayList<Double>>>() ;
 		for (ChildZone childZone: childZones){
@@ -556,7 +582,7 @@ public void multiThreadPathArrange() {
     	}
 		return pss;
 	}
-	
+
 	public ArrayList<ArrayList<ArrayList<ArrayList<Double>>>> getDemoUavPath() {
 		ArrayList<ArrayList<ArrayList<ArrayList<Double>>>> pss = new ArrayList<ArrayList<ArrayList<ArrayList<Double>>>>();
 		for (ChildZone childZone: childZones){
@@ -574,15 +600,16 @@ public void multiThreadPathArrange() {
 	 * 计算points数组中各个点之间的距离,此距离为路上距离，而不是直线距离。以二维数组形式返回
 	 * @param points
 	 * @return
+	 * @throws Exception
 	 */
-	public static double[][] getPointDisByRoad(List<Point> points) {
+	public static double[][] getPointDisByRoad(List<Point> points) throws Exception {
 		double[][] dis = new double[points.size()][points.size()];
 		for (int i = 0; i < points.size(); i++) {
 			for (int j = 0; j < points.size(); j++) {
 				if (j == i) {
 					dis[i][j] = 0;
 				} else if (j > i){
-					dis[i][j] = dis[j][i] = MapDistance.GetDistance(
+					dis[i][j] = dis[j][i] = RoadDistance.getDistanceByRoad(
 							points.get(i).getLongitude(),
 							points.get(i).getLatitude(),
 							points.get(j).getLongitude(),

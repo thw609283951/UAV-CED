@@ -42,5 +42,12 @@ public class Point {
 		return "Point [id=" + id + ", longitude=" + longitude + ", latitude="
 				+ latitude + "]";
 	}
-
+	/**
+	 * 经度在前，纬度在后
+	 * @return
+	 */
+	public double[] toCoordArray() {
+		double[] lnglat = {longitude.doubleValue(), latitude.doubleValue()};
+		return lnglat;
+	}
 }

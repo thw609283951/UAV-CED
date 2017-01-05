@@ -6,3 +6,4 @@
 *.iml
 *.umr
 *.umr~
+.svn/*
