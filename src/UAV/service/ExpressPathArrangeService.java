@@ -64,12 +64,13 @@ public class ExpressPathArrangeService {
 	private List<NeedPoint> allNeedPoints;//所有需求点
 	private static List<DockPoint> selectedDockPoints;//选择的停靠点
 	private static List<WarePoint> warePoints;//仓库店
+	private List<ChildZone> childZones;
 	//下面是一些常量，可根据需求调整
-	private int total_charge_time = 1; //最长充电总时间
-	private double max_trade = 10;       //最长飞行距离
+	private static int total_charge_time = 1; //最长充电总时间
+	private static double max_trade = 10;       //最长飞行距离
 	private int uavsInEveryCar = 2;     //每辆车上的无人机数量
-	private double carV = 6;            //快递车速，km/h
-	private double uavV = 4;            //无人机速度，km/h
+	private static double carV = 6;            //快递车速，km/h
+	private static double uavV = 4;            //无人机速度，km/h
 	private static List<ArrayList<DockPoint>> resultList=new ArrayList<ArrayList<DockPoint>>();
 	public List<DockPoint> getAllDockPoints() {
 		return allDockPoints;
@@ -95,7 +96,25 @@ public class ExpressPathArrangeService {
 	/**
 	 * 路径规划总算法
 	 */
-	public void pathArrange() {
+	public List<ChildZone> pathArrange() {
+		
+		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
+//		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
+//		allDockPoints = epaDao.getAllDockPoints();
+//		allNeedPoints = epaDao.getAllNeedPoints();
+		pointPreProcess();
+		this.childZones = childZonePatition();
+		createCarAndUavs(childZones);//根据子区域，产生Car以及uav对象
+		for (ChildZone childZone : childZones) {
+			List<Point> czPoints = childZone.getCzPoints();
+			double[][] pDis = getPointDisByRoad(czPoints);
+			//List<Point> carPath = carPathArrange(czPoints, pDis);
+			childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
+			UAVArrange(childZone);
+		}
+		return childZones;
+	}
+public void multiThreadPathArrange() {
 		
 		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
 //		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
@@ -104,12 +123,11 @@ public class ExpressPathArrangeService {
 		pointPreProcess();
 		List<ChildZone> childZones = childZonePatition();
 		createCarAndUavs(childZones);//根据子区域，产生Car以及uav对象
+		int id=0;
 		for (ChildZone childZone : childZones) {
-			List<Point> czPoints = childZone.getCzPoints();
-			double[][] pDis = getPointDisByRoad(czPoints);
-			//List<Point> carPath = carPathArrange(czPoints, pDis);
-			childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
-			UAVArrange(childZone);
+			MultiThreadForExpress m = new MultiThreadForExpress(childZone, id);
+			m.start();
+			id++;
 		}
 	}
 	
@@ -298,7 +316,7 @@ public class ExpressPathArrangeService {
 	 * 解决旅行商问题的模块,返回形式为最优解的行走序列，第一个点为仓库点，之后顺序的为停靠点
 	 * @param 
 	 */
-	public List<Point> carPathArrange(List<Point> czPs, double[][] pDis) {
+	public static List<Point> carPathArrange(List<Point> czPs, double[][] pDis) {
 		 ACO aco = new ACO();
 		 aco.Init_Distance(czPs.size(), pDis);
 	     aco.iterator();
@@ -312,7 +330,7 @@ public class ExpressPathArrangeService {
 	 * 无人机调度模块
 	 * @param carPath 已经经过计算的旅行商问题最优解的序列，车要按着这个序列走
 	 */
-	private void UAVArrange(ChildZone childZone) {
+	public static void UAVArrange(ChildZone childZone) {
 		//TODO:会需要从停靠点得到停靠点所负责的所有需求点的集合
 		ArrayList<NeedPoint> S = new ArrayList<NeedPoint>();//保存child_zone的所有需求点
 		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();//指定停靠点所属需求点的划分
@@ -383,7 +401,7 @@ public class ExpressPathArrangeService {
 	 * @param l路径序列长度
 	 * @return
 	 */
-	private Double get_l_length(List<Point> l) {
+	private static Double get_l_length(List<Point> l) {
 		// TODO Auto-generated method stub
 		Double l_length = new Double(0);
 		int i;
@@ -403,7 +421,7 @@ public class ExpressPathArrangeService {
 	 * @param var_uav无人及数量
 	 * @return 划分结果
 	 */
-	private ArrayList<ArrayList<NeedPoint>> Divid_need(List<NeedPoint> S,DockPoint dock, int var_uav){
+	private static ArrayList<ArrayList<NeedPoint>> Divid_need(List<NeedPoint> S,DockPoint dock, int var_uav){
 		int m = S.size();//需求点个数
 		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();
 		if(var_uav>=m){
@@ -426,7 +444,7 @@ public class ExpressPathArrangeService {
 	 * @param var_uav 无人及数量，也是划分子区域数量
 	 * @return
 	 */
-	private ArrayList<ArrayList<NeedPoint>> k_means_with_Point(
+	private static ArrayList<ArrayList<NeedPoint>> k_means_with_Point(
 			List<NeedPoint> s, int var_uav) {
 		// TODO Auto-generated method stub
 		List<Cluster> clusters= new ArrayList<Cluster>();
@@ -449,7 +467,7 @@ public class ExpressPathArrangeService {
 	 * 妥
 	 * 旅行商问题求解从dock点出发遍历part中点，并返回dock的最短路径的路径序列
 	 */
-	private List<Point> TSP(List<NeedPoint> part, DockPoint dock){
+	private static List<Point> TSP(List<NeedPoint> part, DockPoint dock){
 		List<Point> l = new ArrayList<Point>();
 		List<Point> points = new ArrayList<Point>();
 		points.add(dock);
@@ -467,7 +485,7 @@ public class ExpressPathArrangeService {
 	 * max_l：所有无人机最长飞行距离
 	 * uavZ_v,car_v:无人机、车速
 	 */
-	private double get_max_wait_time(double max_l,double uav_v,double car_v,double to_next_dock_time, DockPoint dock, ChildZone childZone){
+	private static double get_max_wait_time(double max_l,double uav_v,double car_v,double to_next_dock_time, DockPoint dock, ChildZone childZone){
 		double t_max_charge = get_max_charge_time(max_l);//先设一个常数，后面换成数学模型
 
 		if (to_next_dock_time > t_max_charge){// 在路上即可完成充电
@@ -484,7 +502,7 @@ public class ExpressPathArrangeService {
 	 * @param max_l：最长航程
 	 * @return
 	 */
-	private double get_max_charge_time(double max_l) {
+	private static double get_max_charge_time(double max_l) {
 		// TODO Auto-generated method stub
 		return total_charge_time*(max_l/max_trade);
 	}
@@ -496,8 +514,60 @@ public class ExpressPathArrangeService {
 	 */
 	public static void main(String[] args) {
     	ExpressPathArrangeService ep = new ExpressPathArrangeService();
-    	ep.pathArrange();
+    	
+    	//ExpressPathArrangeService ep2 = new ExpressPathArrangeService();
+    	long start = System.currentTimeMillis();
+    	List<ChildZone> childZones = ep.pathArrange();
+    	
+    	for (ChildZone childZone: childZones){
+    		Car car = childZone.getCar();
+    		System.out.println("Car"+car.getP());
+//    		for (ArrayList<Double> P:childZone.getCar().getP()){
+//    			System.out.println("Car:"+P);
+//    		}
+    		for (UavForExpress uav : car.getUavs()){
+    			System.out.println("Uav"+uav.getP());
+    		}
+    	}
+    	System.out.println("DemoCars:"+ep.getDemoCarPath());
+    	System.out.println("DemoUavs:"+ep.getDemoUavPath());
+//    	long time = System.currentTimeMillis()-start;
+//    	System.out.println("One thread time:"+time);
+//    	
+//    	start = System.currentTimeMillis();
+//    	System.out.println("Multi thread start time:"+start);
+//    	ep2.multiThreadPathArrange();
+//    	time = System.currentTimeMillis()-start;
+//    	System.out.println("Multi thread time:"+time);
     }
+	
+	public ArrayList<ArrayList<ArrayList<Double>>> getDemoCarPath(){
+		ArrayList<ArrayList<ArrayList<Double>>> pss = new ArrayList<ArrayList<ArrayList<Double>>>() ;
+		for (ChildZone childZone: childZones){
+    		Car car = childZone.getCar();
+    		ArrayList<ArrayList<Double>> ps = new ArrayList<ArrayList<Double>>();
+    		for (ArrayList<Double> p : car.getP()){
+    			ArrayList<Double> item = new ArrayList<Double>();
+    			item.add(p.get(1));
+    			item.add(p.get(2));
+    			ps.add(item);
+    		}
+    		pss.add(ps);
+    	}
+		return pss;
+	}
+	
+	public ArrayList<ArrayList<ArrayList<ArrayList<Double>>>> getDemoUavPath() {
+		ArrayList<ArrayList<ArrayList<ArrayList<Double>>>> pss = new ArrayList<ArrayList<ArrayList<ArrayList<Double>>>>();
+		for (ChildZone childZone: childZones){
+    		Car car = childZone.getCar();
+    		ArrayList<UavForExpress>uavs = car.getUavs();
+    		for (UavForExpress uav : uavs){
+    			pss.add(uav.getDemoP());
+    		}
+    	}
+		return pss;
+	}
 
 	/**
 	 * 马
