@@ -45,8 +45,12 @@ public class RoadDistance {
 		JSONObject obj = JSONObject.fromObject(json);
 		if(obj.get("status").toString().equals("0")){
 
+			System.out.println("success road dis");
 			return ((JSONObject)obj.getJSONObject("result").getJSONArray("routes").get(0)).getDouble("distance");
-        }else{
+		}else{
+        	System.out.println(url);
+        	System.out.println(obj.get("message").toString());
+        	System.out.println(obj.get("status").toString());
         	throw new Exception("get Road Distance Error!");
         }
 	}
