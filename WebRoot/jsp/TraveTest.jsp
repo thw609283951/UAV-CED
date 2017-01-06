@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -60,25 +61,17 @@
     	
 		<div id="TraveTest" style="height:600px"></div>
     	<div id="panel"></div>
+    	
     	<div class="button-group">
-    		<button onclick="allcar(all1[0],all1[1],all1[0],all1[1],all1,all1)">开始</button> 
-    		<br>
-    		<button onclick="flight()">flight</button> 
-    		<br>   
-    		<button onclick="lushu1()">lushu1</button> 
-    		<button onclick="lushu2()">lushu2</button> 
-    		<br>  	
-    		<button onclick="UAVflight11()">flight1</button> 
-    		<br> 
-    		<button onclick="UAVflight12()">flight2</button> 
-    		<br>  		
-    		<button onclick="UAVflight1()">end1</button>
-    		<button onclick="UAVflight2()">end2</button>
-    		<input type="button" id="run1" value="第一辆车开始" onclick="">
-    		<input type="button" id="run2" value="第二辆车开始" onclick="">
+    		<table>
+    			<c:forEach var="j" begin="1" end="${fn:length(carsPath)}">
+				   <tr>
+				   <td><button class="btn btn-info" onclick=lushu${j}()>子区域${j }</button> </td>
+				   <td><input type="button" class="btn btn-info" id=run${j} value="开始" onclick=""></td>
+				   </tr>
+				</c:forEach>
+    		</table>
     		<input type="button" class="btn btn-info" value="添加点" id=showonline onclick="addPoint()"/>  
-   
-    		 		
         </div>
        <%@ include file="var.jsp" %>
        <%@ include file="oneflight.jsp" %>
@@ -93,32 +86,31 @@
 			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
 			map.setCurrentCity("哈尔滨");          // 设置地图显示的城市 此项是必须设置的
 			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-
-			for (i=0;i<UAVCars[0].length;i++){
-					//console.log(positions[i]);
-					x=UAVCars[0][i][0];
-					y=UAVCars[0][i][1];
-					var point = new BMap.Point(x,y); // 创建标注
-					all1.push(point);
-				}     
 			
-			for (i=0;i<UAVCars[1].length;i++){
+			<c:forEach var="j" begin="1" end="${fn:length(carsPath)}">
+			   for (i=0;i<UAVCars[${j}-1].length;i++){
 					//console.log(positions[i]);
-					x=UAVCars[1][i][0];
-					y=UAVCars[1][i][1];
+					x=UAVCars[${j}-1][i][0];
+					y=UAVCars[${j}-1][i][1];
 					var point = new BMap.Point(x,y); // 创建标注
-					all2.push(point);
-				}  
+					all${j}.push(point);
+				}   
+			</c:forEach>
 			//倒是可以直接将点读取到positions中
+			<c:forEach var="j" begin="1" end="${fn:length(carsPath)}">
+			   function lushu${j}(){
+					car${j}(all${j}[0],all${j}[0],all${j});
+				
+				}
+			</c:forEach>
 			
-			
-			function lushu1(){
+			/* function lushu1(){
 				car1(all1[0],all1[0],all1);
 				
 			}
 			function lushu2(){
 				car2(all2[0],all2[0],all2);
-			}
+			} */
 			function test(j){
 				o=j;
 				setInterval("goWay(ex[o],ey[o],sx[o],sy[o],o)",1000);

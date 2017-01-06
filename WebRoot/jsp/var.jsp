@@ -17,82 +17,138 @@
   
   <body>
     <script type="text/javascript">
-    	var all1=[];
-		var all2=[];
+    	//var all1=[];
+		//var all2=[];
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			var all${i}=[];
+		</c:forEach>
 		var	q1 = new BMap.Point(126.660917,45.759976);
 		var q2 = new BMap.Point(126.665166,45.760425);
 		var q3 = new BMap.Point(126.651304,45.751143);
 		var q4 = new BMap.Point(126.629932,45.737052);
-		var index=[1,1];
+		//var index=[1,1];
+		var index=[
+			<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+				1,
+			</c:forEach>
+		];
 		var flightnumber=[0,1,2,3,4,5];//飞机编码
-		var pointnumber=[[1,1],[1,1]];
+		//var pointnumber=[[1,1],[1,1]];
+		var pointnumber=[
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			[
+		   	<c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   	1,
+			</c:forEach>
+			],
+		</c:forEach>
+		];
         var o=[0,1];
         //下列是模拟真实数据
-        var UAVWarePoints=[[126.636613,45.738045]];
-        //var UAVWarePoints=${warePoints};
-        var UAVDockPoints=[[126.63735,45.75214],
-							[126.644968,45.747209],
-							[126.645111,45.752542],
-							[126.65007,45.728539],
-							[126.655819,45.73171],
-							[126.649926,45.73317],
-
-						];
-        var UAVNeedPoints=[[126.637637,45.752744],
-							[126.63735,45.751436],
-							[126.635769,45.751436],
-							[126.637062,45.753951],
-							[126.644249,45.748719],
-							[126.649998,45.746605],
-							[126.64353,45.746304],
-							[126.644608,45.753146],
-							[126.646549,45.75385],
-							[126.649279,45.727583],
-							[126.648058,45.72869],
-							[126.649208,45.730301],
-							[126.6574,45.73171],
-							[126.657256,45.733321],
-							[126.647537,45.734723],
-							];
-		var endLong = [[126.637637,126.644249],[126.637637, 126.644249]];  // 几架飞机就设几个
-		var endLat = [[45.752744,45.748719],[126.637637, 126.644249]]; 
-		var startLong = [[126.637637,126.644249],[126.637637, 126.644249]]; 
-		var startLat = [[45.752744,45.748719],[126.637637, 126.644249]]; 
-   		var carMk=[0,0,0,0,0,0,0]; 
-		var sx = [[126.637637, 126.644249],[126.637637, 126.644249]];
-        var sy = [[45.752744, 45.748719],[126.637637, 126.644249]];
-        var ex = [[126.63735, 126.649998],[126.637637, 126.644249]];
-        var ey = [[45.751436, 45.746605],[126.637637, 126.644249]]; 
-        
-		var UAVCars=[[[126.636613, 45.738045], [126.63735, 45.75214], [126.645111, 45.752542], [126.644968, 45.747209], [126.636613, 45.738045]],
-				[[126.636613, 45.738045], [126.65007, 45.728539], [126.655819, 45.73171], [126.649926, 45.73317], [126.636613, 45.738045]]
-				];
+        var UAVWarePoints=${warePoints};
+		var UAVDockPoints=${dockPoints};
+		var UAVNeedPoints=${needPoints};
+		var UAVCars=${carsPath};
+		var UAVFlights=${uavsPath};
+		var UAVsInEveryCar=${uavsInEveryCar};
+		
+   		var carMk=
+   		[
+   		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			0,
+		</c:forEach>
+		];
+   		var sx=[
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			[
+		   	<c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   	0,
+			</c:forEach>
+			],
+		</c:forEach>
+		];
+		var sy=[
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			[
+		   	<c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   	0,
+			</c:forEach>
+			],
+		</c:forEach>
+		];
+		var ex=[
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			[
+		   	<c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   	0,
+			</c:forEach>
+			],
+		</c:forEach>
+		];
+		var ey=[
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			[
+		   	<c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   	0,
+			</c:forEach>
+			],
+		</c:forEach>
+		];
+        var tmp=0;
+        var endLong=[
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			[
+		   	<c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   	0,
+			</c:forEach>
+			],
+		</c:forEach>
+		];
+		var endLat=[
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			[
+		   	<c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   	0,
+			</c:forEach>
+			],
+		</c:forEach>
+		];
+		var startLong=[
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			[
+		   	<c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   	0,
+			</c:forEach>
+			],
+		</c:forEach>
+		];
+		var startLat=[
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			[
+		   	<c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   	0,
+			</c:forEach>
+			],
+		</c:forEach>
+		];
 		//以下通过模板创建
 		//UAVFlight[子区域][飞机号]
-		var UAVFlight11=[//2表示子区域飞机
-							[[126.63735, 45.75214], [126.637062, 45.753951], [126.637637, 45.752744], [126.63735, 45.75214]],
-							[[126.645111, 45.752542], [126.644608, 45.753146], [126.645111, 45.752542]],
-							[[126.644968, 45.747209], [126.644249, 45.748719], [126.64353, 45.746304], [126.644968, 45.747209]],
-						];
-		
-		var UAVFlight12=[
-						[[126.63735, 45.75214], [126.635769, 45.751436], [126.63735, 45.751436], [126.63735, 45.75214]],
-						[[126.645111, 45.752542], [126.646549, 45.75385], [126.645111, 45.752542]],
-						[[126.644968, 45.747209], [126.649998, 45.746605], [126.644968, 45.747209]],
-					   ];
-		var UAVFlight21=[
-					[[126.65007, 45.728539], [126.649279, 45.727583], [126.65007, 45.728539]], 
-					[[126.655819, 45.73171], [126.6574, 45.73171], [126.655819, 45.73171]],
-					[[126.649926, 45.73317], [126.647537, 45.734723], [126.649926, 45.73317]],
-				   ];			
-		var UAVFlight22=[
-					[[126.65007, 45.728539], [126.649208, 45.730301], [126.648058, 45.72869], [126.65007, 45.728539]], 
-					[[126.655819, 45.73171], [126.657256, 45.733321], [126.655819, 45.73171]], 
-					[[126.649926, 45.73317]]
-				];
 		//UAVIndex[子区域][飞机号列表]
-		var UAVIndex=[[0,0,0,0,0,0],[0,0,0]];
-		
+		var UAVIndex=[
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+			[
+		   	<c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+			   	0,
+			</c:forEach>
+			],
+		</c:forEach>
+		];
+		<c:forEach var="i" begin="1" end="${fn:length(carsPath)}">
+		   <c:forEach var="j" begin="1" end="${uavsInEveryCar}">
+		   var UAVFlight${i}${j}=UAVFlights[2*${i}+${j}-3];
+		   console.log(UAVFlight${i}${j});
+			</c:forEach>
+		</c:forEach>
 		
     </script>
   </body>

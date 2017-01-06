@@ -70,8 +70,8 @@ public class ExpressPathArrangeService {
 	private static int total_charge_time = 1; //最长充电总时间
 	private static double max_trade = 10;       //最长飞行距离
 	private int uavsInEveryCar = 2;     //每辆车上的无人机数量
-	private static double carV = 6;            //快递车速，km/h
-	private static double uavV = 4;            //无人机速度，km/h
+	private static double carV = 10;            //快递车速，km/h
+	private static double uavV = 10;            //无人机速度，km/h
 	private static List<ArrayList<DockPoint>> resultList=new ArrayList<ArrayList<DockPoint>>();
 	public List<DockPoint> getAllDockPoints() {
 		return allDockPoints;
@@ -541,6 +541,31 @@ public void multiThreadPathArrange() {
 		return total_charge_time*(max_l/max_trade);
 	}
 
+	
+	/**
+	 * 妥
+	 * 打印路径
+	 */
+	public void printPath(){
+		double tmpTime,totalTime = 0;
+		System.out.println("路径规划输出：");
+		for (ChildZone childZone: childZones){
+    		Car car = childZone.getCar();
+    		tmpTime = car.getP().get(car.getP().size()-1).get(0);//最终返回仓库点的时间
+    		if (tmpTime>totalTime){
+    			totalTime=tmpTime;
+    		}
+    		System.out.println("Car"+car.getP());
+//    		for (ArrayList<Double> P:childZone.getCar().getP()){
+//    			System.out.println("Car:"+P);
+//    		}
+    		for (UavForExpress uav : car.getUavs()){
+    			System.out.println("Uav"+uav.getP());
+    		}
+    	}
+		System.out.println("任务总时间估计："+totalTime+"小时");
+		
+	}
 	/**
 	 * 妥
 	 * 测试代码
@@ -553,19 +578,7 @@ public void multiThreadPathArrange() {
     	//ExpressPathArrangeService ep2 = new ExpressPathArrangeService();
     	long start = System.currentTimeMillis();
     	List<ChildZone> childZones = ep.pathArrange();
-
-    	for (ChildZone childZone: childZones){
-    		Car car = childZone.getCar();
-    		System.out.println("Car"+car.getP());
-//    		for (ArrayList<Double> P:childZone.getCar().getP()){
-//    			System.out.println("Car:"+P);
-//    		}
-    		for (UavForExpress uav : car.getUavs()){
-    			System.out.println("Uav"+uav.getP());
-    		}
-    	}
-    	System.out.println("DemoCars:"+ep.getDemoCarPath());
-    	System.out.println("DemoUavs:"+ep.getDemoUavPath());
+    	ep.printPath();
 //    	long time = System.currentTimeMillis()-start;
 //    	System.out.println("One thread time:"+time);
 //
