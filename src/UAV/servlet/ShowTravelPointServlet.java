@@ -30,23 +30,24 @@ public class ShowTravelPointServlet extends HttpServlet {
 			throws ServletException, IOException {
 		System.out.println("***************ShowTravelPointServlet****************");
 		
-		ExpressPathArrangeService ep = new ExpressPathArrangeService();//创建快递规划对象
-		try {
-			ep.pathArrange();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}//执行主函数
-		
-		
-		request.setAttribute("warePoints", ep.getWpCoords());
-		request.setAttribute("dockPoints", ep.getSdpCoords());
-		request.setAttribute("needPoints", ep.getNpCoords());
-		
-		request.setAttribute("carsPath", ep.getDemoCarPath());
-		request.setAttribute("uavsPath", ep.getDemoUavPath());
-		
-		request.setAttribute("uavsInEveryCar",ep.getUavsInEveryCar());
+//		ExpressPathArrangeService ep = new ExpressPathArrangeService();//创建快递规划对象
+//		try {
+//			ep.pathArrange();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}//执行主函数
+//		
+//		
+//		request.setAttribute("warePoints", ep.getWpCoords());
+//		request.setAttribute("dockPoints", ep.getSdpCoords());
+//		request.setAttribute("needPoints", ep.getNpCoords());
+//		
+//		request.setAttribute("carsPath", ep.getDemoCarPath());
+//		request.setAttribute("uavsPath", ep.getDemoUavPath());
+//		
+//		request.setAttribute("uavsInEveryCar",ep.getUavsInEveryCar());
+		request.setAttribute("a", 2);
 	
 		RequestDispatcher de=request.getRequestDispatcher("/jsp/TraveTest.jsp"); 
 		de.forward(request, response); 
