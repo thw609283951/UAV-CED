@@ -38,7 +38,7 @@ public class ShowTravelPointServlet extends HttpServlet {
 			e.printStackTrace();
 		}//执行主函数
 		
-		
+		ep.printPath();//规划输出
 		request.setAttribute("warePoints", ep.getWpCoords());
 		request.setAttribute("dockPoints", ep.getSdpCoords());
 		request.setAttribute("needPoints", ep.getNpCoords());
@@ -47,6 +47,7 @@ public class ShowTravelPointServlet extends HttpServlet {
 		request.setAttribute("uavsPath", ep.getDemoUavPath());
 		
 		request.setAttribute("uavsInEveryCar",ep.getUavsInEveryCar());
+		
 	
 		RequestDispatcher de=request.getRequestDispatcher("/jsp/TraveTest.jsp"); 
 		de.forward(request, response); 
