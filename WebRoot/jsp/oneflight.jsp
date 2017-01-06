@@ -26,7 +26,7 @@
 		   }   	
 		     
 		   	function getRound(temp,x,y){  
-		       return temp+(x-y)/2;
+		       return temp+(x-y)*0.05;
 		   }   
 /* 		   function changepoint(j,k){//修改经过点
 		        console.log(pointnumber[j]);
@@ -127,8 +127,8 @@
 					startLat[${i}-1][${j}-1]=sy[${i}-1][${j}-1];
 					endLong[${i}-1][${j}-1]=sx[${i}-1][${j}-1];
 					endLat[${i}-1][${j}-1]=sy[${i}-1][${j}-1];
-					clock${i}${j}1=setInterval("goWay(ex[${i}-1][${j}-1],ey[${i}-1][${j}-1],sx[${i}-1][${j}-1],sy[${i}-1][${j}-1],${j}-1,${i}-1)",1000);
-					clock${i}${j}2=setInterval("changepoint${i}${j}(${j}-1,${j}-1)",2000);
+					clock${i}${j}1=setInterval("goWay(ex[${i}-1][${j}-1],ey[${i}-1][${j}-1],sx[${i}-1][${j}-1],sy[${i}-1][${j}-1],${j}-1,${i}-1)",100);
+					clock${i}${j}2=setInterval("changepoint${i}${j}(${j}-1,${j}-1)",2001);
 					setTimeout("map.removeOverlay(carMk[${i}+${j}-2])", UAVFlight${i}${j}[UAVIndex[${i}-1][${j}-1]].length*2000-1000);
 					setTimeout("UAVZoneNumber(${j}-1,${i}-1)",UAVFlight${i}${j}[UAVIndex[${i}-1][${j}-1]].length*2000);
 				}
