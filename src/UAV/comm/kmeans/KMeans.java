@@ -1,4 +1,4 @@
-package UAV.comm;
+package UAV.comm.kmeans;
 
 /* 
  * KMeans.java ; Cluster.java ; Point.java
@@ -11,8 +11,8 @@ import java.util.List;
 
 import UAV.entity.NeedPoint;
 
-import UAV.comm.Point;
-import UAV.comm.Cluster;
+import UAV.comm.kmeans.Point;
+import UAV.comm.kmeans.Cluster;
 public class KMeans {
 
 	//Number of Clusters. This metric should be related to the number of points

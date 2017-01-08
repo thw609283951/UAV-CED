@@ -1,4 +1,4 @@
-package UAV.comm;
+package UAV.comm.kmeans;
 
 /* 
  * KMeans.java ; Cluster.java ; Point.java

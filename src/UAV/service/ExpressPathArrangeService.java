@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import UAV.comm.Cluster;
-import UAV.comm.KMeans;
+import UAV.comm.kmeans.Cluster;
+import UAV.comm.kmeans.KMeans;
 
 
 import UAV.entity.Car;
