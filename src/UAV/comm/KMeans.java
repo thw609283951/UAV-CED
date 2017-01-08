@@ -1,11 +1,8 @@
-package kmeans;
+package UAV.comm;
 
 /* 
  * KMeans.java ; Cluster.java ; Point.java
- *
- * Solution implemented by DataOnFocus
- * www.dataonfocus.com
- * 2015
+ * 用于快递需求点划分的Kmeans算法
  *
 */
 
@@ -14,8 +11,8 @@ import java.util.List;
 
 import UAV.entity.NeedPoint;
 
-import kmeans.Point;
-import kmeans.Cluster;
+import UAV.comm.Point;
+import UAV.comm.Cluster;
 public class KMeans {
 
 	//Number of Clusters. This metric should be related to the number of points

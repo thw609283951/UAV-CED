@@ -68,14 +68,14 @@
 		       	map.addOverlay(polyline);  
 		   	}  
 		   	function drawIcon(startLong,startLat,endLong,endLat,j,z){  
-		   		console.log("flight:",j+2*z);
-		       	if(carMk[j+z*2]){  
-		           	map.removeOverlay(carMk[2*z+j]);  
+		   		console.log("flight:",j+${uavsInEveryCar}*z);
+		       	if(carMk[j+z*${uavsInEveryCar}]){  
+		           	map.removeOverlay(carMk[${uavsInEveryCar}*z+j]);  
 		       	}  
-		       	carMk[j+z*2] = new BMap.Marker(  
+		       	carMk[j+z*${uavsInEveryCar}] = new BMap.Marker(  
 		                   new BMap.Point(endLong[z][j],endLat[z][j]),//起始点的经纬度  
 		                  {icon:myIcon});  
-		       	map.addOverlay(carMk[2*z+j]);  
+		       	map.addOverlay(carMk[${uavsInEveryCar}*z+j]);  
 		       	drawGreenLine(startLong[z][j],startLat[z][j],endLong[z][j],endLat[z][j]);  
 		   	}  
 		   	

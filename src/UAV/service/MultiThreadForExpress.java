@@ -32,7 +32,7 @@ public class MultiThreadForExpress implements Runnable{
 		}
 		//List<Point> carPath = carPathArrange(czPoints, pDis);
 		childZone.setCzPoints((ArrayList<Point>) ExpressPathArrangeService.carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
-		ExpressPathArrangeService.UAVArrange(childZone);
+		//ExpressPathArrangeService.UAVArrange(childZone);
 		System.out.println("Thread "+id+" end time:"+System.currentTimeMillis());
 	}
 	public void start(){

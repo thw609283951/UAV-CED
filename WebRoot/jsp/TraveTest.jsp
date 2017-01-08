@@ -59,7 +59,7 @@
     	<input type="hidden" id="index" value=0>
     	<input type="hidden" id="road1" value=0>;
     	
-		<div id="TraveTest" style="height:600px"></div>
+		<div id="TraveTest" style="height:1000px"></div>
     	<div id="panel"></div>
     	
     	<div class="button-group">
@@ -82,7 +82,7 @@
 	// 百度地图API功能
 			var myIcon = new BMap.Icon("../images/icons/flight.png", new BMap.Size(48,32), {imageOffset: new BMap.Size(0, 0)});
 			var map = new BMap.Map("TraveTest");    // 创建Map实例
-			map.centerAndZoom(new BMap.Point(126.63735,45.75214), 18);  // 初始化地图,设置中心点坐标和地图级别
+			map.centerAndZoom(new BMap.Point(126.63735,45.75214), 12);  // 初始化地图,设置中心点坐标和地图级别
 			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
 			map.setCurrentCity("哈尔滨");          // 设置地图显示的城市 此项是必须设置的
 			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放

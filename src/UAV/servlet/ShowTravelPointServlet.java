@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import UAV.entity.Car;
 import UAV.entity.ChildZone;
 import UAV.entity.Point;
 import UAV.entity.UavForExpress;
@@ -46,7 +47,7 @@ public class ShowTravelPointServlet extends HttpServlet {
 		request.setAttribute("carsPath", ep.getDemoCarPath());
 		request.setAttribute("uavsPath", ep.getDemoUavPath());
 		
-		request.setAttribute("uavsInEveryCar",ep.getUavsInEveryCar());
+		request.setAttribute("uavsInEveryCar",Car.uavsInEveryCar);
 		
 	
 		RequestDispatcher de=request.getRequestDispatcher("/jsp/TraveTest.jsp"); 

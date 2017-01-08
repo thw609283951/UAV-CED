@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import kmeans.Cluster;
-import kmeans.KMeans;
+import UAV.comm.Cluster;
+import UAV.comm.KMeans;
 
 
 import UAV.entity.Car;
@@ -66,13 +66,8 @@ public class ExpressPathArrangeService {
 	private static List<DockPoint> selectedDockPoints;//选择的停靠点
 	private static List<WarePoint> warePoints;//仓库店
 	private List<ChildZone> childZones;
-	//下面是一些常量，可根据需求调整
-	private static int total_charge_time = 1; //最长充电总时间
-	private static double max_trade = 10;       //最长飞行距离
-	private int uavsInEveryCar = 2;     //每辆车上的无人机数量
-	private static double carV = 10;            //快递车速，km/h
-	private static double uavV = 10;            //无人机速度，km/h
-	private static List<ArrayList<DockPoint>> resultList=new ArrayList<ArrayList<DockPoint>>();
+	
+	private List<ArrayList<DockPoint>> resultList=new ArrayList<ArrayList<DockPoint>>();//
 	public List<DockPoint> getAllDockPoints() {
 		return allDockPoints;
 	}
@@ -133,27 +128,19 @@ public class ExpressPathArrangeService {
 	public List<ChildZone> pathArrange() throws Exception {
 		
 		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
-//		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
-//		allDockPoints = epaDao.getAllDockPoints();
-//		allNeedPoints = epaDao.getAllNeedPoints();
 		pointPreProcess();
 		this.childZones = childZonePatition();
 		createCarAndUavs(childZones);//根据子区域，产生Car以及uav对象
 		for (ChildZone childZone : childZones) {
 			List<Point> czPoints = childZone.getCzPoints();
 			double[][] pDis = getPointDisByRoad(czPoints);
-			//List<Point> carPath = carPathArrange(czPoints, pDis);
 			childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
 			UAVArrange(childZone);
 		}
 		return childZones;
 	}
 public void multiThreadPathArrange() {
-
 		//TODO: 利用DAOimpl初始化allDockPoints,allNeedPoints,warePoints;
-//		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
-//		allDockPoints = epaDao.getAllDockPoints();
-//		allNeedPoints = epaDao.getAllNeedPoints();
 		pointPreProcess();
 		List<ChildZone> childZones = childZonePatition();
 		createCarAndUavs(childZones);//根据子区域，产生Car以及uav对象
@@ -175,7 +162,7 @@ public void multiThreadPathArrange() {
 		for (ChildZone childZone : childZones){
 			Car car= new Car();
 			ArrayList<UavForExpress> uavs = new ArrayList<UavForExpress>();
-			for (int i = 0; i < getUavsInEveryCar() ; i++){
+			for (int i = 0; i < Car.uavsInEveryCar ; i++){
 				UavForExpress uav = new UavForExpress();
 				uavs.add(uav);
 			}
@@ -198,21 +185,18 @@ public void multiThreadPathArrange() {
 	 * 马
 	 * 
 	 * 此子函数为距离计算模块和停靠点选取模块的综合
-	 * 负责填写need_point表中的dockid和dockdis
+	 * 负责填写needPoint表中的dockid和dockdis
 	 * 在allNeedPoints中修改并将修改添加到数据库
 	 * 并将allDockPoints中选出selectedDockPoints
 	 * 并释放allDockPoints
 	 */
-	public void pointPreProcess() {
+	private void pointPreProcess() {
 		ExpressPathArrangeDAO epaDao = ExpressPathArrangeDAOFactory.getInstance();
 		allDockPoints = epaDao.getAllDockPoints();
 		allNeedPoints = epaDao.getAllNeedPoints();
 		warePoints = epaDao.getAllWarePoints();
-//		System.out.println(allDockPoints);
-//		System.out.println(allNeedPoints);
 		KDTree<Integer> wareKdTree = new KDTree<Integer>(2);
 		KDTree<Integer> dockKdTree = new KDTree<Integer>(2);
-		//Map<Integer, ArrayList<NeedPoint>> needPointMap = new TreeMap<Integer, ArrayList<NeedPoint>>();
 		
 		for (WarePoint warePoint : warePoints) {
 			double[] coord = {warePoint.getLongitude().doubleValue(),
@@ -228,12 +212,9 @@ public void multiThreadPathArrange() {
 		
 		Integer wrId = null;
 		for (DockPoint dockPoint : allDockPoints) {
-			//needPointMap.put(dockPoint.getId(), new ArrayList<NeedPoint>());
 			double[] coord = {dockPoint.getLongitude().doubleValue(),
 					dockPoint.getLatitude().doubleValue()};
-//			System.out.println(coord);
 			try {
-				//System.out.println("kkkkk"+dockPoint.getId());
 				wrId = wareKdTree.nearest(coord);
 				dockPoint.setWrid(wrId);
 				System.out.println(dockPoint.getId() + "\t\t\t" + dockPoint.getWrid() );
@@ -251,14 +232,10 @@ public void multiThreadPathArrange() {
 					needPoint.getLatitude().doubleValue()};
 			Integer dockId = null;
 			try {
-//				System.out.println(needPoint);
-//				System.out.println(kdTree.size());
 				dockId = dockKdTree.nearest(coord);
-				//System.out.println(id + "\t\t" + needPoint.getId());
 				for (DockPoint d : allDockPoints) {
 					if (d.getId().equals(dockId)) {
-						//needPointMap.get(d.getId()).add(needPoint);
-						d.getNeedPoint_arr().add(needPoint);
+						d.getneedPoints().add(needPoint);
 						needPoint.setDockid(d.getId());
 						needPoint.setDockdis(MapDistance.GetDistance(
 								needPoint.getLongitude(), 
@@ -275,13 +252,6 @@ public void multiThreadPathArrange() {
 			}
 			
 		}
-
-//		for (DockPoint dockPoint : allDockPoints) {
-//			dockPoint.setSelected(true);
-//			dockPoint.setCzid(-1);
-//			needPointMap.get(dockPoint.getId()).toArray();
-//			dockPoint.setNeedPoint_arr((NeedPoint[]) needPointMap.get(dockPoint.getId()).toArray(new NeedPoint[0]));
-//		}
 		
 		selectedDockPoints = allDockPoints;
 		
@@ -299,7 +269,7 @@ public void multiThreadPathArrange() {
 	 * 黄
 	 * 
 	 * 子区域划分模块
-	 * 负责填写dock_point表中的czid
+	 * 负责填写dockPoint表中的czid
 	 * 在selectedDockPoints中修改并将修改添加到数据库
 	 * 生成ChildZone序列，并填写其中的wrid
 	 */
@@ -326,7 +296,6 @@ public void multiThreadPathArrange() {
 					continue;
 				}
 				onechildzone=new ArrayList<Point>();//清楚子区域伪装数组
-//				System.out.println("-----第"+index+"个聚类-----");
 				//为每个子区域配子区域id 负责子区域的仓库点 子区域的停靠点集合 负责子区域的车 多个仓库点的话需要再加一层循环
 				// 这里只考虑了一个仓库点
 				Zone = new ChildZone();
@@ -364,18 +333,17 @@ public void multiThreadPathArrange() {
 	 * 无人机调度模块
 	 * @param carPath 已经经过计算的旅行商问题最优解的序列，车要按着这个序列走
 	 */
-	static void UAVArrange(ChildZone childZone) {
+	public void UAVArrange(ChildZone childZone) {
 		//TODO:会需要从停靠点得到停靠点所负责的所有需求点的集合
 		ArrayList<NeedPoint> S = new ArrayList<NeedPoint>();//保存child_zone的所有需求点
 		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();//指定停靠点所属需求点的划分
-//		ArrayList<Double> l_all = new ArrayList<Double>();//指定停靠点的无人机路径序列
-		Double max_l;//保存最长的区域路径长度
-		Double l_length = new Double(0);//l长度
-		Double max_wait_time;//指定停靠点的最大等待时间，等待是为了充电
+		Double maxL;//保存最长的区域路径长度
+		Double lLength = new Double(0);//l长度
+		Double maxWaitTime;//指定停靠点的最大等待时间，等待是为了充电
 		Double time = new Double(0);//相对时间，从0起
 		Double dist;//保存距离计算结果输出
 		Point warePoint = childZone.getCzPoints().get(0);//保存仓库点
-		Double tmp_time;
+		Double tmpTime;
 		Car car = childZone.getCar();//获取子区域负责车辆
 	
 		ArrayList<DockPoint> dps = new ArrayList<DockPoint>();//将czpoint中的对象从第2分开始往后转化为dockPoint
@@ -383,48 +351,48 @@ public void multiThreadPathArrange() {
 		for (int i = 1; i < czps.size(); i++) {
 			dps.add((DockPoint) czps.get(i));
 		}
-		car.add_P(time,warePoint);//向仓库点添加时序序列表示其由仓库点开始，走向了第一个停靠点
+		car.addP(time,warePoint);//向仓库点添加时序序列表示其由仓库点开始，走向了第一个停靠点
 		dist = 0.001 * getDistanceByAir(warePoint,dps.get(0));//仓库点到第一个停靠点的距离
-		tmp_time = dist/carV;//到下一个停靠点的时间
-		time+=tmp_time;
+		tmpTime = dist/Car.carV;//到下一个停靠点的时间
+		time+=tmpTime;
 		
 		for(DockPoint dock : dps){ //遍历停靠点
-			car.add_P(time,dock);//车行驶到停靠点
-			S = dock.getNeedPoint_arr();//所有需求点
-			Point next_dock = childZone.get_next_dock(dock);//获取下一个停靠点;
-			max_l = new Double(0);
-			max_wait_time = new Double(0);
-			double t_max_fly = 0;
+			car.addP(time,dock);//车行驶到停靠点
+			S = dock.getneedPoints();//所有需求点
+			Point nextDock = childZone.getNextDock(dock);//获取下一个停靠点;
+			maxL = new Double(0);
+			maxWaitTime = new Double(0);
+			double tMaxFly = 0;
 			
 			if (S.size() != 0){ //停靠点包含至少一个需求点
-				div = Divid_need(S, dock, car.getUavCount());//划分所有需求点
+				div = DividNeed(S, dock, car.getUavCount());//划分所有需求点
 				List<Point> l;//保存每个划分的无人机路径序列，第一个为停靠点，后面为需求点
 				UavForExpress uav = null;
 				for(List<NeedPoint> part : div){ //遍历所有需求划分区域
 					l = TSP(part, dock);         //该区域的路线，借助旅行商算法
 					uav = car.sendUav();         //从car中派出一辆无人机
-					uav.add_P(l,time,uavV);      //通过路径，向uav中添加时序路径序列
-					l_length = get_l_length(l);  //得到l长度，为从停靠点出发，再返回停靠点的长度
-					if (max_l < l_length){       //得到最长路径，计算充电时间
-						max_l = l_length;
+					uav.addP(l,time,UavForExpress.velocity);      //通过路径，向uav中添加时序路径序列
+					lLength = getLLength(l);  //得到l长度，为从停靠点出发，再返回停靠点的长度
+					if (maxL < lLength){       //得到最长路径，计算充电时间
+						maxL = lLength;
 					}
 				}
-				t_max_fly = max_l/uavV;//无人机最长飞行时间
-				max_wait_time = get_max_wait_time(max_l,uavV,carV,tmp_time,dock,childZone);//获取car在dock的最大等待时间
+				tMaxFly = maxL/UavForExpress.velocity;//无人机最长飞行时间
+				maxWaitTime = getMaxWaitTime(maxL,UavForExpress.velocity,Car.carV,tmpTime,dock,childZone);//获取car在dock的最大等待时间
 			}
-			if (next_dock != null){//未到最后一个停靠点
-				dist = 0.001 * getDistanceByAir(dock,next_dock);
-				tmp_time = dist/carV;//到下一个停靠点的时间
-				tmp_time += max_wait_time + t_max_fly;
-				if (max_wait_time>0){
-					car.add_P(max_wait_time+time+t_max_fly,dock);//需要原地等待
+			if (nextDock != null){//未到最后一个停靠点
+				dist = 0.001 * getDistanceByAir(dock,nextDock);
+				tmpTime = dist/Car.carV;//到下一个停靠点的时间
+				tmpTime += maxWaitTime + tMaxFly;
+				if (maxWaitTime>0){
+					car.addP(maxWaitTime+time+tMaxFly,dock);//需要原地等待
 				}
-				time += tmp_time;//过了tmp_time时间，车行驶到下一个停靠点
+				time += tmpTime;//过了tmpTime时间，车行驶到下一个停靠点
 			}
 			else{//添加到仓库点的时序路径
 				dist = 0.001 * getDistanceByAir(dock,warePoint);
-				time += dist/carV;
-				car.add_P(time, warePoint);
+				time += dist/Car.carV;
+				car.addP(time, warePoint);
 			}
 			car.freeUavs();//设置所有无人机状态为“闲”,表示所有无人机已返回快递车
 		}
@@ -435,30 +403,30 @@ public void multiThreadPathArrange() {
 	 * @param l路径序列长度
 	 * @return
 	 */
-	private static Double get_l_length(List<Point> l) {
+	private Double getLLength(List<Point> l) {
 		// TODO Auto-generated method stub
-		Double l_length = new Double(0);
+		Double lLength = new Double(0);
 		int i;
 		for (i=0; i<l.size()-1;i++){
-			l_length += 0.001 * getDistanceByAir(l.get(i),l.get(i+1));
+			lLength += 0.001 * getDistanceByAir(l.get(i),l.get(i+1));
 		}
-		l_length += 0.001 *getDistanceByAir(l.get(i), l.get(0));//加上到最后一个需求点到停靠点的距离
-		return l_length;
+		lLength += 0.001 *getDistanceByAir(l.get(i), l.get(0));//加上到最后一个需求点到停靠点的距离
+		return lLength;
 	}
 
 
 	/**
 	 * 妥
-	 * 划分需求点并指派给无人机,S为需求点集合，var_uav为无人机数量，也就是需要划分成的块数
+	 * 划分需求点并指派给无人机,S为需求点集合，varUav为无人机数量，也就是需要划分成的块数
 	 * @param S 需求点集合
 	 * @param dock 停靠点
-	 * @param var_uav无人及数量
+	 * @param varUav无人及数量
 	 * @return 划分结果
 	 */
-	private static ArrayList<ArrayList<NeedPoint>> Divid_need(List<NeedPoint> S,DockPoint dock, int var_uav){
+	private ArrayList<ArrayList<NeedPoint>> DividNeed(List<NeedPoint> S,DockPoint dock, int varUav){
 		int m = S.size();//需求点个数
 		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();
-		if(var_uav>=m){
+		if(varUav>=m){
 			for(NeedPoint p : S){
 				ArrayList<NeedPoint> tmp = new ArrayList<NeedPoint>();
 				tmp.add(p);
@@ -466,34 +434,34 @@ public void multiThreadPathArrange() {
 			}
 		}
 		else{
-			return k_means_with_Point(S,var_uav);
+			return kMeansWithPoint(S,varUav);
 		}
 
 		return div;
 	}
 	/**
 	 * 妥
-	 * k均值算法划分需求点为var_uav个部分
+	 * k均值算法划分需求点为varUav个部分
 	 * @param s 需求点集合
-	 * @param var_uav 无人及数量，也是划分子区域数量
+	 * @param varUav 无人及数量，也是划分子区域数量
 	 * @return
 	 */
-	private static ArrayList<ArrayList<NeedPoint>> k_means_with_Point(
-			List<NeedPoint> s, int var_uav) {
+	private ArrayList<ArrayList<NeedPoint>> kMeansWithPoint(
+			List<NeedPoint> s, int varUav) {
 		// TODO Auto-generated method stub
 		List<Cluster> clusters= new ArrayList<Cluster>();
-		ArrayList<ArrayList<NeedPoint>> div_points = new ArrayList<ArrayList<NeedPoint>>();
+		ArrayList<ArrayList<NeedPoint>> divPoints = new ArrayList<ArrayList<NeedPoint>>();
 		KMeans k = new KMeans();
-		k.setNUM_CLUSTERS(var_uav);
+		k.setNUM_CLUSTERS(varUav);
 		k.init(s);
 		k.calculate();
 		clusters = k.getClusters();
 		for (Cluster cluster : clusters){
-			ArrayList<NeedPoint> tmp_points = new ArrayList<NeedPoint>();
-			tmp_points = cluster.getNeedPoints();
-			div_points.add(tmp_points);
+			ArrayList<NeedPoint> tmpPoints = new ArrayList<NeedPoint>();
+			tmpPoints = cluster.getNeedPoints();
+			divPoints.add(tmpPoints);
 		}
-		return div_points;
+		return divPoints;
 	}
 
 
@@ -501,14 +469,14 @@ public void multiThreadPathArrange() {
 	 * 妥
 	 * 旅行商问题求解从dock点出发遍历part中点，并返回dock的最短路径的路径序列
 	 */
-	private static List<Point> TSP(List<NeedPoint> part, DockPoint dock){
+	private List<Point> TSP(List<NeedPoint> part, DockPoint dock){
 		List<Point> l = new ArrayList<Point>();
 		List<Point> points = new ArrayList<Point>();
 		points.add(dock);
 		points.addAll(part);
 		
-		double[][] p_dist = getPointDisByAir(points);//记录停靠点和所有需求点彼此路径长度
-		l =  carPathArrange(points, p_dist);//这里完全可以使用掌印的TSP代码
+		double[][] pPist = getPointDisByAir(points);//记录停靠点和所有需求点彼此路径长度
+		l =  carPathArrange(points, pPist);//这里完全可以使用掌印的TSP代码
 		
 		return l;
 	}
@@ -516,29 +484,29 @@ public void multiThreadPathArrange() {
 	/**
 	 * 妥
 	 * 根据无人机执行情况推算所需的最大充电时间，以得到car在停靠点dock的最大等待时间
-	 * max_l：所有无人机最长飞行距离
-	 * uavZ_v,car_v:无人机、车速
+	 * maxL：所有无人机最长飞行距离
+	 * uavV,carV:无人机、车速
 	 */
-	private static double get_max_wait_time(double max_l,double uav_v,double car_v,double to_next_dock_time, DockPoint dock, ChildZone childZone){
-		double t_max_charge = get_max_charge_time(max_l);//先设一个常数，后面换成数学模型
+	private double getMaxWaitTime(double maxL,double uavV,double carV,double toNextDockTime, DockPoint dock, ChildZone childZone){
+		double tMaxCharge = getMaxChargeTime(maxL);//先设一个常数，后面换成数学模型
 
-		if (to_next_dock_time > t_max_charge){// 在路上即可完成充电
+		if (toNextDockTime > tMaxCharge){// 在路上即可完成充电
 			return 0;
 		}
 		else{//需要等待充一会电再出发
-			return t_max_charge - to_next_dock_time;
+			return tMaxCharge - toNextDockTime;
 		}
 	}
 	/**
 	 * 妥
 	 * 最长充电时间
 	 * 充电时间=总充电时间*（已行驶航程/总航程）     <不考虑负责需求点数>
-	 * @param max_l：最长航程
+	 * @param maxL：最长航程
 	 * @return
 	 */
-	private static double get_max_charge_time(double max_l) {
+	private double getMaxChargeTime(double maxL) {
 		// TODO Auto-generated method stub
-		return total_charge_time*(max_l/max_trade);
+		return UavForExpress.totalChargeTime*(maxL/UavForExpress.maxTrade);
 	}
 
 	
@@ -556,9 +524,6 @@ public void multiThreadPathArrange() {
     			totalTime=tmpTime;
     		}
     		System.out.println("Car"+car.getP());
-//    		for (ArrayList<Double> P:childZone.getCar().getP()){
-//    			System.out.println("Car:"+P);
-//    		}
     		for (UavForExpress uav : car.getUavs()){
     			System.out.println("Uav"+uav.getP());
     		}
@@ -574,19 +539,9 @@ public void multiThreadPathArrange() {
 	 */
 	public static void main(String[] args) throws Exception {
     	ExpressPathArrangeService ep = new ExpressPathArrangeService();
-
-    	//ExpressPathArrangeService ep2 = new ExpressPathArrangeService();
     	long start = System.currentTimeMillis();
     	List<ChildZone> childZones = ep.pathArrange();
     	ep.printPath();
-//    	long time = System.currentTimeMillis()-start;
-//    	System.out.println("One thread time:"+time);
-//
-//    	start = System.currentTimeMillis();
-//    	System.out.println("Multi thread start time:"+start);
-//    	ep2.multiThreadPathArrange();
-//    	time = System.currentTimeMillis()-start;
-//    	System.out.println("Multi thread time:"+time);
     }
 
 	public ArrayList<ArrayList<ArrayList<Double>>> getDemoCarPath(){
@@ -674,19 +629,5 @@ public void multiThreadPathArrange() {
 			}
 		}
 		return dis;
-	}
-	public int getUavsInEveryCar() {
-		return uavsInEveryCar;
-	}
-	public void setUavsInEveryCar(int uavsInEveryCar) {
-		this.uavsInEveryCar = uavsInEveryCar;
-	}
-		
-
-//	public List<Point> getTestCzPoints() {
-//		
-//	}
-	
-	
-	
+	}			
 }
