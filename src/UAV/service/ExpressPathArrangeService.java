@@ -208,19 +208,14 @@ public void multiThreadPathArrange() {
 		allDockPoints = epaDao.getAllDockPoints();
 		allNeedPoints = epaDao.getAllNeedPoints();
 		warePoints = epaDao.getAllWarePoints();
-//		System.out.println(allDockPoints);
-//		System.out.println(allNeedPoints);
 		KDTree<Integer> wareKdTree = new KDTree<Integer>(2);
 		KDTree<Integer> dockKdTree = new KDTree<Integer>(2);
-		//Map<Integer, ArrayList<NeedPoint>> needPointMap = new TreeMap<Integer, ArrayList<NeedPoint>>();
-		
 		for (WarePoint warePoint : warePoints) {
 			double[] coord = {warePoint.getLongitude().doubleValue(),
 					warePoint.getLatitude().doubleValue()};
 			try {
 				wareKdTree.insert(coord, warePoint.getId());
 			} catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
 		}
@@ -228,21 +223,16 @@ public void multiThreadPathArrange() {
 		
 		Integer wrId = null;
 		for (DockPoint dockPoint : allDockPoints) {
-			//needPointMap.put(dockPoint.getId(), new ArrayList<NeedPoint>());
 			double[] coord = {dockPoint.getLongitude().doubleValue(),
 					dockPoint.getLatitude().doubleValue()};
-//			System.out.println(coord);
 			try {
-				//System.out.println("kkkkk"+dockPoint.getId());
 				wrId = wareKdTree.nearest(coord);
 				dockPoint.setWrid(wrId);
 				System.out.println(dockPoint.getId() + "\t\t\t" + dockPoint.getWrid() );
 				dockKdTree.insert(coord, dockPoint.getId());
 			} catch (KeySizeException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (KeyDuplicateException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -251,13 +241,9 @@ public void multiThreadPathArrange() {
 					needPoint.getLatitude().doubleValue()};
 			Integer dockId = null;
 			try {
-//				System.out.println(needPoint);
-//				System.out.println(kdTree.size());
 				dockId = dockKdTree.nearest(coord);
-				//System.out.println(id + "\t\t" + needPoint.getId());
 				for (DockPoint d : allDockPoints) {
 					if (d.getId().equals(dockId)) {
-						//needPointMap.get(d.getId()).add(needPoint);
 						d.getNeedPoint_arr().add(needPoint);
 						needPoint.setDockid(d.getId());
 						needPoint.setDockdis(MapDistance.GetDistance(
@@ -270,19 +256,10 @@ public void multiThreadPathArrange() {
 				}
 				
 			} catch (KeySizeException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 		}
-
-//		for (DockPoint dockPoint : allDockPoints) {
-//			dockPoint.setSelected(true);
-//			dockPoint.setCzid(-1);
-//			needPointMap.get(dockPoint.getId()).toArray();
-//			dockPoint.setNeedPoint_arr((NeedPoint[]) needPointMap.get(dockPoint.getId()).toArray(new NeedPoint[0]));
-//		}
-		
 		selectedDockPoints = allDockPoints;
 		
 		for (NeedPoint needPoint : allNeedPoints) {
