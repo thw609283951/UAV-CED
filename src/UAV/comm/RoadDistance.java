@@ -17,7 +17,7 @@ public class RoadDistance {
 	
 	
 	private final static String region = "哈尔滨";
-	private final static String ak = "2SPHCeYgDidpmS89Lb0nIFCYw1xMi0Oc";
+	private final static String ak = "kDUDetLj7Tcg8gQ2CMzr2RHDC7FeR46x";
 	
     public static String loadJSON (String url) {
         StringBuilder json = new StringBuilder();
