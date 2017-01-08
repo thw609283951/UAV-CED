@@ -1,4 +1,10 @@
-package kmeans;
+package UAV.comm.kmeans;
+
+/* 
+ * KMeans.java ; Cluster.java ; Point.java
+ * 用于快递需求点划分的Kmeans算法
+ *
+*/
 
 import java.util.ArrayList;
 import java.util.List;

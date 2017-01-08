@@ -29,11 +29,12 @@ public class UavForExpress implements java.io.Serializable {
 	powerconsumption	Double[(6,2)]	Not null	无人机的功率，即耗电量，单位为kj/km。小数点后保留两位小数。
 	remainingpower	Int	Not null	无人机电量剩余，单位为%.
 */
-	
-	private double velocity;//无人机速度
-	private Integer expressamount;//无人机当前载有货物的数量（不是最大能载货数量哦）
-	private Boolean is_sended = false;//记录无人机是否已派出
 
+	private Integer expressamount;//无人机当前载有货物的数量（不是最大能载货数量哦）
+	private Boolean isSended = false;//记录无人机是否已派出
+	public static int totalChargeTime = 1; //最长充电总时间
+	public static double maxTrade = 10;       //最长飞行距离
+	public static double velocity = 10;//无人机速度
 	// Constructors
 
 	/** default constructor */
@@ -41,17 +42,6 @@ public class UavForExpress implements java.io.Serializable {
 		this.setP(new ArrayList<ArrayList<Double>>());
 		this.setDemoP(new ArrayList<ArrayList<ArrayList<Double>>>());
 	}
-
-	/** full constructor */
-//	public UavForExpress(String version, Double longitude, Double latitude,
-//			Integer remainingpower, Integer expressamount) {
-//		this.version = version;
-//		this.longitude = longitude;
-//		this.latitude = latitude;
-//		this.remainingpower = remainingpower;
-//		this.expressamount = expressamount;
-//		this.P=new ArrayList<ArrayList<Double>>();
-//	}
 
 	public UavForExpress(Integer id, Integer carId, String version,
 			Double longitude, Double latitude, Integer remainingpower,
@@ -70,7 +60,7 @@ public class UavForExpress implements java.io.Serializable {
 	}
 
 	// 根据路径l向无人机添加时序路径
-	public void add_P(List<Point> l,double time, double uavV){
+	public void addP(List<Point> l,double time, double uavV){
 		ArrayList<Double> item;
 		double dist = 0;//得到dock和第一个需求点的距离，待完成。
 		ArrayList<ArrayList<Double>> itemDemoPs = new ArrayList<ArrayList<Double>>();//向demoP中添加l中第一个点--停靠点
@@ -109,7 +99,7 @@ public class UavForExpress implements java.io.Serializable {
 		this.demoP.add(itemDemoPs);
 	}
 	// 根据停靠点向无人机添加时序路径
-	public void add_P(Double time, Point dock) {
+	public void addP(Double time, Point dock) {
 		// TODO Auto-generated method stub
 		ArrayList<Double> item = new ArrayList<Double>();
 		item.add(time);//时间
@@ -174,20 +164,12 @@ public class UavForExpress implements java.io.Serializable {
 		this.expressamount = expressamount;
 	}
 
-	public double getVelocity() {
-		return velocity;
+	public Boolean getisSended() {
+		return isSended;
 	}
 
-	public void setVelocity(double velocity) {
-		this.velocity = velocity;
-	}
-
-	public Boolean getIs_sended() {
-		return is_sended;
-	}
-
-	public void setIs_sended(Boolean is_sended) {
-		this.is_sended = is_sended;
+	public void setisSended(Boolean isSended) {
+		this.isSended = isSended;
 	}
 	
 	private double getDistanceByAir(Point a, Point b) {

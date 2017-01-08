@@ -17,7 +17,7 @@ public class DockPoint extends Point implements java.io.Serializable {
 	private Integer group;//没用了。。。。
 	private Integer wrid;//仓库点
 	private Boolean selected;//是否是被选择了的停靠点
-	private ArrayList<NeedPoint> NeedPoint_arr = new ArrayList<NeedPoint>();//保存这个停靠点所有的需求点
+	private ArrayList<NeedPoint> needPoints = new ArrayList<NeedPoint>();//保存这个停靠点所有的需求点
 
 	private boolean isKey;//判断是否是核心点
 	private boolean isClassed;//判断是否已经分类
@@ -39,12 +39,6 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public void setWrid(Integer wrid) {
 		this.wrid = wrid;
 	}
-//	public Integer getId() {
-//		return id;
-//	}
-//	public void setId(Integer id) {
-//		this.id = id;
-//	}
 	public boolean isKey() {
 		return isKey;
 	}
@@ -106,16 +100,16 @@ public class DockPoint extends Point implements java.io.Serializable {
 	public String print(){
 		return "<"+this.getLongitude()+","+this.getLatitude()+"> 地点:"+this.getName()+" id:"+this.getId();
 	}
-	public ArrayList<NeedPoint> getNeedPoint_arr() {
-		return NeedPoint_arr;
+	public ArrayList<NeedPoint> getneedPoints() {
+		return needPoints;
 	}
-	public void setNeedPoint_arr(ArrayList<NeedPoint> needPoint_arr) {
-		NeedPoint_arr = needPoint_arr;
+	public void setneedPoints(ArrayList<NeedPoint> needPoints) {
+		needPoints = needPoints;
 	}
 	@Override
 	public String toString() {
 		return super.toString() + "DockPoint [czid=" + czid + ", wrid=" + wrid
-				+ ", NeedPoint_arr=" + NeedPoint_arr + ", isClassed="
+				+ ", needPoints=" + needPoints + ", isClassed="
 				+ isClassed + ", name=" + name + "]";
 	}
 }
