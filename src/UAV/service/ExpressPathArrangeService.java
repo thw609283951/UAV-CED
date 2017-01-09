@@ -197,14 +197,12 @@ public void multiThreadPathArrange() {
 		warePoints = epaDao.getAllWarePoints();
 		KDTree<Integer> wareKdTree = new KDTree<Integer>(2);
 		KDTree<Integer> dockKdTree = new KDTree<Integer>(2);
-		
 		for (WarePoint warePoint : warePoints) {
 			double[] coord = {warePoint.getLongitude().doubleValue(),
 					warePoint.getLatitude().doubleValue()};
 			try {
 				wareKdTree.insert(coord, warePoint.getId());
 			} catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
 		}
@@ -220,10 +218,8 @@ public void multiThreadPathArrange() {
 				System.out.println(dockPoint.getId() + "\t\t\t" + dockPoint.getWrid() );
 				dockKdTree.insert(coord, dockPoint.getId());
 			} catch (KeySizeException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (KeyDuplicateException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -247,12 +243,11 @@ public void multiThreadPathArrange() {
 				}
 				
 			} catch (KeySizeException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 		}
-		
+
 		selectedDockPoints = allDockPoints;
 		
 		for (NeedPoint needPoint : allNeedPoints) {
