@@ -10,7 +10,7 @@ public class Car {
 	private Integer Id;
 	private ArrayList<UavForExpress> Uavs;
     private ArrayList<ArrayList<Double>> P = new ArrayList<ArrayList<Double>>();//时序路径
-    public static int uavsInEveryCar = 0;     //每辆车上的无人机数量
+    public static int uavsInEveryCar = 2;     //每辆车上的无人机数量
     public static double carV = 10;            //快递车速，km/h
 	
 	/*
