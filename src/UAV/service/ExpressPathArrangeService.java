@@ -134,7 +134,7 @@ public class ExpressPathArrangeService {
 		for (ChildZone childZone : childZones) {
 			List<Point> czPoints = childZone.getCzPoints();
 			double[][] pDis = getPointDisByRoad(czPoints);
-			childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
+			//childZone.setCzPoints((ArrayList<Point>) carPathArrange(czPoints, pDis));//TODO: 不确定这句话对不对
 			UAVArrange(childZone);
 		}
 		return childZones;
@@ -365,7 +365,7 @@ public void multiThreadPathArrange() {
 			double tMaxFly = 0;
 			
 			if (S.size() != 0){ //停靠点包含至少一个需求点
-				div = DividNeed(S, dock, car.getUavCount());//划分所有需求点
+				div = DividNeed(S,car.getUavCount());//划分所有需求点
 				List<Point> l;//保存每个划分的无人机路径序列，第一个为停靠点，后面为需求点
 				UavForExpress uav = null;
 				for(List<NeedPoint> part : div){ //遍历所有需求划分区域
@@ -378,7 +378,7 @@ public void multiThreadPathArrange() {
 					}
 				}
 				tMaxFly = maxL/UavForExpress.velocity;//无人机最长飞行时间
-				maxWaitTime = getMaxWaitTime(maxL,UavForExpress.velocity,Car.carV,tmpTime,dock,childZone);//获取car在dock的最大等待时间
+				maxWaitTime = getMaxWaitTime(maxL,tmpTime);//获取car在dock的最大等待时间
 			}
 			if (nextDock != null){//未到最后一个停靠点
 				dist = 0.001 * getDistanceByAir(dock,nextDock);
@@ -423,7 +423,7 @@ public void multiThreadPathArrange() {
 	 * @param varUav无人及数量
 	 * @return 划分结果
 	 */
-	private ArrayList<ArrayList<NeedPoint>> DividNeed(List<NeedPoint> S,DockPoint dock, int varUav){
+	private ArrayList<ArrayList<NeedPoint>> DividNeed(List<NeedPoint> S,int varUav){
 		int m = S.size();//需求点个数
 		ArrayList<ArrayList<NeedPoint>> div = new ArrayList<ArrayList<NeedPoint>>();
 		if(varUav>=m){
@@ -483,11 +483,11 @@ public void multiThreadPathArrange() {
 
 	/**
 	 * 妥
-	 * 根据无人机执行情况推算所需的最大充电时间，以得到car在停靠点dock的最大等待时间
+	 * 根据无人机执行情况推算所需的最大充电时间
 	 * maxL：所有无人机最长飞行距离
 	 * uavV,carV:无人机、车速
 	 */
-	private double getMaxWaitTime(double maxL,double uavV,double carV,double toNextDockTime, DockPoint dock, ChildZone childZone){
+	private double getMaxWaitTime(double maxL,double toNextDockTime){
 		double tMaxCharge = getMaxChargeTime(maxL);//先设一个常数，后面换成数学模型
 
 		if (toNextDockTime > tMaxCharge){// 在路上即可完成充电
@@ -598,6 +598,7 @@ public void multiThreadPathArrange() {
 
 		return dis;
 	}
+
 	
 	public static double getDistanceByAir(Point a, Point b) {
 		return MapDistance.GetDistance(a.getLongitude(), 
